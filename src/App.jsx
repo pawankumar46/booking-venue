@@ -8,6 +8,7 @@ import Landing from './components/Landing'
 import Footer from './components/Footer'
 import NavBar from './components/NavBar'
 import './App.css'
+import ListYourBusiness from './components/ListYourBusiness'
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/business" element={<ListYourBusiness/>}/>
             <Route path="/venues" element={<Venues />} />
             <Route path="/venues/:city" element={<ListofVenues />} />
             <Route path="/venue/:city/:venueId" element={<IndividualVenue />} />

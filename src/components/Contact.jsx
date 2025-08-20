@@ -3,7 +3,7 @@ import emailjs from '@emailjs/browser';
 
 const Contact = () => {
   const form = useRef();
- const [form1, setForm] = useState({ user_name: '', user_email: '', user_mobile: '', message: '' })
+  const [form1, setForm] = useState({ user_name: '', user_email: '', user_mobile: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
 
   const handleChange = (e) => {
@@ -14,21 +14,20 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     setSubmitted(true)
-    console.log(form1)
     emailjs
-      .sendForm(import.meta.env.VITE_EMAILJS_SERVICE_ID, 
-                import.meta.env.VITE_EMAILJS_TEMPLATE_ID, form.current, {
-                publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+      .sendForm(import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID, form.current, {
+        publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
       })
       .then(
         () => {
-          
+         console.log("Success")
         },
         (error) => {
           console.log('FAILED...', error.text);
         },
       );
-    setForm({ user_name: '', user_email: '', user_mobile: '', message: ''})
+    setForm({ user_name: '', user_email: '', user_mobile: '', message: '' })
   }
 
   return (
@@ -102,8 +101,8 @@ const Contact = () => {
 
         <div className="relative h-80 md:h-full rounded-xl overflow-hidden">
           <img
-src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600&auto=format&fit=crop"
-alt="Event celebration"
+            src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600&auto=format&fit=crop"
+            alt="Event celebration"
             className="absolute inset-0 h-full w-full object-cover"
             loading="lazy"
           />

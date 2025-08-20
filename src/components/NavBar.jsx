@@ -5,11 +5,13 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isVenueOpen, setIsVenueOpen] = useState(false); // Add this state for venue dropdown
   const navigations = [
     { name: 'Home', to: '/' },
     { name: 'Venues', to: '/venues' },
+    { name: 'List You Business', to: '/business' },
     { name: 'Contact', to: '/contact' },
-    { name: 'Blogs', to: '/blogs' },
+    { name: 'Reviews', to: '/blogs' },
 
   ];
   const cities = [
@@ -48,7 +50,7 @@ const NavBar = () => {
                       <span className="text-gray-500">▾</span>
                     </button>
                     <div className="absolute left-0 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block">
-                      <div className="py-1 max-h-64 overflow-auto">
+                      <div className="py-1 max-h-72 overflow-auto scroll-smooth divide-y divide-gray-200">
                         {cities.map((city) => (
                           <Link
                             key={city}
@@ -95,22 +97,46 @@ const NavBar = () => {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
               {navigations.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.to}
-                  className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
-                  onClick={() => setIsOpen(false)}
-                >
-                  {item.name}
-                </Link>
+                item.name === 'Venues' ? (
+                  <div key={item.name} className="space-y-1">
+                    <button
+                      onClick={() => setIsVenueOpen(!isVenueOpen)}
+                      className="w-full text-left text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium flex items-center justify-between"
+                    >
+                      Venues
+                      <span className="text-gray-500">
+                        {isVenueOpen ? '▾' : '▸'}
+                      </span>
+                    </button>
+                    {isVenueOpen && (
+                      <div className="pl-4 space-y-1 max-h-48 overflow-auto">
+                        {cities.map((city) => (
+                          <Link
+                            key={city}
+                            to={`/venues/${encodeURIComponent(city)}`}
+                            className="text-gray-600 hover:text-blue-600 block px-3 py-2 rounded-md text-sm font-medium"
+                            onClick={() => {
+                              setIsOpen(false);
+                              setIsVenueOpen(false);
+                            }}
+                          >
+                            {city}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Link
+                    key={item.name}
+                    to={item.to}
+                    className="text-gray-700 hover:text-blue-600 block px-3 py-2 rounded-md text-base font-medium"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                )
               ))}
-              <Link
-                to="/contact"
-                onClick={() => setIsOpen(false)}
-                className="w-full mt-4 bg-blue-600 text-white px-6 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors duration-200 inline-block text-center"
-              >
-                Get Started
-              </Link>
             </div>
           </div>
         )}

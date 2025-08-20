@@ -15,7 +15,7 @@ const Landing = () => {
   )
   const venueTypes = useMemo(
     () => [
-      'Banquet Hall', 'Lawn', 'Resort', 'Hotel', 'Community Hall', 'Conference Hall', 'Farmhouse', 'Restaurant',
+      'Banquet Hall', 'Lawn', 'Resort', 'Wedding Hall','Hotel', 'Community Hall', 'Conference Hall', 'Farmhouse', 'Restaurant',
     ],
     []
   )
@@ -66,40 +66,58 @@ const Landing = () => {
       {/* Search Bar */}
       <div className="max-w-6xl mx-auto px-3 -mt-12 relative z-10 mb-20">
         <div className="bg-white rounded-2xl shadow-xl p-4 md:p-6">
-          <form onSubmit={onSubmit} className="grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] items-end gap-4">
-            <div>
-              <label htmlFor="landing-city" className="block text-sm font-medium text-gray-700">Wedding City</label>
-              <select
-                id="landing-city"
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              >
-                <option value="">Select city</option>
-                {cities.map((city) => (
-                  <option key={city} value={city}>{city}</option>
-                ))}
-              </select>
+          <form onSubmit={onSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_auto] items-end gap-4">
+            <div className="w-full">
+              <label htmlFor="landing-city" className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+              <div className="relative">
+                <select
+                  id="landing-city"
+                  value={selectedCity}
+                  onChange={(e) => setSelectedCity(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer"
+                  style={{ 
+                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                    backgroundPosition: 'right 0.5rem center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '1.5em 1.5em',
+                    paddingRight: '2.5rem'
+                  }}
+                >
+                  <option value="" className="text-gray-500">Select city</option>
+                  {cities.map((city) => (
+                    <option key={city} value={city} className="text-gray-900 py-2">{city}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="landing-type" className="block text-sm font-medium text-gray-700">Venue Type</label>
-              <select
-                id="landing-type"
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
-              >
-                <option value="">Select type</option>
-                {venueTypes.map((t) => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
+            <div className="w-full">
+              <label htmlFor="landing-type" className="block text-sm font-medium text-gray-700 mb-2">Venue Type</label>
+              <div className="relative">
+                <select
+                  id="landing-type"
+                  value={selectedType}
+                  onChange={(e) => setSelectedType(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer"
+                  style={{ 
+                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                    backgroundPosition: 'right 0.5rem center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '1.5em 1.5em',
+                    paddingRight: '2.5rem'
+                  }}
+                >
+                  <option value="" className="text-gray-900">Select type</option>
+                  {venueTypes.map((t) => (
+                    <option key={t} value={t} className="text-gray-900 py-2">{t}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <button
               type="submit"
-              className="h-[44px] md:h-[42px] w-full md:w-auto inline-flex items-center justify-center rounded-lg bg-red-600 px-6 py-2 font-semibold text-white hover:bg-red-700"
+              className="h-[50px] w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-red-600 px-6 py-3 font-semibold text-white hover:bg-red-700 transition-colors duration-200 shadow-sm"
             >
               Find venues →
             </button>
