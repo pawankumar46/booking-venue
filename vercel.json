@@ -1,35 +1,5 @@
 {
-    "routes" : [
-        {
-            "src": "/",
-            "dest": "/"
-            
-        },
-        {
-            "src": "/blogs",
-            "dest": "/"
-            
-        },
-        {
-            "src": "/contact",
-            "dest":"/"
-        },
-        {
-            "src":"/business",
-            "dest":"/"
-        },
-        {
-            "src":"/venues",
-            "dest":"/"
-        },
-        {
-            "src":"/venues/:city",
-            "dest":"/"
-        },
-        {
-            "src":"/venue/:city/:venueId",
-            "dest":"/"
-        }
-
-    ]
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
+  ]
 }
