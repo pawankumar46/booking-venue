@@ -218,7 +218,7 @@ const IndividualVenue = () => {
 
           {/* Highlights */}
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="rounded-xl bg-white p-5 shadow ring-1 ring-black/5 shadow-lg" >
+            <div className="rounded-xl bg-white p-5  ring-1 ring-black/5 shadow-lg" >
               <h3 className="font-semibold text-gray-900 mb-2">Highlights</h3>
               <ul className="text-sm text-gray-700 list-disc pl-5 space-y-1">
                 <li>Veg & Non-Veg available</li>
@@ -227,12 +227,12 @@ const IndividualVenue = () => {
                 <li>45 rooms, valet parking</li>
               </ul>
             </div>
-            <div className="rounded-xl bg-white p-5 shadow ring-1 ring-black/5 shadow-lg">
+            <div className="rounded-xl bg-white p-5  ring-1 ring-black/5 shadow-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Timings</h3>
               <p className="text-sm text-gray-700">Morning: 9:00 AM – 3:30 PM</p>
               <p className="text-sm text-gray-700">Evening: 5:00 PM – 11:00 PM</p>
             </div>
-            <div className="rounded-xl bg-white p-5 shadow ring-1 ring-black/5 shadow-lg">
+            <div className="rounded-xl bg-white p-5  ring-1 ring-black/5 shadow-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Menu</h3>
               <p className="text-sm text-gray-700">Veg: ₹800 per person</p>
               <p className="text-sm text-gray-700">Non-Veg: ₹999 per person</p>
