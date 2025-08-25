@@ -1,5 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import Calendar from './Calendar'
 
 const ListofVenues = () => {
   const params = useParams()
@@ -17,6 +18,38 @@ const ListofVenues = () => {
   })
   const [guestCount, setGuestCount] = useState('')
   const [showFilters, setShowFilters] = useState(false)
+  const [searchLocation, setSearchLocation] = useState('')
+  const [distanceWithin, setDistanceWithin] = useState(0)
+  const [typeOfFunction, setTypeOfFunction] = useState('')
+  const [decorator, setDecorator] = useState('')
+  const [caterer, setCaterer] = useState('')
+  const [floor, setFloor] = useState('')
+  const [startDateTime, setStartDateTime] = useState(null)
+  const [endDateTime, setEndDateTime] = useState(null)
+  const [pax, setPax] = useState('')
+  const [sort, setSort] = useState('')
+  const [slot, setSlot] = useState('')
+  const [openStartCal, setOpenStartCal] = useState(false)
+  const [openEndCal, setOpenEndCal] = useState(false)
+  const startCalRef = useRef(null)
+  const endCalRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (openStartCal && startCalRef.current && !startCalRef.current.contains(e.target)) {
+        setOpenStartCal(false)
+      }
+      if (openEndCal && endCalRef.current && !endCalRef.current.contains(e.target)) {
+        setOpenEndCal(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('touchstart', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('touchstart', handleClickOutside)
+    }
+  }, [openStartCal, openEndCal])
 
   const venueImages = useMemo(
     () => [
@@ -49,6 +82,10 @@ const ListofVenues = () => {
       location: city,
       locality: localities[i % localities.length],
       venueType: venueTypes[i % venueTypes.length],
+      address: `123 Event Street, ${localities[i % localities.length]}, ${city}`,
+      rooms: (i % 6) + 1,
+      floors: (i % 4) + 1,
+      carParking: 10 + i * 2,
       features: {
         veg: Math.random() > 0.3,
         nonVeg: Math.random() > 0.2,
@@ -68,6 +105,13 @@ const ListofVenues = () => {
       // Venue type filter
       if (selectedVenueType && venue.venueType !== selectedVenueType) return false
       
+      // Search by location/locality
+      if (searchLocation) {
+        const q = searchLocation.trim().toLowerCase()
+        const matches = venue.locality.toLowerCase().includes(q) || venue.location.toLowerCase().includes(q)
+        if (!matches) return false
+      }
+      
       // Guest count filter
       if (guestCount && venue.capacity < parseInt(guestCount)) return false
       
@@ -80,7 +124,7 @@ const ListofVenues = () => {
       
       return true
     })
-  }, [list, selectedLocality, selectedVenueType, filters, guestCount])
+  }, [list, selectedLocality, selectedVenueType, filters, guestCount, searchLocation])
 
   const handleFilterChange = (filterName) => {
     setFilters(prev => ({
@@ -108,192 +152,246 @@ const ListofVenues = () => {
   }
 
   return (
-    <div className="relative">
-      {/* Full-page background */}
-      <div className="absolute inset-0">
-        <div
-          className="h-full w-full bg-center bg-cover"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1519167758481-83f550bb49b3?q=80&w=1920&auto=format&fit=crop')",
-          }}
-          aria-label="City venues background"
-        />
-        <div className="absolute inset-0 bg-black/50" />
+    <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {/* Sidebar Filters */}
+        <aside className="md:col-span-1 border rounded-lg p-4 bg-white">
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Search Location</label>
+              <input
+                type="text"
+                value={searchLocation}
+                onChange={(e) => setSearchLocation(e.target.value)}
+                placeholder="Search location"
+                className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
+              />
       </div>
 
-      {/* Hero */}
-      <section className="relative min-h-[35vh] w-full pt-16 pb-8">
-        <div className="relative z-10 max-w-6xl mx-auto px-6 h-full flex items-end">
           <div>
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-white">Venues in {city}</h1>
-            <p className="text-white/90 mt-2">Discover handpicked places perfect for weddings, receptions, and events.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* List container */}
-      <section className="relative z-10">
-        <div className="max-w-6xl mx-auto px-6 pb-16">
-          <div className="rounded-2xl bg-white/90 backdrop-blur-sm shadow-xl ring-1 ring-black/5 p-6 md:p-8">
-            
-            {/* Filters Section */}
-            <div className="mb-6">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-900">Top venues in {city}</h2>
-                  <p className="text-gray-600 text-sm mt-1">
-                    {filteredVenues.length} venues found • Explore options by capacity, price and location.
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => setShowFilters(!showFilters)}
-                    className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                  >
-                    {showFilters ? 'Hide' : 'Show'} Filters
-                  </button>
-                  {(selectedLocality || selectedVenueType || guestCount || Object.values(filters).some(Boolean)) && (
-                    <button
-                      onClick={clearFilters}
-                      className="px-4 py-2 text-sm font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100"
-                    >
-                      Clear All
-                    </button>
-                  )}
-                </div>
+              <label className="block text-sm font-medium text-gray-700">Distance within</label>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={distanceWithin}
+                onChange={(e) => setDistanceWithin(parseInt(e.target.value))}
+                className="mt-2 w-full"
+              />
+              <div className="text-xs text-gray-600 flex justify-between">
+              <span className="text-sm font-medium text-gray-800 w-10">
+      {distanceWithin}+
+    </span>
+              </div>
               </div>
 
-              {/* Filters Panel */}
-              {showFilters && (
-                <div className="bg-gray-50 rounded-lg p-4 mb-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    
-                    {/* Locality Dropdown */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Locality</label>
+              <label className="block text-sm font-medium text-gray-700">Venue Type</label>
                       <select
-                        value={selectedLocality}
-                        onChange={(e) => setSelectedLocality(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
-                        style={{ color: 'black' }}
-                      >
-                        <option value="" style={{ color: 'black' }}>All Localities</option>
-                        {localities.map(locality => (
-                          <option key={locality} value={locality} style={{ color: 'black' }}>{locality}</option>
+                value={selectedVenueType}
+                onChange={(e) => setSelectedVenueType(e.target.value)}
+                size={1}
+                className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
+              >
+                <option value="">All</option>
+                {venueTypes.map(t => (
+                  <option key={t} value={t}>{t}</option>
                         ))}
                       </select>
                     </div>
 
-                    {/* Venue Type Dropdown */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Venue Type</label>
+              <label className="block text-sm font-medium text-gray-700">Food Type</label>
                       <select
-                        value={selectedVenueType}
-                        onChange={(e) => setSelectedVenueType(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
-                        style={{ color: 'black' }}
-                      >
-                        <option value="" style={{ color: 'black' }}>All Types</option>
-                        {venueTypes.map(type => (
-                          <option key={type} value={type} style={{ color: 'black' }}>{type}</option>
-                        ))}
+                value={filters.nonVeg ? 'nonVeg' : filters.veg ? 'veg' : ''}
+                onChange={(e) => {
+                  const val = e.target.value
+                  setFilters(prev => ({ ...prev, veg: val === 'veg', nonVeg: val === 'nonVeg' }))
+                }}
+                size={1}
+                className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
+              >
+                <option value="">Any</option>
+                <option value="veg">Veg</option>
+                <option value="nonVeg">Non-Veg</option>
                       </select>
                     </div>
 
-                    {/* Guest Count */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Min. Guests</label>
+              <label className="block text-sm font-medium text-gray-700">No of Guests</label>
                       <input
                         type="number"
                         value={guestCount}
                         onChange={(e) => setGuestCount(e.target.value)}
-                        placeholder="e.g., 100"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
-                        style={{ color: 'black' }}
+                placeholder="e.g. 100"
+                className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Type of Function</label>
+              <input
+                type="text"
+                value={typeOfFunction}
+                onChange={(e) => setTypeOfFunction(e.target.value)}
+                className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
                       />
                     </div>
 
-                    {/* Feature Filters */}
-                    <div className="md:col-span-2 lg:col-span-3">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Features</label>
-                      <div className="flex flex-wrap gap-3">
-                        {[
-                          { key: 'veg', label: 'Veg Food' },
-                          { key: 'nonVeg', label: 'Non-Veg Food' },
-                          { key: 'outsideFood', label: 'Outside Food Allowed' },
-                          { key: 'outsideLiquor', label: 'Outside Liquor Allowed' },
-                          { key: 'rooftop', label: 'Rooftop' }
-                        ].map(({ key, label }) => (
-                          <label key={key} className="flex items-center gap-2">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Decorator</label>
                             <input
-                              type="checkbox"
-                              checked={filters[key]}
-                              onChange={() => handleFilterChange(key)}
-                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                            />
-                            <span className="text-sm text-gray-700">{label}</span>
-                          </label>
-                        ))}
+                type="text"
+                value={decorator}
+                onChange={(e) => setDecorator(e.target.value)}
+                className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
+              />
                       </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Caterer</label>
+              <input
+                type="text"
+                value={caterer}
+                onChange={(e) => setCaterer(e.target.value)}
+                className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
+              />
                     </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Floor</label>
+              <input
+                type="text"
+                value={floor}
+                onChange={(e) => setFloor(e.target.value)}
+                className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
+              />
                   </div>
 
-                  {/* Apply Button */}
-                  <div className="mt-4 flex justify-end">
-                    <button
-                      onClick={handleApplyFilters}
-                      className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700"
-                    >
-                      Apply Filters
-                    </button>
+            <div className="flex gap-2 pt-2">
+              <button onClick={handleApplyFilters} className="px-4 py-2 bg-blue-600 text-white rounded-md">Apply</button>
+              <button onClick={clearFilters} className="px-4 py-2 bg-blue-100 rounded-md">Clear</button>
                   </div>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="md:col-span-3 space-y-4">
+          {/* Top Controls */}
+          <div className="flex flex-wrap items-center gap-2 bg-gray-50 p-2 rounded-md border">
+            <div className="relative" ref={startCalRef}>
+              <button type="button" onClick={() => setOpenStartCal(!openStartCal)} className="border rounded-md px-3 py-2 w-full sm:w-44 bg-white text-gray-800 text-left">
+                {startDateTime ? startDateTime.toLocaleDateString() : 'Start Date'}
+              </button>
+              {openStartCal && (
+                <div className="absolute z-20 mt-2">
+                  <Calendar value={startDateTime || new Date()} onChange={(d) => { setStartDateTime(d); setOpenStartCal(false) }} minDate={new Date()} />
                 </div>
               )}
             </div>
-
-            {/* Venues Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-6">
-              {filteredVenues.map((v) => (
-                <div key={v.id} className="group rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden transition duration-200 hover:shadow-lg">
-                  <div className="relative h-44 w-full bg-center bg-cover" style={{ backgroundImage: `url(${v.image})` }}>
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-                    <div className="absolute bottom-2 left-2 text-xs font-medium text-white bg-black/40 px-2 py-1 rounded-md">⭐ {v.rating.toFixed(1)}</div>
+            <div className="relative" ref={endCalRef}>
+              <button type="button" onClick={() => setOpenEndCal(!openEndCal)} className="border rounded-md px-3 py-2 w-full sm:w-44 bg-white text-gray-800 text-left">
+                {endDateTime ? endDateTime.toLocaleDateString() : 'End Date'}
+              </button>
+              {openEndCal && (
+                <div className="absolute z-20 mt-2">
+                  <Calendar value={endDateTime || (startDateTime || new Date())} onChange={(d) => { setEndDateTime(d); setOpenEndCal(false) }} minDate={startDateTime || new Date()} />
+                </div>
+              )}
                   </div>
-                  <div className="p-5">
-                    <a  href='/venue/${encodeURIComponent(city)}/${v.id}'className="text-base md:text-lg font-semibold text-gray-900 group-hover:text-blue-700">{v.name}</a>
-                    <p className="text-sm text-gray-600">{v.location} • {v.locality} • {v.venueType}</p>
-                    <p className="text-sm text-gray-600">Up to {v.capacity} guests</p>
-                    <p className="mt-2 text-gray-800 font-medium">Starting at ₹{v.price.toLocaleString('en-IN')}</p>
-                    
-                    {/* Features Display */}
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {v.features.veg && <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Veg</span>}
-                      {v.features.nonVeg && <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded">Non-Veg</span>}
-                      {v.features.outsideFood && <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Outside Food</span>}
-                      {v.features.outsideLiquor && <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded">Outside Liquor</span>}
-                      {v.features.rooftop && <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">Rooftop</span>}
+            <select
+              value={slot}
+              onChange={(e) => setSlot(e.target.value)}
+              size={1}
+              className="border rounded-md px-3 py-2 w-full sm:w-44 bg-white text-gray-800"
+            >
+              <option value="">Select Slot</option>
+              <option value="morning">Morning 6:00 AM – 3:00 PM</option>
+              <option value="afternoon">Afternoon 3:00 PM – 10:00 PM</option>
+            </select>
+            <input
+              type="number"
+              value={pax}
+              onChange={(e) => setPax(e.target.value)}
+              placeholder="PAX"
+              className="border rounded-md px-3 py-2 w-24 bg-white text-gray-800"
+            />
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value)}
+              size={1}
+              className="border rounded-md px-3 py-2 bg-white text-gray-800 w-full sm:w-44"
+            >
+              <option value="">Sort</option>
+              <option value="priceAsc">Price: Low to High</option>
+              <option value="priceDesc">Price: High to Low</option>
+              <option value="capacityDesc">Capacity</option>
+            </select>
                     </div>
                     
-                    <div className="mt-4 flex gap-3">
+          {/* Venue Rows */}
+          <div className="space-y-4">
+            {filteredVenues.map((v) => (
+              <div key={v.id} className="grid grid-cols-1 lg:grid-cols-12 gap-4 border rounded-lg p-4 bg-white">
+                {/* Image */}
+                <div className="lg:col-span-3">
+                  <div className="h-36 w-full rounded-md bg-center bg-cover" style={{ backgroundImage: `url(${v.image})` }} />
+                </div>
+                {/* Details */}
+                <div className="lg:col-span-4">
+                  <div className="text-sm text-gray-800 font-semibold">{v.locality}, {v.location}</div>
+                  <div className="text-xs text-gray-600 mt-1">{v.address}</div>
+                  <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+                    <div>
+                      <div className="text-gray-600">Minimum Pax</div>
+                      <div className="text-gray-800 font-medium">{Math.min(50, v.capacity)} Pax</div>
+                    </div>
+                    <div>
+                      <div className="text-gray-600">Max Floating Capacity</div>
+                      <div className="text-gray-800 font-medium">{v.capacity} Pax</div>
+                    </div>
+                    <div>
+                      <div className="text-gray-600">Number of Rooms</div>
+                      <div className="text-gray-800 font-medium">{v.rooms}</div>
+                    </div>
+                    <div>
+                      <div className="text-gray-600">Floors</div>
+                      <div className="text-gray-800 font-medium">{v.floors}</div>
+                    </div>
+                    <div>
+                      <div className="text-gray-600">Car Parking</div>
+                      <div className="text-gray-800 font-medium">{v.carParking}</div>
+                    </div>
+                  </div>
+                </div>
+                {/* Venue Photos Placeholder */}
+                <div className="lg:col-span-3 flex items-center justify-center border rounded-md">
+                  <span className="text-sm text-gray-600">Venue Photos</span>
+                </div>
+                {/* Price & Actions */}
+                <div className="lg:col-span-2 flex flex-col items-center justify-center gap-3">
+                  <div className="text-2xl font-bold">₹{v.price.toLocaleString('en-IN')}</div>
+                  <div className="text-xl text-black"> 400 / Pax</div>
                       <Link
                         to={`/venue/${encodeURIComponent(city)}/${v.id}`}
                         state={v}
-                        className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 inline-flex items-center justify-center"
+                    className="w-full text-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
                       >
-                        View
+                    Select
                       </Link>
-                      <button className="rounded-md bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-200">Enquire</button>
-                    </div>
+                  <a href='/contact' className="text-blue-700 text-sm">Contact Venue Admin</a>
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* No Results Message */}
             {filteredVenues.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500 text-lg">No venues match your current filters.</p>
+              <p className="text-gray-500 text-lg">
+                {searchLocation
+                  ? `Venue in this area is not available`
+                  : 'No venues match your current filters.'}
+              </p>
                 <button
                   onClick={clearFilters}
                   className="mt-4 px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700"
@@ -302,9 +400,8 @@ const ListofVenues = () => {
                 </button>
               </div>
             )}
+        </main>
           </div>
-        </div>
-      </section>
     </div>
   )
 }

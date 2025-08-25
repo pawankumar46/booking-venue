@@ -55,7 +55,7 @@ const Calendar = ({ value, onChange, minDate }) => {
 	}
 
 	return (
-		<div className="w-72 select-none">
+		<div className="w-72 select-none bg-white rounded-md shadow-lg border border-gray-200 p-3">
 			<div className="flex items-center justify-between mb-2">
 				<button type="button" onClick={goPrev} className="h-8 w-8 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50">‹</button>
 				<div className="text-sm font-semibold text-gray-900">
