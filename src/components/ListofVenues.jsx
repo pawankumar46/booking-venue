@@ -20,7 +20,7 @@ const ListofVenues = () => {
   const [showFilters, setShowFilters] = useState(false)
   const [searchLocation, setSearchLocation] = useState('')
   const [distanceWithin, setDistanceWithin] = useState(0)
-  const [typeOfFunction, setTypeOfFunction] = useState('')
+  
   const [decorator, setDecorator] = useState('')
   const [caterer, setCaterer] = useState('')
   const [floor, setFloor] = useState('')
@@ -228,15 +228,6 @@ const ListofVenues = () => {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Type of Function</label>
-              <input
-                type="text"
-                value={typeOfFunction}
-                onChange={(e) => setTypeOfFunction(e.target.value)}
-                className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
-                      />
-                    </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Decorator</label>
@@ -300,23 +291,6 @@ const ListofVenues = () => {
               )}
                   </div>
             <select
-              value={slot}
-              onChange={(e) => setSlot(e.target.value)}
-              size={1}
-              className="border rounded-md px-3 py-2 w-full sm:w-44 bg-white text-gray-800"
-            >
-              <option value="">Select Slot</option>
-              <option value="morning">Morning 6:00 AM – 3:00 PM</option>
-              <option value="afternoon">Afternoon 3:00 PM – 10:00 PM</option>
-            </select>
-            <input
-              type="number"
-              value={pax}
-              onChange={(e) => setPax(e.target.value)}
-              placeholder="PAX"
-              className="border rounded-md px-3 py-2 w-24 bg-white text-gray-800"
-            />
-            <select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
               size={1}
@@ -379,7 +353,7 @@ const ListofVenues = () => {
                       >
                     Select
                       </Link>
-                  <a href='/contact' className="text-blue-700 text-sm">Contact Venue Admin</a>
+                  
                   </div>
                 </div>
               ))}
