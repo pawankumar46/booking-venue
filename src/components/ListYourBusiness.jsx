@@ -61,7 +61,7 @@ const ListYourBusiness = () => {
       </h3>
       <div className="mt-6 space-y-4">
         <label htmlFor="user_venueType" className="block mb-2 text-sm font-medium text-gray-700">
-          Event Type
+          Service Type
         </label>
         <div className="relative">
           <select

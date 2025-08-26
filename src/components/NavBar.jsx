@@ -9,7 +9,6 @@ const NavBar = () => {
   const navigations = [
     { name: 'Home', to: '/' },
     { name: 'Venues', to: '/venues' },
-    { name: 'List You Business', to: '/business' },
     { name: 'Contact', to: '/contact' },
     { name: 'Reviews', to: '/blogs' },
 

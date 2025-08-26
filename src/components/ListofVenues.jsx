@@ -1,6 +1,8 @@
 import React, { useMemo, useState, useEffect, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Calendar from './Calendar'
+import { FaCarAlt, FaMotorcycle, FaMapMarkerAlt } from 'react-icons/fa'
+import { TiTick, TiTimes } from 'react-icons/ti'
 
 const ListofVenues = () => {
   const params = useParams()
@@ -86,6 +88,9 @@ const ListofVenues = () => {
       rooms: (i % 6) + 1,
       floors: (i % 4) + 1,
       carParking: 10 + i * 2,
+      bikeParking: 20 + i * 3,
+      externalDecorationAllowed: Math.random() > 0.5,
+      externalCatererAllowed: Math.random() > 0.5,
       features: {
         veg: Math.random() > 0.3,
         nonVeg: Math.random() > 0.2,
@@ -95,6 +100,22 @@ const ListofVenues = () => {
       }
     }))
   }, [city, venueImages, localities, venueTypes])
+
+  // Determine minimum accepted pax across venues (based on displayed Minimum Pax)
+  const minAcceptedPax = useMemo(() => {
+    if (!list.length) return 0
+    return list.reduce((min, v) => {
+      const venueMin = Math.min(50, v.capacity)
+      return Math.min(min, venueMin)
+    }, Number.POSITIVE_INFINITY)
+  }, [list])
+
+  const isBelowMinPax = useMemo(() => {
+    if (!guestCount) return false
+    const val = parseInt(guestCount)
+    if (Number.isNaN(val)) return false
+    return val < minAcceptedPax
+  }, [guestCount, minAcceptedPax])
 
   // Filter venues based on selected criteria
   const filteredVenues = useMemo(() => {
@@ -152,7 +173,7 @@ const ListofVenues = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="max-w-7xl mx-auto px-4 py-6 bg-gray-400">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* Sidebar Filters */}
         <aside className="md:col-span-1 border rounded-lg p-4 bg-white">
@@ -180,7 +201,7 @@ const ListofVenues = () => {
               />
               <div className="text-xs text-gray-600 flex justify-between">
               <span className="text-sm font-medium text-gray-800 w-10">
-      {distanceWithin}+
+      {distanceWithin} kms
     </span>
               </div>
               </div>
@@ -231,23 +252,29 @@ const ListofVenues = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Decorator</label>
-                            <input
-                type="text"
+              <select
                 value={decorator}
                 onChange={(e) => setDecorator(e.target.value)}
                 className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
-              />
-                      </div>
+              >
+                <option value="">Any</option>
+                <option value="allowed">External decorator allowed</option>
+                <option value="not_allowed">External decorator not allowed</option>
+              </select>
+            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Caterer</label>
-              <input
-                type="text"
+              <select
                 value={caterer}
                 onChange={(e) => setCaterer(e.target.value)}
                 className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
-              />
-                    </div>
+              >
+                <option value="">Any</option>
+                <option value="allowed">External caterers allowed</option>
+                <option value="not_allowed">External caterers not allowed</option>
+              </select>
+            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Floor</label>
@@ -299,22 +326,25 @@ const ListofVenues = () => {
               <option value="">Sort</option>
               <option value="priceAsc">Price: Low to High</option>
               <option value="priceDesc">Price: High to Low</option>
+              <option value="distClose">By Distance: Closest</option>
+              <option value="distFar">By Distance: Farthest</option>
               <option value="capacityDesc">Capacity</option>
             </select>
                     </div>
                     
           {/* Venue Rows */}
+          {!isBelowMinPax && (
           <div className="space-y-4">
             {filteredVenues.map((v) => (
               <div key={v.id} className="grid grid-cols-1 lg:grid-cols-12 gap-4 border rounded-lg p-4 bg-white">
                 {/* Image */}
                 <div className="lg:col-span-3">
-                  <div className="h-36 w-full rounded-md bg-center bg-cover" style={{ backgroundImage: `url(${v.image})` }} />
+                  <div className="h-73 w-full rounded-md bg-center bg-cover" style={{ backgroundImage: `url(${v.image})` }} />
                 </div>
                 {/* Details */}
                 <div className="lg:col-span-4">
-                  <div className="text-sm text-gray-800 font-semibold">{v.locality}, {v.location}</div>
-                  <div className="text-xs text-gray-600 mt-1">{v.address}</div>
+                  <div className="text-sm text-gray-800 font-semibold flex items-center gap-2"><FaMapMarkerAlt /> {v.locality}, {v.location}</div>
+                  <div className="text-xs text-gray-600 mt-1 truncate" title={v.address}>{v.address}</div>
                   <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
                     <div>
                       <div className="text-gray-600">Minimum Pax</div>
@@ -333,8 +363,27 @@ const ListofVenues = () => {
                       <div className="text-gray-800 font-medium">{v.floors}</div>
                     </div>
                     <div>
-                      <div className="text-gray-600">Car Parking</div>
-                      <div className="text-gray-800 font-medium">{v.carParking}</div>
+                      <div className="text-gray-600">Parking</div>
+                      <div className="mt-1 grid grid-cols-2 gap-1 text-gray-800 mr-20">
+                        <div className="flex flex-col items-center">
+                          <FaMotorcycle className="h-5 w-5 text-gray-700" />
+                          <div className="font-medium">{v.bikeParking}</div>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <FaCarAlt className="h-5 w-5 text-gray-700" />
+                          <div className="font-medium">{v.carParking}</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-span-2 grid grid-cols-2 gap-2 mt-1 pr-15">
+                      <div className={`${v.externalDecorationAllowed ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'} border rounded-md px-2 py-1 text-center text-xs font-medium flex items-center justify-center gap-1`}> 
+                        {v.externalDecorationAllowed ? <TiTick className="text-green-600 w-10 h-10 text-base" /> : <TiTimes className="text-red-600 w-10 h-10 text-base" />}
+                        <span>External Decor {v.externalDecorationAllowed ? 'Allowed' : 'Not Allowed'}</span>
+                      </div>
+                      <div className={`${v.externalCatererAllowed ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'} border rounded-md px-2 py-1 text-center text-xs font-medium flex items-center justify-center gap-1`}> 
+                        {v.externalCatererAllowed ? <TiTick className="text-green-600 w-10 h-10 text-base" /> : <TiTimes className="text-red-600 w-10 h-10 text-base" />}
+                        <span>External Caterers {v.externalCatererAllowed ? 'Allowed' : 'Not Allowed'}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -346,6 +395,7 @@ const ListofVenues = () => {
                 <div className="lg:col-span-2 flex flex-col items-center justify-center gap-3">
                   <div className="text-2xl font-bold">₹{v.price.toLocaleString('en-IN')}</div>
                   <div className="text-xl text-black"> 400 / Pax</div>
+                  <div className="text-xs text-gray-600">Inclusive of food</div>
                       <Link
                         to={`/venue/${encodeURIComponent(city)}/${v.id}`}
                         state={v}
@@ -358,13 +408,16 @@ const ListofVenues = () => {
                 </div>
               ))}
             </div>
+          )}
 
-            {filteredVenues.length === 0 && (
+            {(filteredVenues.length === 0 || isBelowMinPax) && (
               <div className="text-center py-12">
               <p className="text-gray-500 text-lg">
-                {searchLocation
-                  ? `Venue in this area is not available`
-                  : 'No venues match your current filters.'}
+                {isBelowMinPax
+                  ? 'Unfortunately we do not have any venue that accept less than mentioned pax'
+                  : searchLocation
+                    ? `Venue in this area is not available`
+                    : 'No venues match your current filters.'}
               </p>
                 <button
                   onClick={clearFilters}
