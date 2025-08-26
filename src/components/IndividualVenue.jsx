@@ -26,7 +26,7 @@ const IndividualVenue = () => {
       name: state.name || `Premier Venue ${idNum}`,
       rating: state.rating || 4.3,
       capacity: state.capacity || 300 + (idNum - 1) * 50,
-      price: state.price || 50000 + (idNum - 1) * 5000,
+      price: state.price || 450,
       location: state.location || decodeURIComponent(city),
       photos: venueImages,
     }
@@ -147,7 +147,7 @@ const IndividualVenue = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-sm text-gray-600">Starting at</div>
-                    <div className="text-2xl font-bold text-gray-900">₹{Number(venue.price).toLocaleString('en-IN')}</div>
+                    <div className="text-2xl font-bold text-gray-900">₹{`450/Pax`.toLocaleString('en-IN')}</div>
                   </div>
                   <div className="text-sm font-medium text-yellow-600">⭐ {Number(venue.rating).toFixed(1)}</div>
                 </div>
