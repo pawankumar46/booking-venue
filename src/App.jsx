@@ -7,9 +7,12 @@ import IndividualVenue from './components/IndividualVenue'
 import Landing from './components/Landing'
 import Footer from './components/Footer'
 import NavBar from './components/NavBar'
+import Login from './components/Login'
+import ChatBot from './components/ChatBot'
 import './App.css'
 
 import ListYourBusiness from './components/ListYourBusiness'
+import Services from './pages/Services'
 
 
 function App() {
@@ -27,11 +30,14 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/business" element={<ListYourBusiness/>}/>
             <Route path="/venues" element={<Venues />} />
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/services" element={<Services/>}/>
             <Route path="/venues/:city" element={<ListofVenues />} />
             <Route path="/venue/:city/:venueId" element={<IndividualVenue />} />
           </Routes>
         </main>
         <Footer />
+        <ChatBot />
       </div>
     </RouterComponent>
   )

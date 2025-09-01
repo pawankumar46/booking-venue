@@ -29,6 +29,42 @@ const IndividualVenue = () => {
       price: state.price || 450,
       location: state.location || decodeURIComponent(city),
       photos: venueImages,
+      description: state.description || `Experience elegance and sophistication at ${state.name || `Premier Venue ${idNum}`}. Our venue offers a perfect blend of modern amenities and classic charm, making it an ideal choice for your special occasions. With spacious halls, beautiful décor, and exceptional service, we ensure your event becomes a memorable celebration.`,
+      amenities: state.amenities || [
+        'Air Conditioning',
+        'Free WiFi',
+        'Sound System',
+        'LED Lighting',
+        'Stage Setup',
+        'Dance Floor',
+        'Parking Space',
+        'Security',
+        'Catering Service',
+        'Decoration Service',
+        'Backup Power',
+        'Clean Washrooms',
+        'Green Rooms',
+        'Valet Parking',
+        'Bar Counter'
+      ].slice(0, Math.floor(Math.random() * 6) + 8), // Random 8-13 amenities
+      seatingArrangements: state.seatingArrangements || [
+        { type: 'Round Table Seating', capacity: 8, description: 'Perfect for intimate dining and conversations' },
+        { type: 'Theater Style', capacity: 200, description: 'Ideal for presentations and ceremonies' },
+        { type: 'Banquet Style', capacity: 150, description: 'Classic formal dining arrangement' },
+        { type: 'Cocktail Standing', capacity: 300, description: 'Great for networking and mingling events' },
+        { type: 'Classroom Style', capacity: 80, description: 'Best for training sessions and workshops' },
+        { type: 'U-Shape Setup', capacity: 40, description: 'Perfect for meetings and discussions' }
+      ].slice(0, Math.floor(Math.random() * 3) + 3), // Random 3-5 seating arrangements
+      features: state.features || {
+        parking: true,
+        airConditioning: true,
+        powerBackup: true,
+        soundSystem: true,
+        decoration: Math.random() > 0.3,
+        catering: Math.random() > 0.2,
+        photography: Math.random() > 0.4,
+        security: true
+      }
     }
   }, [city, state, venueId, venueImages])
 
@@ -47,18 +83,137 @@ const IndividualVenue = () => {
       setOpen(false)
     }
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (open && !event.target.closest('.date-picker')) {
+          setOpen(false)
+        }
+      }
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [open])
+
     return (
-      <div className="relative">
+      <div className="relative date-picker">
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-left text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className={`mt-1 w-full rounded-lg border px-4 py-3 text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            selected 
+              ? 'border-blue-500 bg-blue-50 text-blue-900' 
+              : 'border-gray-300 bg-white text-gray-900 hover:border-gray-400'
+          }`}
         >
-          {label}
+          <div className="flex items-center justify-between">
+            <span className={selected ? 'font-medium' : 'text-gray-500'}>
+              {label}
+            </span>
+            <svg 
+              className={`w-5 h-5 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
         </button>
         {open && (
-          <div className="absolute z-20 mt-2 rounded-md border border-gray-200 bg-white p-3 shadow-lg">
+          <div className="absolute z-30 mt-2 rounded-xl border border-gray-200 bg-white p-4 shadow-xl">
             <Calendar value={selected || new Date()} onChange={handleSelect} minDate={new Date()} />
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  const TimePicker = ({ label, value, onChange, placeholder }) => {
+    const [open, setOpen] = useState(false)
+    const [selectedTime, setSelectedTime] = useState(value || '')
+
+    const timeSlots = [
+      '06:00', '07:00', '08:00', 
+      '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30',
+      '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30',
+      '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30',
+      '21:00', '21:30', '22:00', '22:30', '23:00'
+    ]
+
+    const handleTimeSelect = (time) => {
+      setSelectedTime(time)
+      onChange(time)
+      setOpen(false)
+    }
+
+    const formatTime = (time) => {
+      if (!time) return ''
+      const [hours, minutes] = time.split(':')
+      const hour = parseInt(hours)
+      const ampm = hour >= 12 ? 'PM' : 'AM'
+      const displayHour = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour
+      return `${displayHour}:${minutes} ${ampm}`
+    }
+
+    // Close dropdown when clicking outside
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (open && !event.target.closest('.time-picker')) {
+          setOpen(false)
+        }
+      }
+      document.addEventListener('mousedown', handleClickOutside)
+      return () => document.removeEventListener('mousedown', handleClickOutside)
+    }, [open])
+
+    return (
+      <div className="relative time-picker">
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          className={`mt-1 w-full rounded-lg border px-4 py-3 text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            selectedTime 
+              ? 'border-blue-500 bg-blue-50 text-blue-900' 
+              : 'border-gray-300 bg-white text-gray-900 hover:border-gray-400'
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span className={selectedTime ? 'font-medium' : 'text-gray-500'}>
+              {selectedTime ? formatTime(selectedTime) : placeholder}
+            </span>
+            <svg 
+              className={`w-5 h-5 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </button>
+        
+        {open && (
+          <div className="absolute z-30 mt-2 w-full rounded-xl border border-gray-200 bg-white p-4 shadow-xl max-h-80 overflow-y-auto">
+            <div className="mb-3">
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">Select Time</h3>
+              <div className="h-px bg-gray-200"></div>
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              {timeSlots.map((time) => (
+                <button
+                  key={time}
+                  type="button"
+                  onClick={() => handleTimeSelect(time)}
+                  className={`px-4 py-3 text-sm rounded-lg font-medium transition-all duration-150 ${
+                    selectedTime === time 
+                      ? 'bg-blue-600 text-white shadow-md' 
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                  }`}
+                >
+                  {formatTime(time)}
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -69,6 +224,10 @@ const IndividualVenue = () => {
   const [isGalleryOpen, setIsGalleryOpen] = useState(false)
   const [galleryIndex, setGalleryIndex] = useState(0)
 
+  // Time selection state
+  const [startTime, setStartTime] = useState('')
+  const [endTime, setEndTime] = useState('')
+
   const openGallery = (startIndex = 0) => {
     setGalleryIndex(startIndex)
     setIsGalleryOpen(true)
@@ -76,6 +235,36 @@ const IndividualVenue = () => {
   const closeGallery = () => setIsGalleryOpen(false)
   const nextImage = () => setGalleryIndex((i) => (i + 1) % venue.photos.length)
   const prevImage = () => setGalleryIndex((i) => (i - 1 + venue.photos.length) % venue.photos.length)
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault()
+    
+    // Validate time selection
+    if (startTime && endTime) {
+      const start = new Date(`2000-01-01T${startTime}`)
+      const end = new Date(`2000-01-01T${endTime}`)
+      if (end <= start) {
+        alert('End time must be after start time')
+        return
+      }
+    }
+    
+    const formData = new FormData(e.target)
+    const data = {
+      venueId: venue.id,
+      venueName: venue.name,
+      date: formData.get('date'),
+      startTime: startTime,
+      endTime: endTime,
+      session: formData.get('session'),
+      guests: formData.get('guests'),
+      name: formData.get('name'),
+      phone: formData.get('phone')
+    }
+    console.log('Booking enquiry:', data)
+    // Here you would typically send this data to your backend
+    alert('Booking enquiry submitted successfully!')
+  }
 
   useEffect(() => {
     if (!isGalleryOpen) return
@@ -166,16 +355,34 @@ const IndividualVenue = () => {
               {/* Availability Form */}
               <div className="mt-6 rounded-2xl bg-white shadow-xl ring-1 ring-black/5 p-6">
                 <h2 className="text-lg font-semibold text-gray-900">Check Availability</h2>
-                <form className="mt-4 space-y-4">
+                <form className="mt-4 space-y-4" onSubmit={handleFormSubmit}>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Event Date</label>
                     <DatePicker />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">Start Time</label>
+                      <TimePicker 
+                        value={startTime}
+                        onChange={setStartTime}
+                        placeholder="Select start time"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">End Time</label>
+                      <TimePicker 
+                        value={endTime}
+                        onChange={setEndTime}
+                        placeholder="Select end time"
+                      />
+                    </div>
                   </div>
                   <div>
                     <label htmlFor="session" className="block text-sm font-medium text-gray-700">Session</label>
                     <select
                       id="session"
-                      className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                      className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                       defaultValue=""
                       required
                     >
@@ -192,7 +399,7 @@ const IndividualVenue = () => {
                       type="number"
                       min="1"
                       placeholder="e.g. 150"
-                      className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                      className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                       required
                     />
                   </div>
@@ -200,20 +407,28 @@ const IndividualVenue = () => {
                     <input
                       type="text"
                       placeholder="Your name"
-                      className="rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                      className="rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                       required
                     />
                     <input
                       type="tel"
                       placeholder="Phone"
-                      className="rounded-md border border-gray-300 px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                      className="rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                       required
                     />
                   </div>
-                  <button type="submit" className="w-full rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700">Check Availability</button>
+                  <button type="submit" className="w-full rounded-lg bg-red-600 px-6 py-4 text-sm font-semibold text-white hover:bg-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">Check Availability</button>
                 </form>
               </div>
             </aside>
+          </div>
+
+          {/* About the Venue */}
+          <div className="mt-8">
+            <div className="rounded-xl bg-white p-6 ring-1 ring-black/5 shadow-lg">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">About {venue.name}</h3>
+              <p className="text-gray-700 leading-relaxed">{venue.description}</p>
+            </div>
           </div>
 
           {/* Highlights */}
@@ -223,19 +438,103 @@ const IndividualVenue = () => {
               <ul className="text-sm text-gray-700 list-disc pl-5 space-y-1">
                 <li>Veg & Non-Veg available</li>
                 <li>3 banquet halls</li>
-                <li>Up to 500 guests</li>
-                <li>45 rooms, valet parking</li>
+                <li>Up to {venue.capacity} guests</li>
+                <li>Professional event management</li>
+                <li>Premium location</li>
               </ul>
             </div>
             <div className="rounded-xl bg-white p-5  ring-1 ring-black/5 shadow-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Timings</h3>
               <p className="text-sm text-gray-700">Morning: 9:00 AM – 3:30 PM</p>
               <p className="text-sm text-gray-700">Evening: 5:00 PM – 11:00 PM</p>
+              <p className="text-sm text-gray-700 mt-2">Full Day bookings available</p>
             </div>
             <div className="rounded-xl bg-white p-5  ring-1 ring-black/5 shadow-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Menu</h3>
               <p className="text-sm text-gray-700">Veg: ₹800 per person</p>
               <p className="text-sm text-gray-700">Non-Veg: ₹999 per person</p>
+              <p className="text-sm text-gray-500 mt-2">Customizable menu options</p>
+            </div>
+          </div>
+
+          {/* Amenities & Features */}
+          <div className="mt-8">
+            <div className="rounded-xl bg-white p-6 ring-1 ring-black/5 shadow-lg">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Amenities & Features</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                {venue.amenities.map((amenity, index) => (
+                  <div key={index} className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
+                    <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+                    <span className="text-sm font-medium text-gray-800">{amenity}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Seating Arrangements */}
+          <div className="mt-8">
+            <div className="rounded-xl bg-white p-6 ring-1 ring-black/5 shadow-lg">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Seating Arrangements</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {venue.seatingArrangements.map((seating, index) => (
+                  <div key={index} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+                    <div className="flex items-center justify-between mb-2">
+                      <h4 className="font-semibold text-gray-900">{seating.type}</h4>
+                      <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                        Up to {seating.capacity} guests
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600">{seating.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Features */}
+          <div className="mt-8">
+            <div className="rounded-xl bg-white p-6 ring-1 ring-black/5 shadow-lg">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">Additional Services</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className={`p-3 rounded-lg text-center ${venue.features.decoration ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200'}`}>
+                  <div className={`w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center ${venue.features.decoration ? 'bg-green-100' : 'bg-gray-100'}`}>
+                    <span className={venue.features.decoration ? 'text-green-600' : 'text-gray-400'}>🎨</span>
+                  </div>
+                  <p className="text-xs font-medium text-gray-700">Decoration</p>
+                  <p className={`text-xs ${venue.features.decoration ? 'text-green-600' : 'text-red-500'}`}>
+                    {venue.features.decoration ? 'Available' : 'Not Available'}
+                  </p>
+                </div>
+
+                <div className={`p-3 rounded-lg text-center ${venue.features.catering ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200'}`}>
+                  <div className={`w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center ${venue.features.catering ? 'bg-green-100' : 'bg-gray-100'}`}>
+                    <span className={venue.features.catering ? 'text-green-600' : 'text-gray-400'}>🍽️</span>
+                  </div>
+                  <p className="text-xs font-medium text-gray-700">Catering</p>
+                  <p className={`text-xs ${venue.features.catering ? 'text-green-600' : 'text-red-500'}`}>
+                    {venue.features.catering ? 'Available' : 'External Only'}
+                  </p>
+                </div>
+
+                <div className={`p-3 rounded-lg text-center ${venue.features.photography ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200'}`}>
+                  <div className={`w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center ${venue.features.photography ? 'bg-green-100' : 'bg-gray-100'}`}>
+                    <span className={venue.features.photography ? 'text-green-600' : 'text-gray-400'}>📸</span>
+                  </div>
+                  <p className="text-xs font-medium text-gray-700">Photography</p>
+                  <p className={`text-xs ${venue.features.photography ? 'text-green-600' : 'text-red-500'}`}>
+                    {venue.features.photography ? 'In-house Available' : 'External Only'}
+                  </p>
+                </div>
+
+                <div className="p-3 rounded-lg text-center bg-green-50 border border-green-200">
+                  <div className="w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center bg-green-100">
+                    <span className="text-green-600">🔒</span>
+                  </div>
+                  <p className="text-xs font-medium text-gray-700">Security</p>
+                  <p className="text-xs text-green-600">24/7 Available</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

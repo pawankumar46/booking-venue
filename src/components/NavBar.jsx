@@ -8,9 +8,10 @@ const NavBar = () => {
   const [isVenueOpen, setIsVenueOpen] = useState(false); // Add this state for venue dropdown
   const navigations = [
     { name: 'Home', to: '/' },
-    { name: 'Venues', to: '/venues' },
+    { name: 'Locations', to: '/venues' },
     { name: 'Contact', to: '/contact' },
     { name: 'Reviews', to: '/blogs' },
+    {name : "Login", to:"/login"}
 
   ];
   const cities = [
@@ -42,10 +43,10 @@ const NavBar = () => {
             {/* Desktop menu */}
             <div className="hidden md:flex items-center space-x-8 ml-8">
               {navigations.map((item) => (
-                item.name === 'Venues' ? (
+                item.name === 'Locations' ? (
                   <div key={item.name} className="relative group">
-                    <button className="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-gray-700 hover:text-blue-600 inline-flex items-center gap-1">
-                      Venues
+                    <button className="px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 text-gray-700 hover:text-blue-600 inline-flex items-center gap-1">
+                      Locations
                       <span className="text-gray-500">▾</span>
                     </button>
                     <div className="absolute left-0 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black/5 hidden group-hover:block">
@@ -66,7 +67,7 @@ const NavBar = () => {
                   <Link
                     key={item.name}
                     to={item.to}
-                    className="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 text-gray-700 hover:text-blue-600"
+                    className="px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 text-gray-700 hover:text-blue-600"
                   >
                     {item.name}
                   </Link>
@@ -96,13 +97,13 @@ const NavBar = () => {
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
               {navigations.map((item) => (
-                item.name === 'Venues' ? (
+                item.name === 'Locations' ? (
                   <div key={item.name} className="space-y-1">
                     <button
                       onClick={() => setIsVenueOpen(!isVenueOpen)}
                       className="w-full text-left text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium flex items-center justify-between"
                     >
-                      Venues
+                      Locations
                       <span className="text-gray-500">
                         {isVenueOpen ? '▾' : '▸'}
                       </span>
