@@ -9,10 +9,12 @@ import Footer from './components/Footer'
 import NavBar from './components/NavBar'
 import Login from './components/Login'
 import ChatBot from './components/ChatBot'
+import Resources from './pages/Resources'
 import './App.css'
 
 import ListYourBusiness from './components/ListYourBusiness'
 import Services from './pages/Services'
+import ListofServices from './pages/ListofServices'
 
 
 function App() {
@@ -34,6 +36,8 @@ function App() {
             <Route path="/services" element={<Services/>}/>
             <Route path="/venues/:city" element={<ListofVenues />} />
             <Route path="/venue/:city/:venueId" element={<IndividualVenue />} />
+            <Route path="/services/:city" element={<ListofServices/>}/>
+            <Route path="/resources/:city" element={<Resources/>}/>
           </Routes>
         </main>
         <Footer />

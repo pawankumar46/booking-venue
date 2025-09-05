@@ -8,9 +8,7 @@ const NavBar = () => {
   const [isVenueOpen, setIsVenueOpen] = useState(false); // Add this state for venue dropdown
   const navigations = [
     { name: 'Home', to: '/' },
-    { name: 'Locations', to: '/venues' },
     { name: 'Contact', to: '/contact' },
-    { name: 'Reviews', to: '/blogs' },
     {name : "Login", to:"/login"}
 
   ];

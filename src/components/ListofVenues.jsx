@@ -12,6 +12,7 @@ import rectTable from "../assets/6-table.svg"
 import roundTable from "../assets/circular.svg"
 import theaterTable from "../assets/theater.svg"
 import classroomTable from "../assets/class.svg"
+import dining from "../assets/dining.svg"
 
 const ListofVenues = () => {
   const params = useParams()
@@ -36,11 +37,6 @@ const ListofVenues = () => {
   const [decorator, setDecorator] = useState('')
   const [caterer, setCaterer] = useState('')
   const [floor, setFloor] = useState('')
-  const [startDateTime, setStartDateTime] = useState(null)
-  const [endDateTime, setEndDateTime] = useState(null)
-  const [pax, setPax] = useState('')
-  const [sort, setSort] = useState('')
-  const [slot, setSlot] = useState('')
   const [openStartCal, setOpenStartCal] = useState(false)
   const [openEndCal, setOpenEndCal] = useState(false)
   const [showAmenitiesModal, setShowAmenitiesModal] = useState(false)
@@ -49,6 +45,11 @@ const ListofVenues = () => {
   const [selectedVenueSeating, setSelectedVenueSeating] = useState([])
   const startCalRef = useRef(null)
   const endCalRef = useRef(null)
+  // Selected seating per venue
+  const [selectedSeatingByVenue, setSelectedSeatingByVenue] = useState({})
+
+  // Loctaion data for Range Slider
+  const [center, setCenter] = useState({ lat: 0, lon: 0 })
 
   // Carousel state for each venue
   const [carouselStates, setCarouselStates] = useState({})
@@ -87,7 +88,8 @@ const ListofVenues = () => {
   //             `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
   //           );
   //           const data = await res.json();
-  //           console.log(data)
+            
+  //           setCenter({lat: data.lat , lon: data.lon})
   //           setLocation(data.address.quarter);
   //         } catch (err) {
   //           setError("Failed to fetch location");
@@ -101,6 +103,27 @@ const ListofVenues = () => {
   //     setError("Geolocation is not supported by this browser.");
   //   }
   // }, []);
+
+  // For Location Range Increase
+
+  //   useEffect(() => {
+  //   // Approximate new point (northwards by radius km)
+  //   const R = 6371; // Earth radius in km
+  //   const lat = Number(center.lat);
+  //   const lng = Number(center.lon);
+  //   const radius = Number(distanceWithin);
+  //   const newLat = lat + (radius / R) * (180 / Math.PI);
+
+  //   fetch(
+  //     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${newLat}&lon=${lng}`
+  // )
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data && data.address) {
+  //         setLocation(data.address.quarter || data.address.suburb || data.address.city || data.address.village || data.address.county);
+  //         }
+  //     });
+  // }, [distanceWithin]);
 
   // Auto-play carousel for all venues
   useEffect(() => {
@@ -134,7 +157,7 @@ const ListofVenues = () => {
 
   // Sample data for localities and venue types
   const localities = [
-    'Bandra West', 'Andheri West', 'Worli', 'Lower Parel', 'Powai', 'Juhu', 'Vashi', 'BKC'," VidyamanyaNagar"
+    'Bandra West', 'Andheri West', 'Worli', 'Lower Parel', 'Powai', 'Juhu', 'Vashi', 'BKC'," VidyaManyaNagar"
   ]
   
   const venueTypes = [
@@ -172,17 +195,15 @@ const ListofVenues = () => {
         'Parking',
         'Security',
         'Catering Service'
-      ].slice(0, Math.floor(Math.random() * 8) + 4), // Random 4-11 amenities
+      ],
       seatingArrangements: [
         { type: 'Round Table', capacity: 8, icon: 'round' },
         { type: 'Rectangular Table', capacity: 6, icon: 'rectangular' },
         { type: 'Theater Style', capacity: 150, icon: 'theater' },
         { type: 'Classroom Style', capacity: 80, icon: 'classroom' },
-        { type: 'Banquet Style', capacity: 200, icon: 'banquet' },
-        { type: 'U-Shape', capacity: 40, icon: 'ushape' },
-        { type: 'Cocktail Style', capacity: 120, icon: 'cocktail' },
-        { type: 'Boardroom', capacity: 20, icon: 'boardroom' }
-      ].slice(0, Math.floor(Math.random() * 4) + 2), // Random 2-5 seating arrangements
+        { type: "Dining Style", capacity:5, icon: 'dining'},
+       
+      ], // All seating arrangements available
       features: {
         veg: Math.random() > 0.3,
         nonVeg: Math.random() > 0.2,
@@ -252,6 +273,8 @@ const ListofVenues = () => {
   }
 
   const clearFilters = () => {
+    setSearchLocation("")
+    setDistanceWithin(0)
     setSelectedLocality('')
     setSelectedVenueType('')
     setFilters({
@@ -287,14 +310,36 @@ const ListofVenues = () => {
         return <img src={classroomTable} alt="Classroom table" className="h-4 w-4" />
       case 'banquet':
         return <MdTableRestaurant className="w-4 h-4 text-blue-600" />
-      case 'ushape':
-        return <div className="w-4 h-4 border-2 border-gray-600 flex items-center justify-center"><div className="w-2 h-2 border border-gray-600 rounded-t-lg"></div></div>
+      case 'dining':
+        return <img src={dining} alt='Dining table' className='h-4 w-4'/>
       case 'cocktail':
         return <MdTableBar className="w-4 h-4 text-gray-600" />
       case 'boardroom':
         return <div className="w-4 h-4 border-2 border-gray-600 rounded flex items-center justify-center"><div className="w-2 h-1 bg-gray-600 rounded"></div></div>
       default:
         return <div className="w-4 h-4 border-2 border-gray-600 rounded"></div>
+    }
+  }
+
+  const getSelectedSeating = (venueId) => {
+    return selectedSeatingByVenue[venueId] || 'theater'
+  }
+
+  const setSeatingForVenue = (venueId, seating) => {
+    setSelectedSeatingByVenue(prev => ({ ...prev, [venueId]: seating }))
+  }
+
+  const getPriceForSeating = (seating) => {
+    switch (seating) {
+      case 'round': // circular
+        return 500
+      case 'rectangular':
+        return 480
+      case 'theater':
+      case 'classroom':
+        return 450
+      default:
+        return 450
     }
   }
 
@@ -358,6 +403,10 @@ const ListofVenues = () => {
     }
   }
 
+  // Range data
+    const changeRange=(e)=>{
+       setDistanceWithin(e.target.value)
+    }
   return (
     <div className="min-h-screen bg-gray-300">
       <div className="max-w-7xl mx-auto px-4 py-5 sm:py-8">
@@ -371,7 +420,7 @@ const ListofVenues = () => {
               <label className="block text-sm font-medium text-gray-700">Search Location</label>
               <input
                 type="text"
-                value={searchLocation || location}
+                value={searchLocation || location || ""}
                 onChange={changeLocation}
                 placeholder="Search location"
                 className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
@@ -385,7 +434,7 @@ const ListofVenues = () => {
                 min="0"
                 max="100"
                 value={distanceWithin}
-                onChange={(e) => setDistanceWithin(parseInt(e.target.value))}
+                onChange={changeRange}
                 className="mt-2 w-full"
               />
               <div className="text-xs text-gray-600 flex justify-between">
@@ -438,10 +487,10 @@ const ListofVenues = () => {
                 className="mt-1 w-full px-3 py-2 border rounded-md bg-white text-gray-800"
               >
                 <option value="">Select guest count</option>
-                <option value="150">150 guests</option>
-                <option value="200">200 guests</option>
-                <option value="250">250 guests</option>
-                <option value="300+">300+ guests</option>
+                <option value="150">100 - 150</option>
+                <option value="200">150 - 200</option>
+                <option value="250">200 - 300</option>
+                <option value="300+">300+</option>
               </select>
             </div>
 
@@ -484,7 +533,7 @@ const ListofVenues = () => {
 
             <div className="flex gap-2 pt-2">
               <button onClick={handleApplyFilters} className="px-4 py-2 bg-blue-600 text-white rounded-md">Apply</button>
-              <button onClick={clearFilters} className="px-4 py-2 bg-blue-100 rounded-md">Clear</button>
+              <button onClick={clearFilters} className="px-4 py-2 bg-blue-600 rounded-md">Clear</button>
                 </div>
                   </div>
           </div>
@@ -496,9 +545,9 @@ const ListofVenues = () => {
                     
           {/* Venue Rows */}
           {!isBelowMinPax && (
-          <div className="space-y-6">
+          <div className="space-y-2">
             {filteredVenues.map((v) => (
-              <div key={v.id} className="bg-white h-57 rounded-lg shadow-sm border overflow-hidden">
+              <div key={v.id} className="bg-white  h-43 rounded-lg shadow-sm border overflow-hidden">
                 {/* Mobile Layout */}
                 <div className=" block lg:hidden">
                 {/* Image Carousel */}
@@ -657,7 +706,7 @@ const ListofVenues = () => {
                         <div className="text-sm font-medium text-gray-700 mb-2">Seating</div>
                         <div className="flex flex-wrap gap-2">
                           {v.seatingArrangements.slice(0, 2).map((seating, index) => (
-                            <div key={index} className="bg-blue-50 rounded px-3 py-1 text-xs font-medium text-gray-700 flex items-center gap-1">
+                            <div key={index} title={`${seating.type}${seating.capacity ? ` (Capacity: ${seating.capacity})` : ''}`} className="bg-blue-50 rounded px-3 py-1 text-xs font-medium text-gray-700 flex items-center gap-1">
                               {renderSeatingIcon(seating.icon)}
                               <span>{seating.type}</span>
                             </div>
@@ -671,6 +720,24 @@ const ListofVenues = () => {
                             </button>
                           )}
                         </div>
+                        <div className="mt-2 flex items-center gap-2">
+                          <label className="text-xs text-gray-600">Select seating:</label>
+                          <select
+                            value={getSelectedSeating(v.id)}
+                            onChange={(e) => setSeatingForVenue(v.id, e.target.value)}
+                            className="border rounded px-2 py-1 text-xs text-gray-800"
+                          >
+                            <option value="theater">Theater</option>
+                            <option value="classroom">Classroom</option>
+                            <option value="round">Circular</option>
+                            <option value="rectangular">Rectangular</option>
+                          </select>
+                          <div className="flex items-center gap-1 text-xs text-gray-700">
+                            <span className="text-gray-500">Selected:</span>
+                            {renderSeatingIcon(getSelectedSeating(v.id))}
+                            <span className="capitalize">{getSelectedSeating(v.id)}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -679,7 +746,7 @@ const ListofVenues = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           
-                          <div className="text-sm text-gray-600">{getPricePerPax(selectedGuestOption)} / Pax • Inclusive of food</div>
+                          <div className="text-sm text-gray-600">{getPriceForSeating(getSelectedSeating(v.id))} / Pax • Inclusive of food</div>
                         </div>
                         <Link
                           to={`/venue/${encodeURIComponent(city)}/${v.id}`}
@@ -694,10 +761,10 @@ const ListofVenues = () => {
                 </div>
 
                 {/* Desktop Layout */}
-                <div className="hidden lg:grid lg:grid-cols-12 gap-4 p-4">
+                <div className="hidden lg:grid lg:grid-cols-12 gap-1 p-2">
                   {/* Image Carousel */}
                   <div className="lg:col-span-3 flex items-center">
-                    <div className="relative w-full h-48 rounded-lg overflow-hidden shadow-sm">
+                    <div className="relative w-48 h-38 rounded-lg overflow-hidden shadow-sm">
                       <div 
                         className="w-full h-full bg-center bg-cover transition-all duration-500 hover:scale-95" 
                         style={{ backgroundImage: `url(${venueImages[getCarouselState(v.id).currentIndex]})` }}
@@ -763,9 +830,10 @@ const ListofVenues = () => {
                   <div className="lg:col-span-7">
                   
                                     {/* Row 1: Capacity and Rooms */}
-                  <div className="mt-3 flex items-center gap-6 text-sm">
-                    <div className="text-sm text-gray-800 font-semibold flex items-center gap-3"><FaMapMarkerAlt /> {v.locality}, {v.location}</div>
-                  <div className="text-xs text-gray-600 mt-1 truncate w-100" title={v.address}>{v.address}</div>
+                  <div className="text-black text-base font-semibold leading-tight">Honganasu Party Hall</div>
+                  <div className="mt-1 flex items-center gap-4 text-xs">
+                    <div className="text-md text-gray-800 font-semibold flex items-center gap-2"><FaMapMarkerAlt /> {v.locality.slice(0,11)}...</div>
+                  
                     <div className="flex items-center gap-2">
                       <IoIosPerson className="h-5 w-5 text-gray-700" />
                       <div className="text-gray-800 font-medium">
@@ -777,18 +845,15 @@ const ListofVenues = () => {
                       <div className="text-gray-800 font-medium">{v.capacity} Pax</div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <IoBed className="h-5 w-5 text-gray-700" />
-                      <div className="text-gray-800 font-medium">{v.rooms}</div>
+                      {/* <IoBed className="h-5 w-5 text-gray-700" /> */}
+                      <div className="text-gray-800 font-medium"> Rooms {v.rooms}</div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <SiLevelsdotfyi className="h-5 w-5 text-gray-700"/>
-                      <div className="text-gray-800 font-medium">{v.floors}</div>
+                      {/* <SiLevelsdotfyi className="h-5 w-5 text-gray-700"/> */}
+                      <div className="text-gray-800 font-medium"> Floors {v.floors}</div>
                     </div>
-                  </div>
 
-                  {/* Row 2: Parking and Permissions */}
-                  <div className="mt-3 flex items-center gap-6 text-sm">
-                    {/* Parking */}
+                      {/* Parking */}
                     <div className="flex items-center gap-2">
                       <FaParking className="h-5 w-5 text-gray-700" />
                       <div className="flex gap-3">
@@ -802,9 +867,15 @@ const ListofVenues = () => {
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  {/* Row 2: Parking and Permissions */}
+                  <div>
+                   
+
 
                     {/* Permissions */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 mt-2">
                       <div className={`${v.externalDecorationAllowed ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'} border rounded px-2 py-1 text-center text-xs font-medium flex items-center gap-1 h-7 relative group`}> 
                         {v.externalDecorationAllowed ? <TiTick className="text-green-600 w-3 h-3" /> : <TiTimes className="text-red-600 w-3 h-3" />}
                         <span className="truncate">External Decorator</span>
@@ -827,11 +898,11 @@ const ListofVenues = () => {
                   </div>
 
                   {/* Row 3: Amenities and Seating in Columns */}
-                  <div className="mt-3 grid grid-cols-2 gap-6 text-sm">
+                  <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
                     {/* Amenities Column */}
                     <div>
-                      <div className="text-xs text-gray-600 font-medium mb-2">Amenities:</div>
-                      <div className="flex flex-wrap gap-1 mb-2">
+                      <div className="text-[10px] text-gray-600 font-medium mb-1">Amenities:</div>
+                      <div className="flex flex-wrap gap-1 mb-1">
                         {v.amenities.slice(0, 3).map((amenity, index) => (
                           <div key={index} className="bg-gray-100 rounded px-2 py-1 text-xs font-medium text-gray-700">
                             {amenity}
@@ -850,40 +921,41 @@ const ListofVenues = () => {
 
                     {/* Seating Column */}
                     <div>
-                      <div className="text-xs text-gray-600 font-medium mb-2">Seating:</div>
-                      <div className="flex flex-wrap gap-1 mb-2">
-                        {v.seatingArrangements.slice(0, 3).map((seating, index) => (
-                          <div key={index} className="bg-gray-100 rounded px-2 py-1 text-xs font-medium text-gray-700">
+                      <div className="text-[10px] text-gray-600 font-medium mb-1">Available Seating Arrangements:</div>
+                      <div className="flex flex-wrap gap-1 mb-1">
+                        {v.seatingArrangements.map((seating, index) => (
+                          <div key={index} title={`${seating.type}${seating.capacity ? ` (Capacity: ${seating.capacity})` : ''}`} className="bg-gray-100 rounded px-2 py-1 text-xs font-medium text-gray-700">
                             {renderSeatingIcon(seating.icon)}
                           </div>
                         ))}
                       </div>
-                      {/* {v.seatingArrangements.length > 3 && (
-                        <button
-                          onClick={() => openSeatingModal(v.seatingArrangements)}
-                          className="text-xs text-blue-600 hover:text-blue-800 font-medium underline"
+                      <div className="mt-1 flex items-center gap-2">
+                        <label className="text-[10px] text-gray-600">Select seating:</label>
+                        <select
+                          value={getSelectedSeating(v.id)}
+                          onChange={(e) => setSeatingForVenue(v.id, e.target.value)}
+                          className="border rounded px-2 py-1 text-[11px] text-gray-800"
                         >
-                          +{v.seatingArrangements.length - 3} more options
-                        </button>
-                      )} */}
+                          <option value="theater">Theater</option>
+                          <option value="classroom">Classroom</option>
+                          <option value="round">Circular</option>
+                          <option value="rectangular">Rectangular</option>
+                        </select>
+                        <div className="flex items-center gap-1 text-[11px] text-gray-700">
+                          <span className="text-gray-500">Selected:</span>
+                          {renderSeatingIcon(getSelectedSeating(v.id))}
+                          <span className="capitalize">{getSelectedSeating(v.id)}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Amenities Section */}
-                {/* <div className="lg:col-span-1 flex flex-col justify-center">
-                  
-                </div> */}
-
-                {/* Seating Capacity Section */}
-                {/* <div className="lg:col-span-1 flex flex-col justify-center">
-                  
-                </div> */}
                 
                 {/* Price & Actions */}
                 <div className="lg:col-span-2 flex flex-col items-center justify-center gap-2">
-        
-                  <div className="text-xl text-black"> {getPricePerPax(selectedGuestOption)} / Pax</div>
+
+                  <div className="text-xl text-black"> {getPriceForSeating(getSelectedSeating(v.id))} / Pax</div>
                   <div className="text-xs text-gray-600">Inclusive of food</div>
                       <Link
                         to={`/venue/${encodeURIComponent(city)}/${v.id}`}

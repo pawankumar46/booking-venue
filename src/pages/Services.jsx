@@ -1,12 +1,46 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FiCamera, FiCoffee, FiMusic, FiUsers, FiStar } from 'react-icons/fi'
+import { FiCamera, FiCoffee, FiMusic, FiUsers, FiStar, FiVideo, FiScissors, FiMic, FiSmile } from 'react-icons/fi'
 import {GiPalette} from "react-icons/gi"
 import {FaArrowRight } from "react-icons/fa"
 import { BsFillAwardFill } from "react-icons/bs";
+import CarouselShowcase from './CarouselShowcase'
 
 const Services = () => {
   const navigate = useNavigate()
+
+  const ServiceCarousel = ({ title, images }) => {
+    const containerRef = useRef(null)
+    const scroll = (direction) => {
+      const node = containerRef.current
+      if (!node) return
+      node.scrollBy({ left: direction * 320, behavior: 'smooth' })
+    }
+    return (
+      <div className="rounded-2xl p-[1px] bg-gradient-to-r from-pink-400/40 via-fuchsia-400/40 to-purple-400/40">
+        <div className="rounded-2xl bg-white/80 backdrop-blur ring-1 ring-gray-200 shadow-sm">
+          <div className="flex items-center justify-between px-4 py-3">
+            <h3 className="text-lg md:text-xl font-bold text-gray-900">{title}</h3>
+            <div className="inline-flex gap-2">
+              <button type="button" onClick={() => scroll(-1)} className="h-8 w-8 rounded-lg bg-black ring-1 ring-gray-300 grid place-items-center hover:bg-gray-350">‹</button>
+              <button type="button" onClick={() => scroll(1)} className="h-8 w-8 rounded-lg bg-black ring-1 ring-gray-300 grid place-items-center hover:bg-gray-350">›</button>
+            </div>
+          </div>
+          <div ref={containerRef} className="px-4 pb-4 overflow-x-auto scroll-smooth [scrollbar-width:none] [-ms-overflow-style:none]">
+            <div className="flex gap-4 snap-x snap-mandatory">
+              {images.map((src, idx) => (
+                <div key={idx} className="min-w-[80px] snap-start rounded-xl overflow-hidden ring-1 ring-gray-200 bg-white shadow-sm">
+                  <div className="h-40 w-20 bg-gray-100">
+                    <img src={src} alt={`${title} ${idx + 1}`} className="w-full h-full object-cover" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const cities = useMemo(
     () => [
@@ -33,155 +67,73 @@ const Services = () => {
     []
   )
 
-  const [selectedCity, setSelectedCity] = useState('')
-  const [selectedService, setSelectedService] = useState('')
-  const [selectedOccasion, setSelectedOccasion] = useState('')
-  const [selectedPax, setSelectedPax] = useState('')
-
-  const onSubmit = (e) => {
-    e.preventDefault()
-    const params = new URLSearchParams()
-    if (selectedService) params.set('service', selectedService)
-    if (selectedOccasion) params.set('occasion', selectedOccasion)
-    if (selectedPax) params.set('pax', selectedPax)
-    const query = params.toString()
-    const url = `/services/${encodeURIComponent(selectedCity || 'all')}${query ? `?${query}` : ''}`
-    navigate(url)
-  }
+ 
   return (
     <div className="min-h-screen bg-gray-300">
 
       <section className="w-full py-10 md:py-14">
-        <div className="max-w-6xl mx-auto px-4 space-y-6">
-          {/* Block 1: Text left, photo right */}
-          <div className="rounded-2xl p-[1px] bg-gradient-to-r from-pink-400/40 via-fuchsia-400/40 to-purple-400/40">
-            <div className="rounded-2xl bg-white/80 backdrop-blur shadow-xl ring-1 ring-gray-200 px-6 py-8 md:px-10 md:py-12">
-              <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-6">
-                <div>
-                  <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-gray-900">
-                    Professional Event Services
-                  </h1>
-                  <p className="mt-5 text-lg md:text-xl text-gray-700">
-                    Connect with verified service providers who specialize in making your events extraordinary. From photography to catering, we have everything you need.
-                  </p>
-                </div>
-                <div>
-                  <div className="relative h-48 md:h-64 rounded-xl overflow-hidden ring-1 ring-black/5 shadow">
-                    <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1600&auto=format&fit=crop" alt="Event services" className="absolute inset-0 h-full w-full object-cover" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div className="max-w-7xl mx-auto px-4 space-y-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900">Discover Services</h2>
+          <CarouselShowcase />
         </div>
       </section>
-
-      {/* Search Bar */}
-      <div className="max-w-6xl mx-auto px-3 -mt-4 mb-10">
-        <div className="bg-white rounded-2xl shadow-xl ring-1 ring-gray-200 p-4 md:p-6">
-          <form onSubmit={onSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 items-end gap-4">
-            <div className="w-full">
-              <label htmlFor="services-city" className="block text-sm font-medium text-gray-700 mb-2">Location</label>
-              <div className="relative">
-                <select
-                  id="services-city"
-                  value={selectedCity}
-                  onChange={(e) => setSelectedCity(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer"
-                >
-                  <option value="" className="text-gray-500">Select city</option>
-                  {cities.map((c) => (
-                    <option key={c} value={c} className="text-gray-900 py-2">{c}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="w-full">
-              <label htmlFor="services-type" className="block text-sm font-medium text-gray-700 mb-2">Service type</label>
-              <div className="relative">
-                <select
-                  id="services-type"
-                  value={selectedService}
-                  onChange={(e) => setSelectedService(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer"
-                >
-                  <option value="" className="text-gray-500">Select service</option>
-                  {serviceTypes.map((t) => (
-                    <option key={t} value={t} className="text-gray-900 py-2">{t}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="w-full">
-              <label htmlFor="services-occasion" className="block text-sm font-medium text-gray-700 mb-2">Occasion</label>
-              <div className="relative">
-                <select
-                  id="services-occasion"
-                  value={selectedOccasion}
-                  onChange={(e) => setSelectedOccasion(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer"
-                >
-                  <option value="" className="text-gray-500">Occasion type</option>
-                  {occasionTypes.map((o) => (
-                    <option key={o} value={o} className="text-gray-900 py-2">{o}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="w-full">
-              <label htmlFor="services-pax" className="block text-sm font-medium text-gray-700 mb-2">Pax</label>
-              <div className="relative">
-                <select
-                  id="services-pax"
-                  value={selectedPax}
-                  onChange={(e) => setSelectedPax(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer"
-                >
-                  <option value="" className="text-gray-500">Select pax</option>
-                  {paxRanges.map((p) => (
-                    <option key={p} value={p} className="text-gray-900 py-2">{p}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="h-[50px] w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-red-600 px-6 py-3 font-semibold text-white hover:bg-red-700 transition-all duration-200 shadow-sm hover:shadow ring-1 ring-red-500/20"
-            >
-              Search services
-            </button>
-          </form>
-        </div>
-      </div>
 
       {/* Category Cards */}
       <section className="w-full pb-14">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-          {/* Photography & Videography */}
+          {/* Photography */}
           <div className="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
             <div className="p-6 bg-gradient-to-br from-sky-50 to-white">
               <div className="h-12 w-12 rounded-2xl bg-sky-100 text-sky-600 grid place-items-center">
                 <FiCamera className="h-6 w-6" />
               </div>
-              <h3 className="mt-4 text-xl font-bold text-gray-900">Photography & Video</h3>
-              <p className="mt-2 text-sm text-gray-600">Professional photographers and videographers to capture your special moments.</p>
+              <h3 className="mt-4 text-xl font-bold text-gray-900">Photography</h3>
+              <p className="mt-2 text-sm text-gray-600">
+                Professional photographers to beautifully capture your special moments.
+              </p>
               <div className="mt-4 flex items-center gap-6 text-sm text-gray-600">
-                <span className="inline-flex items-center gap-2"><FiUsers /> 45 providers</span>
+                <span className="inline-flex items-center gap-2"><FiUsers /> 40 providers</span>
                 <span className="inline-flex items-center gap-1"><FiStar className="text-amber-500" /> 4.8+ rating</span>
               </div>
             </div>
             <div className="p-6 border-t">
               <ul className="space-y-2 text-gray-700 text-sm">
-                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-sky-500"/>Event Photography</li>
-                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-sky-500"/>Cinematic Videos</li>
-                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-sky-500"/>Photo Booths</li>
-                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-sky-500"/>Drone Shots</li>
+                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-sky-500" />Event Photography</li>
+                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-sky-500" />Portraits & Studio</li>
+                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-sky-500" />Photo Booths</li>
+                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-sky-500" />Drone Shots</li>
               </ul>
-              <button className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-sky-600 text-white py-2.5 font-semibold hover:bg-sky-700 ring-1 ring-sky-500/20">Explore <FaArrowRight className="w-4 h-4" /></button>
+              <button className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-sky-600 text-white py-2.5 font-semibold hover:bg-sky-700 ring-1 ring-sky-500/20">
+                Explore <FaArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        
+          {/* Videography */}
+          <div className="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+            <div className="p-6 bg-gradient-to-br from-purple-50 to-white">
+              <div className="h-12 w-12 rounded-2xl bg-purple-100 text-purple-600 grid place-items-center">
+                <FiVideo className="h-6 w-6" />
+              </div>
+              <h3 className="mt-4 text-xl font-bold text-gray-900">Videography</h3>
+              <p className="mt-2 text-sm text-gray-600">
+                Professional videographers to create cinematic films and timeless memories of your events.
+              </p>
+              <div className="mt-4 flex items-center gap-6 text-sm text-gray-600">
+                <span className="inline-flex items-center gap-2"><FiUsers /> 32 providers</span>
+                <span className="inline-flex items-center gap-1"><FiStar className="text-amber-500" /> 4.9+ rating</span>
+              </div>
+            </div>
+            <div className="p-6 border-t">
+              <ul className="space-y-2 text-gray-700 text-sm">
+                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-purple-500" />Wedding Films</li>
+                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-purple-500" />Cinematic Highlight Reels</li>
+                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-purple-500" />Corporate Videos</li>
+                <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-purple-500" />Drone Videography</li>
+              </ul>
+              <button className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-purple-600 text-white py-2.5 font-semibold hover:bg-purple-700 ring-1 ring-purple-500/20">
+                Explore <FaArrowRight className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
@@ -256,8 +208,156 @@ const Services = () => {
               <button className="mt-13 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-orange-600 text-white py-2.5 font-semibold hover:bg-orange-700 ring-1 ring-orange-500/20">Explore <FaArrowRight className="w-4 h-4" /></button>
             </div>
           </div>
+          
+          {/* MakeUp */}
+          <div className="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+  <div className="p-6 bg-gradient-to-br from-pink-50 to-white">
+    <div className="h-12 w-12 rounded-2xl bg-pink-100 text-pink-600 grid place-items-center">
+      <FiScissors className="h-6 w-6" />
+    </div>
+    <h3 className="mt-4 text-xl font-bold text-gray-900">Makeup & Styling</h3>
+    <p className="mt-2 text-sm text-gray-600">
+      Professional makeup artists and hairstylists to make your special day even more glamorous.
+    </p>
+    <div className="mt-4 flex items-center gap-6 text-sm text-gray-600">
+      <span className="inline-flex items-center gap-2"><FiUsers /> 25 providers</span>
+      <span className="inline-flex items-center gap-1"><FiStar className="text-amber-500" /> 4.7+ rating</span>
+    </div>
+  </div>
+  <div className="p-6 border-t">
+    <ul className="space-y-2 text-gray-700 text-sm">
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-pink-500"/>Bridal Makeup</li>
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-pink-500"/>Hairstyling</li>
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-pink-500"/>Party Makeup</li>
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-pink-500"/>Traditional Saree Draping</li>
+    </ul>
+    <button className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-pink-600 text-white py-2.5 font-semibold hover:bg-pink-700 ring-1 ring-pink-500/20">
+      Explore <FaArrowRight className="w-4 h-4" />
+    </button>
+  </div>
+</div>
+    
+
+    <div className="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+  <div className="p-6 bg-gradient-to-br from-indigo-50 to-white">
+    <div className="h-12 w-12 rounded-2xl bg-indigo-100 text-indigo-600 grid place-items-center">
+      <FiMic className="h-6 w-6" />
+    </div>
+    <h3 className="mt-4 text-xl font-bold text-gray-900">Anchors & Hosts</h3>
+    <p className="mt-2 text-sm text-gray-600">
+      Experienced anchors and MCs to keep your guests entertained and events lively.
+    </p>
+    <div className="mt-4 flex items-center gap-6 text-sm text-gray-600">
+      <span className="inline-flex items-center gap-2"><FiUsers /> 18 providers</span>
+      <span className="inline-flex items-center gap-1"><FiStar className="text-amber-500" /> 4.6+ rating</span>
+    </div>
+  </div>
+  <div className="p-6 border-t">
+    <ul className="space-y-2 text-gray-700 text-sm">
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-indigo-500"/>Wedding Anchors</li>
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-indigo-500"/>Corporate Event MCs</li>
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-indigo-500"/>Birthday Party Hosts</li>
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-indigo-500"/>Cultural Function Anchors</li>
+    </ul>
+    <button className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 text-white py-2.5 font-semibold hover:bg-indigo-700 ring-1 ring-indigo-500/20">
+      Explore <FaArrowRight className="w-4 h-4" />
+    </button>
+  </div>
+</div>
+
+
+<div className="rounded-2xl bg-white shadow-sm ring-1 ring-gray-200 overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1">
+  <div className="p-6 bg-gradient-to-br from-yellow-50 to-white">
+    <div className="h-12 w-12 rounded-2xl bg-yellow-100 text-yellow-600 grid place-items-center">
+      <FiSmile className="h-6 w-6" />
+    </div>
+    <h3 className="mt-4 text-xl font-bold text-gray-900">Magic & Puppet Shows</h3>
+    <p className="mt-2 text-sm text-gray-600">
+      Fun-filled entertainment with magicians and puppeteers for kids and family events.
+    </p>
+    <div className="mt-4 flex items-center gap-6 text-sm text-gray-600">
+      <span className="inline-flex items-center gap-2"><FiUsers /> 12 providers</span>
+      <span className="inline-flex items-center gap-1"><FiStar className="text-amber-500" /> 4.5+ rating</span>
+    </div>
+  </div>
+  <div className="p-6 border-t">
+    <ul className="space-y-2 text-gray-700 text-sm">
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-yellow-500"/>Magic Shows</li>
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-yellow-500"/>Puppet Shows</li>
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-yellow-500"/>Balloon Tricks</li>
+      <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-yellow-500"/>Kids Party Fun</li>
+    </ul>
+    <button className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-yellow-600 text-white py-2.5 font-semibold hover:bg-yellow-700 ring-1 ring-yellow-500/20">
+      Explore <FaArrowRight className="w-4 h-4" />
+    </button>
+  </div>
+</div>
+
         </div>
       </section>
+
+      {/* Recommended service - carousels */}
+      <section className="w-full pb-14">
+        <div className="max-w-7xl mx-auto px-4 space-y-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">Recommended service</h2>
+          <ServiceCarousel
+            title="Photography"
+            images={[
+              'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1520975922284-5f1b0873edc4?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1520975922284-5f1b0873edc4?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1520975922284-5f1b0873edc4?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1511795409834-https://images.unsplash.com/photo-1462926795244-b273f8a5454f?q=80&w=1006&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1520975922284-5f1b0873edc4?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1511795409834-https://images.unsplash.com/photo-1462926795244-b273f8a5454f?q=80&w=1006&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1520975922284-5f1b0873edc4?q=80&w=1600&auto=format&fit=crop'
+            ]}
+          />
+          <ServiceCarousel
+            title="Caterers"
+            images={[
+              'https://images.unsplash.com/photo-1550507992-eb63ffee0847?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1600&auto=format&fit=crop'
+            ]}
+          />
+          <ServiceCarousel
+            title="Decoration"
+            images={[
+              'https://images.unsplash.com/photo-1521334884684-d80222895322?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1504196606672-aef5c9cefc92?q=80&w=1600&auto=format&fit=crop'
+            ]}
+          />
+          <ServiceCarousel
+            title="Music"
+            images={[
+              'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1506157786151-b8491531f063?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?q=80&w=1600&auto=format&fit=crop',
+              'https://images.unsplash.com/photo-1521334726092-b509a19597c6?q=80&w=1600&auto=format&fit=crop'
+            ]}
+          />
+        </div>
+      </section>
+
+      <div>
+        
+      </div>
        <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-2xl p-8 md:p-12 text-white relative overflow-hidden">
         <div className="relative z-10 text-center space-y-6">
           <div className="inline-flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full">

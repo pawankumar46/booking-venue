@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { TiTick, TiTimes } from 'react-icons/ti'
 import { FaCarAlt, FaMotorcycle, FaStar, FaMapMarkerAlt, FaParking, FaBed } from 'react-icons/fa'
 import { MdPeopleAlt } from 'react-icons/md'
+import Blogs from './Blogs'
 
 const Landing = () => {
   const FeaturedCard = ({ venue }) => {
@@ -103,10 +104,61 @@ const Landing = () => {
     ],
     []
   )
+  const serviceTypes = useMemo(
+    () => [
+      'Photography', 'Videography', 'Catering', 'Decoration', 'DJ & Music', 'Lighting', 'Transportation', 'Makeup & Styling', 'Event Planning', 'Security'
+    ],
+    []
+  )
+  // Resources dropdown data
+  const resourceTypes = useMemo(
+    () => [
+      "Ganesha idol / God idol setup",
+      "Decorative background / stage backdrop",
+      "Flower decorations (real/artificial)",
+      "Balloon decorations / arches / pillars",
+      "Mandap / canopy / shamiana",
+      "Wedding arch / entry gate decoration",
+      "Fairy lights / LED lights / chandeliers",
+      "Carpet / red carpet walkway",
+      "Photo booth props & frames",
+      "Chairs (plastic, cushioned, banquet)",
+      "Chair covers & ribbons",
+      "Sofas for stage",
+      "Dining tables / round tables",
+      "Cocktail tables / high tables",
+      "Tablecloths, runners, skirting",
+      "DJ & sound system",
+      "Speakers & microphones",
+      "LED screens / projectors",
+      "Dance floor setup",
+      "Stage platforms / risers",
+      "Cutlery (plates, spoons, glasses)",
+      "Serving counters / buffet tables",
+      "Chafing dishes (for hot food)",
+      "Juice / mocktail counters",
+      "Coffee machine / tea stall setup",
+      "Shamiana / pandal",
+      "Fans / coolers / heaters",
+      "Portable AC",
+      "Generators / backup power",
+      "Carpet flooring / matting",
+      "Bouncy castle / inflatable games (for birthdays)",
+      "Magician / clown props",
+      "Cake table setup",
+      "Party props (hats, masks, etc.)",
+      "Themed cutouts / cartoon characters"
+    ],
+    []
+  )
   const [selectedCity, setSelectedCity] = useState('')
   const [selectedType, setSelectedType] = useState('')
   const [selectedOccasion, setSelectedOccasion] = useState('')
   const [selectedPax, setSelectedPax] = useState('')
+  const [searchType, setSearchType] = useState('venue') // 'venue' or 'service' or 'resources'
+  // Resources state
+  const [selectedResourceType, setSelectedResourceType] = useState('')
+  const [resourceMode, setResourceMode] = useState('rent') // 'rent' | 'sell'
   const featuredVenues = useMemo(
     () => [
       {
@@ -164,62 +216,284 @@ const Landing = () => {
     if (selectedOccasion) params.set('occasion', selectedOccasion)
     if (selectedPax) params.set('pax', selectedPax)
     const query = params.toString()
-    const url = `/venues/${encodeURIComponent(selectedCity)}${query ? `?${query}` : ''}`
-    navigate(url)
+    
+    if (searchType === 'venue') {
+      const url = `/venues/${encodeURIComponent(selectedCity)}${query ? `?${query}` : ''}`
+      navigate(url)
+    } else if (searchType === 'service') {
+      const url = `/services/${encodeURIComponent(selectedCity)}${query ? `?${query}` : ''}`
+      navigate(url)
+    } else {
+      const paramsResources = new URLSearchParams()
+      if (selectedResourceType) paramsResources.set('resourceType', selectedResourceType)
+      paramsResources.set('mode', resourceMode)
+      const queryResources = paramsResources.toString()
+      const url = `/resources/${encodeURIComponent(selectedCity)}${queryResources ? `?${queryResources}` : ''}`
+      navigate(url)
+    }
   }
   return (
-    <div className="relative bg-gray-300">
+    <div className="relative bg-gradient-to-r from-gray-300 via-purple-200 to-pink-200">
       <section className="w-full py-12 md:py-10">
         <div className="relative max-w-7xl mx-auto px-4">
           {/* Decorative background blobs */}
           <div className="pointer-events-none absolute -top-10 -left-10 h-40 w-40 rounded-full bg-pink-200/40 blur-3xl"></div>
           <div className="pointer-events-none absolute -bottom-12 -right-8 h-48 w-48 rounded-full bg-purple-200/40 blur-3xl"></div>
           
-          <div className="relative grid grid-cols-1 gap-6">
-            {/* Card 1 with gradient border wrapper */}
-            <div className="rounded-2xl p-[1px] bg-gradient-to-r from-pink-400/40 via-fuchsia-400/40 to-purple-400/40">
-              <div className="rounded-2xl bg-white/80 backdrop-blur shadow-xl ring-1 ring-gray-200 px-5 py-6 md:px-8 md:py-8 transition-all hover:shadow-2xl hover:-translate-y-1">
-                <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-6">
-                  <a href='/' className="block order-2 md:order-1">
-                    <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">
-                      <span className="block">Find Your Perfect</span>
-                      <span className="block bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent w-fit">
-                        Venue
-                      </span>
-                    </h1>
-                    <p className="mt-6 text-lg md:text-xl text-gray-600">
-                      Discover amazing party halls for weddings, birthdays, corporate events, and celebrations. Book your dream venue in just a few clicks.
-                    </p>
-                  </a>
-                  <div className="order-1 md:order-2">
-                    <div className="relative h-48 md:h-64 rounded-xl overflow-hidden ring-1 ring-black/5 shadow">
-                      <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1600&auto=format&fit=crop" alt="Venue" className="absolute inset-0 h-full w-full object-cover" />
+          {/* Main container */}
+          <div className="rounded-2xl p-4 bg-gray-300">
+            <div className="grid grid-cols-3 gap-4 h-[600px]">
+              {/* Left column with two stacked sections */}
+              <div className="col-span-2 flex flex-col gap-4">
+                {/* Top section - Venue card */}
+                <div className="flex-1 rounded-xl p-[1px] bg-gradient-to-r from-pink-400/5 via-fuchsia-400/5 to-purple-400/5">
+                  <div className="rounded-xl bg-white/40 backdrop-blur shadow-xl ring-1 ring-gray-200 h-full px-5 py-6 transition-all hover:shadow-2xl hover:-translate-y-1">
+                    <div className="flex items-center gap-6 h-full">
+                      <a href='/' className="flex-1">
+                        <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight">
+                          <span className="block">Find Your Perfect</span>
+                          <span className="block bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent w-fit">
+                            Venue
+                          </span>
+                        </h1>
+                        <p className="mt-4 text-base md:text-lg text-gray-600">
+                          Discover amazing party halls for weddings, birthdays, corporate events, and celebrations.
+                        </p>
+                      </a>
+                      <div className="w-32 h-24 md:w-65 md:h-52 rounded-lg overflow-hidden ring-1 ring-black/5 shadow">
+                        <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1600&auto=format&fit=crop" alt="Venue" className="w-full h-full object-cover" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom section - Services card */}
+                <div className="flex-1 rounded-xl p-[1px] bg-gradient-to-r from-pink-400/5 via-fuchsia-400/5 to-purple-400/5">
+                  <div className="rounded-xl bg-white/40 backdrop-blur shadow-xl ring-1 ring-gray-200 h-full px-5 py-6 transition-all hover:shadow-2xl hover:-translate-y-1">
+                    <div className="flex items-center gap-6 h-full">
+                      <div className="w-32 h-24 md:w-65 md:h-52 rounded-lg overflow-hidden ring-1 ring-black/5 shadow">
+                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1600&auto=format&fit=crop" alt="Services" className="w-full h-full object-cover" />
+                      </div>
+                      <a href='/services' className="flex-1 text-right">
+                        <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight">
+                          <span className="block">Find Your Perfect</span>
+                          <span className="block bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent w-fit ml-auto">
+                            Services
+                          </span>
+                        </h1>
+                        <p className="mt-4 text-base md:text-lg text-gray-600">
+                          Our Service and your Happiness is one appointment away. Click now to Book!
+                        </p>
+                      </a>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Card 2 with gradient border wrapper */}
-            <div className="rounded-2xl p-[1px] bg-gradient-to-r from-pink-400/40 via-fuchsia-400/40 to-purple-400/40">
-              <div className="rounded-2xl bg-white/80 backdrop-blur shadow-xl ring-1 ring-gray-200 px-5 py-6 md:px-8 md:py-8 transition-all hover:shadow-2xl hover:-translate-y-1">
-                <div className="grid grid-cols-1 md:grid-cols-2 items-center gap-6">
-                  <div className="order-2 md:order-1">
-                    <div className="relative h-48 md:h-64 rounded-xl overflow-hidden ring-1 ring-black/5 shadow">
-                      <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1600&auto=format&fit=crop" alt="Services" className="absolute inset-0 h-full w-full object-cover" />
-                    </div>
-                  </div>
-                  <a href='/services' className="block order-1 md:order-2 text-right">
-                    <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-gray-900 leading-tight">
-                      <span className="block">Find Your Perfect</span>
-                      <span className="block bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent w-fit ml-auto">
+              {/* Right column - Search section */}
+              <div className="col-span-1">
+                <div className="rounded-xl p-[1px] bg-gradient-to-r from-pink-400/5 via-fuchsia-400/5 to-purple-400/5 h-full">
+                  <div className="rounded-xl bg-white/40 backdrop-blur shadow-xl ring-1 ring-gray-200 h-full px-5 py-6 transition-all hover:shadow-2xl hover:-translate-y-1">
+                  <div className="h-full">
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 text-center">
+                      Search {searchType === 'venue' ? 'Venues' : searchType === 'service' ? 'Services' : 'Resources'}
+                    </h2>
+                    
+                    {/* Toggle buttons */}
+                    <div className="flex mb-6 bg-gray-100 rounded-lg p-1">
+                      <button
+                        type="button"
+                        onClick={() => setSearchType('venue')}
+                        className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+                          searchType === 'venue'
+                            ? 'bg-white text-gray-900 shadow-sm'
+                            : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                      >
+                        Venues
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSearchType('service')}
+                        className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+                          searchType === 'service'
+                            ? 'bg-white text-gray-900 shadow-sm'
+                            : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                      >
                         Services
-                      </span>
-                    </h1>
-                    <p className="mt-6 text-lg md:text-xl text-gray-600">
-                      Discover amazing services for photography, decorations, catering, DJs, and entertainment. Book your complete event package in just a few clicks.
-                    </p>
-                  </a>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSearchType('resources')}
+                        className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+                          searchType === 'resources'
+                            ? 'bg-white text-gray-900 shadow-sm'
+                            : 'text-gray-600 hover:text-gray-900'
+                        }`}
+                      >
+                        Resources
+                      </button>
+                    </div>
+
+                    <form onSubmit={onSubmit} className="space-y-4">
+                      <div>
+                        <label htmlFor="landing-city" className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                        <select
+                          id="landing-city"
+                          value={selectedCity}
+                          onChange={(e) => setSelectedCity(e.target.value)}
+                          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer text-sm"
+                          style={{ 
+                            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                            backgroundPosition: 'right 0.5rem center',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundSize: '1.2em 1.2em',
+                            paddingRight: '2rem'
+                          }}
+                        >
+                          <option value="" className="text-gray-500">Select city</option>
+                          {cities.map((city) => (
+                            <option key={city} value={city} className="text-gray-900 py-2">{city}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {searchType !== 'resources' && (
+                        <div>
+                          <label htmlFor="landing-type" className="block text-sm font-medium text-gray-700 mb-2">
+                            {searchType === 'venue' ? 'Venue Type' : 'Service Type'}
+                          </label>
+                          <select
+                            id="landing-type"
+                            value={selectedType}
+                            onChange={(e) => setSelectedType(e.target.value)}
+                            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer text-sm"
+                            style={{ 
+                              backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                              backgroundPosition: 'right 0.5rem center',
+                              backgroundRepeat: 'no-repeat',
+                              backgroundSize: '1.2em 1.2em',
+                              paddingRight: '2rem'
+                            }}
+                          >
+                            <option value="" className="text-gray-900">Select type</option>
+                            {(searchType === 'venue' ? venueTypes : serviceTypes).map((t) => (
+                              <option key={t} value={t} className="text-gray-900 py-2">{t}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+
+                      {searchType === 'resources' && (
+                        <>
+                          <div>
+                            <label htmlFor="landing-resource-type" className="block text-sm font-medium text-gray-700 mb-2">Resource Type</label>
+                            <select
+                              id="landing-resource-type"
+                              value={selectedResourceType}
+                              onChange={(e) => setSelectedResourceType(e.target.value)}
+                              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer text-sm"
+                              style={{ 
+                                backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                                backgroundPosition: 'right 0.5rem center',
+                                backgroundRepeat: 'no-repeat',
+                                backgroundSize: '1.2em 1.2em',
+                                paddingRight: '2rem'
+                              }}
+                            >
+                              <option value="" className="text-gray-900">Select resource</option>
+                              {resourceTypes.map((r) => (
+                                <option key={r} value={r} className="text-gray-900 py-2">{r}</option>
+                              ))}
+                            </select>
+                          </div>
+
+                          {/* Rent/Sell toggle */}
+                          <div className="flex mb-2 mt-2 bg-gray-100 rounded-lg p-1">
+                            <button
+                              type="button"
+                              onClick={() => { setResourceMode('rent') }}
+                              className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+                                resourceMode === 'rent'
+                                  ? 'bg-white text-gray-900 shadow-sm'
+                                  : 'text-gray-600 hover:text-gray-900'
+                              }`}
+                            >
+                              Rent
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => { setResourceMode('sell') }}
+                              className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+                                resourceMode === 'sell'
+                                  ? 'bg-white text-gray-900 shadow-sm'
+                                  : 'text-gray-600 hover:text-gray-900'
+                              }`}
+                            >
+                              Sell
+                            </button>
+                          </div>
+                        </>
+                      )}
+
+                      {searchType === 'venue' && (
+                        <div>
+                          <label htmlFor="landing-occasion" className="block text-sm font-medium text-gray-700 mb-2">Occasion</label>
+                          <select
+                            id="landing-occasion"
+                            value={selectedOccasion}
+                            onChange={(e) => setSelectedOccasion(e.target.value)}
+                            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer text-sm"
+                            style={{ 
+                              backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                              backgroundPosition: 'right 0.5rem center',
+                              backgroundRepeat: 'no-repeat',
+                              backgroundSize: '1.2em 1.2em',
+                              paddingRight: '2rem'
+                            }}
+                          >
+                            <option value="" className="text-gray-900">Occasion type</option>
+                            {occasionTypes.map((o) => (
+                              <option key={o} value={o} className="text-gray-900 py-2">{o}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+
+                      {searchType === 'venue' && (
+                        <div>
+                          <label htmlFor="landing-pax" className="block text-sm font-medium text-gray-700 mb-2">Pax</label>
+                          <select
+                            id="landing-pax"
+                            value={selectedPax}
+                            onChange={(e) => setSelectedPax(e.target.value)}
+                            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer text-sm"
+                            style={{ 
+                              backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                              backgroundPosition: 'right 0.5rem center',
+                              backgroundRepeat: 'no-repeat',
+                              backgroundSize: '1.2em 1.2em',
+                              paddingRight: '2rem'
+                            }}
+                          >
+                            <option value="" className="text-gray-900">Select pax</option>
+                            {paxRanges.map((p) => (
+                              <option key={p} value={p} className="text-gray-900 py-2">{p}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+
+                      <button
+                        type="submit"
+                        className="w-full inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-3 font-semibold text-white hover:bg-red-700 transition-all duration-200 shadow-sm hover:shadow ring-1 ring-red-500/20 text-sm"
+                      >
+                        Find {searchType === 'venue' ? 'venues' : searchType === 'service' ? 'services' : 'resources'} →
+                      </button>
+                    </form>
+                  </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -227,115 +501,9 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Search Bar */}
-      <div className="max-w-6xl mx-auto px-3 mt-8 mb-20">
-        <div className="bg-white rounded-2xl shadow-xl ring-1 ring-gray-200 p-4 md:p-6">
-          <form onSubmit={onSubmit} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 items-end gap-4">
-            <div className="w-full">
-              <label htmlFor="landing-city" className="block text-sm font-medium text-gray-700 mb-2">Location</label>
-              <div className="relative">
-                <select
-                  id="landing-city"
-                  value={selectedCity}
-                  onChange={(e) => setSelectedCity(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer"
-                  style={{ 
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
-                    backgroundPosition: 'right 0.5rem center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: '1.5em 1.5em',
-                    paddingRight: '2.5rem'
-                  }}
-                >
-                  <option value="" className="text-gray-500">Select city</option>
-                  {cities.map((city) => (
-                    <option key={city} value={city} className="text-gray-900 py-2">{city}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
 
-            <div className="w-full">
-              <label htmlFor="landing-type" className="block text-sm font-medium text-gray-700 mb-2">Venue Type</label>
-              <div className="relative">
-                <select
-                  id="landing-type"
-                  value={selectedType}
-                  onChange={(e) => setSelectedType(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer"
-                  style={{ 
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
-                    backgroundPosition: 'right 0.5rem center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: '1.5em 1.5em',
-                    paddingRight: '2.5rem'
-                  }}
-                >
-                  <option value="" className="text-gray-900">Select type</option>
-                  {venueTypes.map((t) => (
-                    <option key={t} value={t} className="text-gray-900 py-2">{t}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
 
-            <div className="w-full">
-              <label htmlFor="landing-occasion" className="block text-sm font-medium text-gray-700 mb-2">Occasion</label>
-              <div className="relative">
-                <select
-                  id="landing-occasion"
-                  value={selectedOccasion}
-                  onChange={(e) => setSelectedOccasion(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer"
-                  style={{ 
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
-                    backgroundPosition: 'right 0.5rem center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: '1.5em 1.5em',
-                    paddingRight: '2.5rem'
-                  }}
-                >
-                  <option value="" className="text-gray-900">Occasion type</option>
-                  {occasionTypes.map((o) => (
-                    <option key={o} value={o} className="text-gray-900 py-2">{o}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="w-full">
-              <label htmlFor="landing-pax" className="block text-sm font-medium text-gray-700 mb-2">Pax</label>
-              <div className="relative">
-                <select
-                  id="landing-pax"
-                  value={selectedPax}
-                  onChange={(e) => setSelectedPax(e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer"
-                  style={{ 
-                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
-                    backgroundPosition: 'right 0.5rem center',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: '1.5em 1.5em',
-                    paddingRight: '2.5rem'
-                  }}
-                >
-                  <option value="" className="text-gray-900">Select pax</option>
-                  {paxRanges.map((p) => (
-                    <option key={p} value={p} className="text-gray-900 py-2">{p}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="h-[50px] w-full sm:w-auto inline-flex items-center justify-center rounded-lg bg-red-600 px-6 py-3 font-semibold text-white hover:bg-red-700 transition-all duration-200 shadow-sm hover:shadow ring-1 ring-red-500/20"
-            >
-              Find venues →
-            </button>
-          </form>
-        </div>
-      </div>
+      
       <section className="max-w-7xl mx-auto px-6 py-10">
         <div className="relative flex items-center justify-center">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center">Featured Venues</h2>
@@ -370,6 +538,7 @@ const Landing = () => {
           </Link>
         </div>
       </section>
+      <Blogs/>
 
       {showTalkModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">

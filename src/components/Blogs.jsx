@@ -47,8 +47,8 @@ const Blogs = () => {
   return (
     <div className="max-w-6xl mx-auto px-6 py-12">
       <div className="text-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-white-900">What our customers say</h2>
-        <p className="mt-2 text-white-600">Real experiences from events booked through our platform.</p>
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900">What our customers say</h2>
+        <p className="mt-2 text-gray-600">Real experiences from events booked through our platform.</p>
       </div>
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
