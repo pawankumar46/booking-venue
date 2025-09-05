@@ -22,7 +22,7 @@ const Resources = () => {
 			if (n.includes('mandap') || n.includes('shamiana')) return 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?q=80&w=1200&auto=format&fit=crop'
 			if (n.includes('wedding arch')) return 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1200&auto=format&fit=crop'
 			if (n.includes('fairy lights') || n.includes('chandeliers') || n.includes('led lights')) return 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('carpet')) return 'https://images.unsplash.com/photo-1545239351-1141bd82e8a6?q=80&w=1200&auto=format&fit=crop'
+			if (n.includes('carpet')) return 'https://images.unsplash.com/photo-1614080035039-af24354a6478?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1200&auto=format&fit=crop'
 			if (n.includes('photo booth')) return 'https://images.unsplash.com/photo-1452587925148-ce544e77e70d?q=80&w=1200&auto=format&fit=crop'
 			if (n.includes('chair')) return 'https://images.unsplash.com/photo-1571428229830-4f2e5b3f0c74?q=80&w=1200&auto=format&fit=crop'
 			if (n.includes('sofa')) return 'https://images.unsplash.com/photo-1505691723518-36a5ac3b2a02?q=80&w=1200&auto=format&fit=crop'
