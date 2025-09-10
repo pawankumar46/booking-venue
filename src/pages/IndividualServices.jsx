@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { useParams, useLocation, Link, useNavigate } from 'react-router-dom'
-import { FiMapPin, FiClock, FiStar, FiHeart, FiShare2, FiPhone, FiMail, FiCamera, FiCoffee, FiMusic, FiBriefcase } from 'react-icons/fi'
+import { FiMapPin, FiClock, FiStar, FiHeart, FiShare2, FiPhone, FiMail, FiCamera, FiCoffee, FiMusic, FiBriefcase, FiCalendar, FiCheckCircle, FiXCircle } from 'react-icons/fi'
 import { GiPalette } from 'react-icons/gi'
 
 const IndividualServices = () => {
@@ -11,6 +11,8 @@ const IndividualServices = () => {
   
   const [activeTab, setActiveTab] = useState('about')
   const [isSaved, setIsSaved] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(null)
+  const [currentMonth, setCurrentMonth] = useState(new Date())
 
   // Service type configuration
   const serviceConfig = useMemo(() => {
@@ -103,19 +105,96 @@ const IndividualServices = () => {
 
   const currentColor = colorClasses[serviceConfig.color]
 
-  const handleBookNow = () => {
-    navigate('/pay', {
-      state: {
-        amount: 499,
-        merchantName: 'Booking Website',
-        description: `Booking advance for ${serviceData.name}`,
-        customerName: 'John Doe',
-        customerEmail: 'john.doe@example.com',
-        customerPhone: '9999999999',
-        logo: serviceData.portfolio?.[0]
+  // Mock unavailable dates (in a real app, this would come from an API)
+  const unavailableDates = useMemo(() => {
+    const today = new Date()
+    const unavailable = []
+    
+    // Add some random unavailable dates for demo
+    for (let i = 0; i < 10; i++) {
+      const date = new Date(today)
+      date.setDate(today.getDate() + Math.floor(Math.random() * 30) + 1)
+      unavailable.push(date.toDateString())
+    }
+    
+    // Add weekends as unavailable for some services
+    if (serviceType === 'Photography') {
+      const weekends = []
+      for (let i = 0; i < 30; i++) {
+        const date = new Date(today)
+        date.setDate(today.getDate() + i)
+        if (date.getDay() === 0 || date.getDay() === 6) { // Sunday or Saturday
+          weekends.push(date.toDateString())
+        }
       }
+      unavailable.push(...weekends)
+    }
+    
+    return unavailable
+  }, [serviceType])
+
+  // Calendar utility functions
+  const getDaysInMonth = (date) => {
+    const year = date.getFullYear()
+    const month = date.getMonth()
+    const firstDay = new Date(year, month, 1)
+    const lastDay = new Date(year, month + 1, 0)
+    const daysInMonth = lastDay.getDate()
+    const startingDayOfWeek = firstDay.getDay()
+    
+    return { daysInMonth, startingDayOfWeek }
+  }
+
+  const isDateAvailable = (date) => {
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    
+    if (date < today) return false
+    return !unavailableDates.includes(date.toDateString())
+  }
+
+  const isDateSelected = (date) => {
+    return selectedDate && date.toDateString() === selectedDate.toDateString()
+  }
+
+  const handleDateSelect = (date) => {
+    if (isDateAvailable(date)) {
+      setSelectedDate(date)
+    }
+  }
+
+  const navigateMonth = (direction) => {
+    setCurrentMonth(prev => {
+      const newMonth = new Date(prev)
+      newMonth.setMonth(prev.getMonth() + direction)
+      return newMonth
     })
   }
+
+const handleBookNow = () => {
+  if (!selectedDate) {
+    // Scroll down smoothly
+    window.scrollBy({
+      top: 500,
+      behavior: "smooth",
+    });
+    return; 
+  }
+
+  // Navigate only if a date is selected
+  navigate("/pay", {
+    state: {
+      amount: 499,
+      merchantName: "Booking Website",
+      description: `Booking advance for ${serviceData.name}`,
+      customerName: "John Doe",
+      customerEmail: "john.doe@example.com",
+      customerPhone: "9999999999",
+      logo: serviceData.portfolio?.[0],
+    },
+  });
+};
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -203,7 +282,7 @@ const IndividualServices = () => {
             <div className="bg-white rounded-xl shadow-sm">
               <div className="border-b border-gray-200">
                 <nav className="flex space-x-8 px-6">
-                  {['about', 'packages', 'reviews'].map((tab) => (
+                  {['about', 'availability', 'packages', 'reviews'].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
@@ -250,6 +329,151 @@ const IndividualServices = () => {
                         ))}
                       </div>
                     </div>
+                  </div>
+                )}
+
+                {/* Availability Tab */}
+                {activeTab === 'availability' && (
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Check Availability</h3>
+                      <p className="text-gray-600 mb-6">Select your preferred date to check availability and proceed with booking.</p>
+                    </div>
+
+                    {/* Calendar */}
+                    <div className="bg-gray-50 rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-lg font-semibold text-gray-900">
+                          {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                        </h4>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => navigateMonth(-1)}
+                            className="p-2 rounded-lg text-black bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
+                          >
+                            ←
+                          </button>
+                          <button
+                            onClick={() => navigateMonth(1)}
+                            className="p-2 rounded-lg text-black bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
+                          >
+                            →
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Calendar Grid */}
+                      <div className="grid grid-cols-7 gap-1 mb-2">
+                        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+                          <div key={day} className="p-2 text-center text-sm font-medium text-gray-500">
+                            {day}
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="grid grid-cols-7 gap-1">
+                        {(() => {
+                          const { daysInMonth, startingDayOfWeek } = getDaysInMonth(currentMonth)
+                          const days = []
+                          
+                          // Empty cells for days before the first day of the month
+                          for (let i = 0; i < startingDayOfWeek; i++) {
+                            days.push(<div key={`empty-${i}`} className="p-2"></div>)
+                          }
+                          
+                          // Days of the month
+                          for (let day = 1; day <= daysInMonth; day++) {
+                            const date = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day)
+                            const isAvailable = isDateAvailable(date)
+                            const isSelected = isDateSelected(date)
+                            const isToday = date.toDateString() === new Date().toDateString()
+                            
+                            days.push(
+                              <button
+                                key={day}
+                                onClick={() => handleDateSelect(date)}
+                                disabled={!isAvailable}
+                                className={`p-2 text-sm rounded-lg transition-all ${
+                                  isSelected
+                                    ? `${currentColor.button} text-white`
+                                    : isAvailable
+                                    ? 'bg-white hover:bg-gray-100 text-gray-900 border border-gray-200'
+                                    : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                } ${isToday ? 'ring-2 ring-blue-300' : ''}`}
+                              >
+                                {day}
+                              </button>
+                            )
+                          }
+                          
+                          return days
+                        })()}
+                      </div>
+
+                      {/* Legend */}
+                      <div className="flex items-center gap-4 mt-4 text-sm">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-white border border-gray-200 rounded"></div>
+                          <span className="text-gray-600">Available</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-gray-100 rounded"></div>
+                          <span className="text-gray-600">Unavailable</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-blue-600 rounded"></div>
+                          <span className="text-gray-600">Selected</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Selected Date Info */}
+                    {selectedDate && (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div className="flex items-center gap-3">
+                          <FiCheckCircle className="w-5 h-5 text-green-600" />
+                          <div>
+                            <h4 className="font-semibold text-green-900">Date Selected</h4>
+                            <p className="text-green-700">
+                              {selectedDate.toLocaleDateString('en-US', { 
+                                weekday: 'long', 
+                                year: 'numeric', 
+                                month: 'long', 
+                                day: 'numeric' 
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                        <div className=" flex mt-3 gap-4">
+                          <button
+                            onClick={handleBookNow}
+                            className={`${currentColor.button} text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity`}
+                          >
+                            Proceed to Book
+                          </button>
+                          <button
+                            onClick={() => setSelectedDate(null)} // clears the date
+                            className="bg-red-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
+                          >
+                            Remove Selected Date
+                          </button>
+
+                        </div>
+                      </div>
+                    )}
+
+                    {/* No Date Selected */}
+                    {!selectedDate && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div className="flex items-center gap-3">
+                          <FiCalendar className="w-5 h-5 text-blue-600" />
+                          <div>
+                            <h4 className="font-semibold text-blue-900">Select a Date</h4>
+                            <p className="text-blue-700">Choose an available date from the calendar above to proceed with booking.</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -308,8 +532,16 @@ const IndividualServices = () => {
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Get in Touch</h3>
               <div className="space-y-3">
-                <button onClick={handleBookNow} className={`w-full ${currentColor.button} text-white py-3 px-4 rounded-lg font-medium transition-colors`}>
-                  Book Through Online
+                <button 
+                  onClick={handleBookNow} 
+                  // disabled={!selectedDate}
+                  className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
+                    selectedDate 
+                      ? `${currentColor.button} text-white hover:opacity-90` 
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
+                >
+                  {selectedDate ? 'Book Through Online' : 'Select Available Dates'}
                 </button>
                 <button className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
                   <FiPhone className="w-4 h-4" />
@@ -320,6 +552,23 @@ const IndividualServices = () => {
                   Send Message
                 </button>
               </div>
+              
+              {/* Selected Date Display */}
+              {selectedDate && (
+                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <FiCheckCircle className="w-4 h-4 text-green-600" />
+                    <span className="text-sm font-medium text-green-900">Selected Date:</span>
+                  </div>
+                  <p className="text-sm text-green-700 mt-1">
+                    {selectedDate.toLocaleDateString('en-US', { 
+                      weekday: 'short', 
+                      month: 'short', 
+                      day: 'numeric' 
+                    })}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Quick Info */}

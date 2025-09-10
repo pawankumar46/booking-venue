@@ -303,46 +303,80 @@ const Landing = () => {
                 {/* Top section - Venue card */}
                 <div className="flex-1 rounded-xl p-[1px] bg-gradient-to-r from-pink-400/5 via-fuchsia-400/5 to-purple-400/5">
                   <div className="rounded-xl bg-white/40 backdrop-blur shadow-xl ring-1 ring-gray-200 h-64 px-5 py-4 transition-all hover:shadow-2xl hover:-translate-y-1">
-                    <div className="flex flex-col md:flex-col items-center gap-6 h-full">
-                      <a href='/' className="flex flex-col  justify-between">
-                        <h1 className="text-2xl text-center md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight whitespace-nowrap">
+                    <div className="flex flex-col items-center gap-4 h-full">
+
+                      {/* Title + Description */}
+                      <a href="/" className="flex flex-col justify-between text-center">
+                        <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight whitespace-nowrap">
                           <span className="inline">Find Your Perfect </span>
                           <span className="inline bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent w-fit">
                             Venue
                           </span>
                         </h1>
-                        <p className="mt-4 text-base md:text-lg text-gray-600">
+                        <p className="mt-2 text-sm md:text-base text-gray-600">
                           Discover amazing party halls for weddings, birthdays, corporate events, and celebrations.
                         </p>
                       </a>
-                      <div className="w-full h-16 md:h-28 rounded-lg overflow-hidden relative">
-                        <CarouselVenueLanding/>
+
+                      {/* "View All" + Carousel */}
+                      <div className="w-full">
+                        <div className="flex justify-between items-center mb-2">
+                          <h2 className="text-sm font-semibold text-gray-800">Venues</h2>
+                          <a
+                            href="/venues/:city" // need to change once be implemented
+                            className="text-xs font-medium text-purple-600 hover:text-purple-800 transition"
+                          >
+                            View All →
+                          </a>
+                        </div>
+
+                        <div className="w-full h-16 md:h-28 rounded-lg overflow-hidden relative">
+                          <CarouselVenueLanding />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
+
                 {/* Bottom section - Services card */}
                 <div className="flex-1 rounded-xl p-[1px] bg-gradient-to-r from-pink-400/5 via-fuchsia-400/5 to-purple-400/5">
                   <div className="rounded-xl bg-white/40 backdrop-blur shadow-xl ring-1 ring-gray-200 h-64 px-5 py-4 transition-all hover:shadow-2xl hover:-translate-y-1">
-                    <div className="flex flex-col md:flex-col items-center gap-2 h-full">
-                      <a href='/services' className="flex flex-col justify-between">
-                        <h1 className="text-2xl  text-center md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight whitespace-nowrap">
+                    <div className="flex flex-col items-center gap-2 h-full">
+
+                      {/* Title + Description */}
+                      <a href='/services' className="flex flex-col justify-between text-center">
+                        <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight whitespace-nowrap">
                           <span className="inline">Explore Our </span>
                           <span className="inline bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent w-fit">
                             Services
                           </span>
                         </h1>
-                        <p className="mt-4 text-base md:text-lg text-gray-600">
+                        <p className="mt-2 text-sm md:text-base text-gray-600">
                           Our Service and your Happiness is one appointment away. Click now to Book!
                         </p>
                       </a>
-                    <div className="w-full h-16 md:h-28 rounded-lg overflow-hidden relative">
-                        <CarouselServicesLanding/>
-                    </div>
+
+                      {/* "View All" + Carousel */}
+                      <div className="w-full">
+                        <div className="flex justify-between items-center mb-2">
+                          <h2 className="text-sm font-semibold text-gray-800">Services</h2>
+                          <a
+                            href="/services"
+                            className="text-xs font-medium text-purple-600 hover:text-purple-800 transition"
+                          >
+                            View All →
+                          </a>
+                        </div>
+
+                        <div className="w-full h-16 md:h-28 rounded-lg overflow-hidden relative">
+                          <CarouselServicesLanding />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
+
               </div>
 
               {/* Right column - Search section */}
