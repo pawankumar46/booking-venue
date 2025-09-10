@@ -8,6 +8,13 @@ import CarouselShowcase from './CarouselShowcase'
 
 const Services = () => {
   const navigate = useNavigate()
+  const [searchTerm, setSearchTerm] = useState('')
+  const onSearchSubmit = (e) => {
+    e.preventDefault()
+    const term = searchTerm.trim()
+    if (!term) return
+    navigate(`/services?search=${encodeURIComponent(term)}`)
+  }
 
   const ServiceCarousel = ({ title, images }) => {
     const containerRef = useRef(null)
@@ -67,6 +74,10 @@ const Services = () => {
     []
   )
 
+  const handleServiceExplore =()=>{
+   navigate('/services/:city')
+  }
+
  
   return (
     <div className="min-h-screen bg-gray-300">
@@ -74,6 +85,21 @@ const Services = () => {
       <section className="w-full py-10 md:py-14">
         <div className="max-w-7xl mx-auto px-4 space-y-6">
           <h2 className="text-2xl md:text-3xl font-bold text-center text-gray-900">Discover Services</h2>
+          <form onSubmit={onSearchSubmit} className="max-w-xl mx-auto flex items-center gap-2">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Search services (e.g., photography, catering)"
+              className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-purple-600"
+            />
+            <button
+              type="submit"
+              className="inline-flex items-center justify-center rounded-lg bg-purple-600 text-white px-4 py-2 font-semibold hover:bg-purple-700"
+            >
+              Search
+            </button>
+          </form>
           <CarouselShowcase />
         </div>
       </section>
@@ -103,7 +129,7 @@ const Services = () => {
                 <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-sky-500" />Photo Booths</li>
                 <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-sky-500" />Drone Shots</li>
               </ul>
-              <button className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-sky-600 text-white py-2.5 font-semibold hover:bg-sky-700 ring-1 ring-sky-500/20">
+              <button onClick={handleServiceExplore} className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-sky-600 text-white py-2.5 font-semibold hover:bg-sky-700 ring-1 ring-sky-500/20">
                 Explore <FaArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -131,7 +157,7 @@ const Services = () => {
                 <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-purple-500" />Corporate Videos</li>
                 <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-purple-500" />Drone Videography</li>
               </ul>
-              <button className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-purple-600 text-white py-2.5 font-semibold hover:bg-purple-700 ring-1 ring-purple-500/20">
+              <button onClick={handleServiceExplore} className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-purple-600 text-white py-2.5 font-semibold hover:bg-purple-700 ring-1 ring-purple-500/20">
                 Explore <FaArrowRight className="w-4 h-4" />
               </button>
             </div>
@@ -157,7 +183,7 @@ const Services = () => {
                 <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-fuchsia-500"/>Theme Decoration</li>
                 <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-fuchsia-500"/>Backdrop Setup</li>
               </ul>
-              <button className="mt-13 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-fuchsia-600 text-white py-2.5 font-semibold hover:bg-fuchsia-700 ring-1 ring-fuchsia-500/20">Explore <FaArrowRight className="w-4 h-4" /></button>
+              <button onClick={handleServiceExplore} className="mt-13 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-fuchsia-600 text-white py-2.5 font-semibold hover:bg-fuchsia-700 ring-1 ring-fuchsia-500/20">Explore <FaArrowRight className="w-4 h-4" /></button>
             </div>
           </div>
 
@@ -181,7 +207,7 @@ const Services = () => {
                 <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-emerald-500"/>Custom Menus</li>
                 <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-emerald-500"/>Dessert Stations</li>
               </ul>
-              <button className="mt-13 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 text-white py-2.5 font-semibold hover:bg-emerald-700 ring-1 ring-emerald-500/20">Explore <FaArrowRight className="w-4 h-4" /></button>
+              <button onClick={handleServiceExplore} className="mt-13 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 text-white py-2.5 font-semibold hover:bg-emerald-700 ring-1 ring-emerald-500/20">Explore <FaArrowRight className="w-4 h-4" /></button>
             </div>
           </div>
 
@@ -205,7 +231,7 @@ const Services = () => {
                 <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-orange-500"/>Sound Systems</li>
                 <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-orange-500"/>Entertainment Shows</li>
               </ul>
-              <button className="mt-13 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-orange-600 text-white py-2.5 font-semibold hover:bg-orange-700 ring-1 ring-orange-500/20">Explore <FaArrowRight className="w-4 h-4" /></button>
+              <button onClick={handleServiceExplore} className="mt-13 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-orange-600 text-white py-2.5 font-semibold hover:bg-orange-700 ring-1 ring-orange-500/20">Explore <FaArrowRight className="w-4 h-4" /></button>
             </div>
           </div>
           
@@ -231,7 +257,7 @@ const Services = () => {
       <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-pink-500"/>Party Makeup</li>
       <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-pink-500"/>Traditional Saree Draping</li>
     </ul>
-    <button className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-pink-600 text-white py-2.5 font-semibold hover:bg-pink-700 ring-1 ring-pink-500/20">
+    <button onClick={handleServiceExplore} className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-pink-600 text-white py-2.5 font-semibold hover:bg-pink-700 ring-1 ring-pink-500/20">
       Explore <FaArrowRight className="w-4 h-4" />
     </button>
   </div>
@@ -259,7 +285,7 @@ const Services = () => {
       <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-indigo-500"/>Birthday Party Hosts</li>
       <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-indigo-500"/>Cultural Function Anchors</li>
     </ul>
-    <button className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 text-white py-2.5 font-semibold hover:bg-indigo-700 ring-1 ring-indigo-500/20">
+    <button onClick={handleServiceExplore} className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 text-white py-2.5 font-semibold hover:bg-indigo-700 ring-1 ring-indigo-500/20">
       Explore <FaArrowRight className="w-4 h-4" />
     </button>
   </div>
@@ -287,7 +313,7 @@ const Services = () => {
       <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-yellow-500"/>Balloon Tricks</li>
       <li className="flex items-center gap-2"><span className="h-2 w-2 rounded-full bg-yellow-500"/>Kids Party Fun</li>
     </ul>
-    <button className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-yellow-600 text-white py-2.5 font-semibold hover:bg-yellow-700 ring-1 ring-yellow-500/20">
+    <button onClick={handleServiceExplore} className="mt-8 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-yellow-600 text-white py-2.5 font-semibold hover:bg-yellow-700 ring-1 ring-yellow-500/20">
       Explore <FaArrowRight className="w-4 h-4" />
     </button>
   </div>

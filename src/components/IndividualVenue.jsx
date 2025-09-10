@@ -30,7 +30,7 @@ const IndividualVenue = () => {
       location: state.location || decodeURIComponent(city),
       photos: venueImages,
       description: state.description || `Experience elegance and sophistication at ${state.name || `Premier Venue ${idNum}`}. Our venue offers a perfect blend of modern amenities and classic charm, making it an ideal choice for your special occasions. With spacious halls, beautiful décor, and exceptional service, we ensure your event becomes a memorable celebration.`,
-      amenities: state.amenities || [
+      amenities: [
         'Air Conditioning',
         'Free WiFi',
         'Sound System',
@@ -46,7 +46,7 @@ const IndividualVenue = () => {
         'Green Rooms',
         'Valet Parking',
         'Bar Counter'
-      ].slice(0, Math.floor(Math.random() * 6) + 8), // Random 8-13 amenities
+      ],
       seatingArrangements: state.seatingArrangements || [
         { type: 'Round Table Seating', capacity: 8, description: 'Perfect for intimate dining and conversations' },
         { type: 'Theater Style', capacity: 200, description: 'Ideal for presentations and ceremonies' },
@@ -482,10 +482,12 @@ const IndividualVenue = () => {
                     <div className="flex items-center justify-between mb-2">
                       <h4 className="font-semibold text-gray-900">{seating.type}</h4>
                       <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
-                        Up to {seating.capacity} guests
+                        {(['Round Table', 'Rectangular Table', 'Dining Style', 'Dining Table'].includes(seating.type))
+                          ? `Up to ${seating.capacity} guests / table`
+                          : `Up to ${seating.capacity}`}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600">{seating.description}</p>
+                    <p className="text-sm text-gray-600">{seating.description || `Ideal ${seating.type}${seating.capacity ? ` • up to ${seating.capacity}${(['Round Table', 'Rectangular Table', 'Dining Style', 'Dining Table', 'Round Table Seating', 'Rectangular Table Seating'].includes(seating.type) ? ' per table' : ' guests')}` : ''}`}</p>
                   </div>
                 ))}
               </div>

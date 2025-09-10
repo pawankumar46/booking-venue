@@ -1,11 +1,66 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { TiTick, TiTimes } from 'react-icons/ti'
 import { FaCarAlt, FaMotorcycle, FaStar, FaMapMarkerAlt, FaParking, FaBed } from 'react-icons/fa'
 import { MdPeopleAlt } from 'react-icons/md'
 import Blogs from './Blogs'
+import CarouselVenueLanding from './CarouselVenueLanding'
+import CarouselServicesLanding from './CarouselServicesLanding'
 
 const Landing = () => {
+  // Carousel state for venue images
+  const [currentVenueImage, setCurrentVenueImage] = useState(0)
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false)
+  const venueImages = [
+    'https://images.unsplash.com/photo-1542665952-14513db15293?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1600&auto=format&fit=crop',
+    'https://plus.unsplash.com/premium_photo-1681841713733-7b5d6cb95137?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1462826303086-329426d1aef5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1568530873454-e4103a0b3c71?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1600&auto=format&fit=crop'
+  ]
+
+  // Carousel state for services images
+  const [currentServiceImage, setCurrentServiceImage] = useState(0)
+  const [isServiceCarouselPaused, setIsServiceCarouselPaused] = useState(false)
+  const serviceImages = [
+    'https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1747270318402-d0265f822979?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1677677402907-05f2883e3f66?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1600&auto=format&fit=crop'
+  ]
+
+  // Auto-rotate venue carousel every 5 seconds
+  useEffect(() => {
+    if (isCarouselPaused) return
+
+    const interval = setInterval(() => {
+      setCurrentVenueImage((prev) => (prev + 1) % venueImages.length)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [isCarouselPaused, venueImages.length])
+
+  // Auto-rotate services carousel every 5 seconds
+  useEffect(() => {
+    if (isServiceCarouselPaused) return
+
+    const interval = setInterval(() => {
+      setCurrentServiceImage((prev) => (prev + 1) % serviceImages.length)
+    }, 5000)
+
+    return () => clearInterval(interval)
+  }, [isServiceCarouselPaused, serviceImages.length])
+
+  // Function to handle manual navigation and reset timer for venue
+  const handleVenueImageChange = (newIndex) => {
+    setCurrentVenueImage(newIndex)
+  }
+
+  // Function to handle manual navigation and reset timer for services
+  const handleServiceImageChange = (newIndex) => {
+    setCurrentServiceImage(newIndex)
+  }
+
   const FeaturedCard = ({ venue }) => {
     const [index, setIndex] = useState(0)
     const total = venue.photos.length
@@ -88,7 +143,7 @@ const Landing = () => {
   )
   const venueTypes = useMemo(
     () => [
-      'Banquet Hall', 'Lawn', 'Resort', 'Wedding Hall','Hotel', 'Community Hall', 'Conference Hall', 'Farmhouse', 'Restaurant',
+      'Banquet Hall', 'Resort', 'Wedding Hall','Hotel', 'Community Hall', 'Conference Hall', 'Farmhouse', 'Restaurant',
     ],
     []
   )
@@ -228,12 +283,12 @@ const Landing = () => {
       if (selectedResourceType) paramsResources.set('resourceType', selectedResourceType)
       paramsResources.set('mode', resourceMode)
       const queryResources = paramsResources.toString()
-      const url = `/resources/${encodeURIComponent(selectedCity)}${queryResources ? `?${queryResources}` : ''}`
+      const url = `/resources${queryResources ? `?${queryResources}` : ''}`
       navigate(url)
     }
   }
   return (
-    <div className="relative bg-gradient-to-r from-gray-300 via-purple-200 to-pink-200">
+    <div className="relative min-h-screen overflow-x-hidden bg-gradient-to-r from-gray-300 via-purple-200 to-pink-200">
       <section className="w-full py-12 md:py-10">
         <div className="relative max-w-7xl mx-auto px-4">
           {/* Decorative background blobs */}
@@ -241,18 +296,18 @@ const Landing = () => {
           <div className="pointer-events-none absolute -bottom-12 -right-8 h-48 w-48 rounded-full bg-purple-200/40 blur-3xl"></div>
           
           {/* Main container */}
-          <div className="rounded-2xl p-4 bg-gray-300">
-            <div className="grid grid-cols-3 gap-4 h-[600px]">
+          <div className="rounded-2xl p-2 bg-gray-300">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:h-[540px]">
               {/* Left column with two stacked sections */}
-              <div className="col-span-2 flex flex-col gap-4">
+              <div className="col-span-2 flex flex-col gap-2">
                 {/* Top section - Venue card */}
                 <div className="flex-1 rounded-xl p-[1px] bg-gradient-to-r from-pink-400/5 via-fuchsia-400/5 to-purple-400/5">
-                  <div className="rounded-xl bg-white/40 backdrop-blur shadow-xl ring-1 ring-gray-200 h-full px-5 py-6 transition-all hover:shadow-2xl hover:-translate-y-1">
-                    <div className="flex items-center gap-6 h-full">
-                      <a href='/' className="flex-1">
-                        <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight">
-                          <span className="block">Find Your Perfect</span>
-                          <span className="block bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent w-fit">
+                  <div className="rounded-xl bg-white/40 backdrop-blur shadow-xl ring-1 ring-gray-200 h-64 px-5 py-4 transition-all hover:shadow-2xl hover:-translate-y-1">
+                    <div className="flex flex-col md:flex-col items-center gap-6 h-full">
+                      <a href='/' className="flex flex-col  justify-between">
+                        <h1 className="text-2xl text-center md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight whitespace-nowrap">
+                          <span className="inline">Find Your Perfect </span>
+                          <span className="inline bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent w-fit">
                             Venue
                           </span>
                         </h1>
@@ -260,8 +315,8 @@ const Landing = () => {
                           Discover amazing party halls for weddings, birthdays, corporate events, and celebrations.
                         </p>
                       </a>
-                      <div className="w-32 h-24 md:w-65 md:h-52 rounded-lg overflow-hidden ring-1 ring-black/5 shadow">
-                        <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1600&auto=format&fit=crop" alt="Venue" className="w-full h-full object-cover" />
+                      <div className="w-full h-16 md:h-28 rounded-lg overflow-hidden relative">
+                        <CarouselVenueLanding/>
                       </div>
                     </div>
                   </div>
@@ -269,15 +324,12 @@ const Landing = () => {
 
                 {/* Bottom section - Services card */}
                 <div className="flex-1 rounded-xl p-[1px] bg-gradient-to-r from-pink-400/5 via-fuchsia-400/5 to-purple-400/5">
-                  <div className="rounded-xl bg-white/40 backdrop-blur shadow-xl ring-1 ring-gray-200 h-full px-5 py-6 transition-all hover:shadow-2xl hover:-translate-y-1">
-                    <div className="flex items-center gap-6 h-full">
-                      <div className="w-32 h-24 md:w-65 md:h-52 rounded-lg overflow-hidden ring-1 ring-black/5 shadow">
-                        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1600&auto=format&fit=crop" alt="Services" className="w-full h-full object-cover" />
-                      </div>
-                      <a href='/services' className="flex-1 text-right">
-                        <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight">
-                          <span className="block">Find Your Perfect</span>
-                          <span className="block bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent w-fit ml-auto">
+                  <div className="rounded-xl bg-white/40 backdrop-blur shadow-xl ring-1 ring-gray-200 h-64 px-5 py-4 transition-all hover:shadow-2xl hover:-translate-y-1">
+                    <div className="flex flex-col md:flex-col items-center gap-2 h-full">
+                      <a href='/services' className="flex flex-col justify-between">
+                        <h1 className="text-2xl  text-center md:text-4xl font-extrabold tracking-tight text-gray-900 leading-tight whitespace-nowrap">
+                          <span className="inline">Explore Our </span>
+                          <span className="inline bg-gradient-to-r from-pink-500 via-fuchsia-500 to-purple-600 bg-clip-text text-transparent w-fit">
                             Services
                           </span>
                         </h1>
@@ -285,6 +337,9 @@ const Landing = () => {
                           Our Service and your Happiness is one appointment away. Click now to Book!
                         </p>
                       </a>
+                    <div className="w-full h-16 md:h-28 rounded-lg overflow-hidden relative">
+                        <CarouselServicesLanding/>
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -431,7 +486,7 @@ const Landing = () => {
                                   : 'text-gray-600 hover:text-gray-900'
                               }`}
                             >
-                              Sell
+                              Sell / Buy
                             </button>
                           </div>
                         </>

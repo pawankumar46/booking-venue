@@ -22,3 +22,8 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none; /* Chrome, Safari */
 }
+
+html, body {
+  overscroll-behavior-x: none;
+  touch-action: pan-y; /* disables horizontal swipe */
+}

@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { FiStar, FiMapPin, FiPhone, FiBriefcase, FiCamera, FiCoffee, FiMusic } from 'react-icons/fi'
 import { GiPalette } from 'react-icons/gi'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const categoryTheme = {
   Photography: {
@@ -134,10 +134,12 @@ const serviceProviders = [
 
 const ListofServices = () => {
   const params = useParams()
-  const city = decodeURIComponent(params.city || '')
+  const city = decodeURIComponent(params.city)
+  const navigate = useNavigate()
   const categories = ['Photography', 'Caterers', 'Decoration', 'Music']
   const [selectedCategories, setSelectedCategories] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
+  const [searchTerm, setSearchTerm] = useState('')
 
   const toggleCategory = (cat) => {
     setSelectedCategories((prev) =>
@@ -146,9 +148,25 @@ const ListofServices = () => {
   }
 
   const filteredProviders = useMemo(() => {
-    if (selectedCategories.length === 0) return serviceProviders
-    return serviceProviders.filter((p) => selectedCategories.includes(p.category))
-  }, [selectedCategories])
+    const byCategory = selectedCategories.length === 0
+      ? serviceProviders
+      : serviceProviders.filter((p) => selectedCategories.includes(p.category))
+
+    const term = searchTerm.trim().toLowerCase()
+    if (!term) return byCategory
+
+    return byCategory.filter((p) => {
+      const inName = p.name.toLowerCase().includes(term)
+      const inPlace = p.place.toLowerCase().includes(term)
+      const inCategory = p.category.toLowerCase().includes(term)
+      const inServices = (p.services || []).some((s) => s.toLowerCase().includes(term))
+      return inName || inPlace || inCategory || inServices
+    })
+  }, [selectedCategories, searchTerm])
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedCategories, searchTerm])
 
   const itemsPerPage = 6
   const totalPages = Math.ceil(filteredProviders.length / itemsPerPage) || 1
@@ -162,16 +180,34 @@ const ListofServices = () => {
     setCurrentPage(page)
   }
 
+  const handleServiceNavigate = (serviceProvider) => {
+    // Navigate to individual service page with service data
+    navigate(`/services/${serviceProvider.category.toLowerCase()}/${serviceProvider.id}`, {
+      state: serviceProvider
+    })
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 py-10">
         <div className="mb-8 text-center">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Service Providers in {city}</h1>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{city != ":city" ? `Service Providers in ${city}` : 'Service Providers'}</h1>
           <p className="text-gray-600 mt-2">Photography, Caterers, Decorations, Music (DJ) and more</p>
         </div>
 
         <div className="mb-6 bg-white rounded-xl ring-1 ring-gray-200 p-4">
-          <div className="text-sm font-medium text-gray-700 mb-2">Filter by category</div>
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+            <div className="text-sm font-medium text-gray-700">Filter by category</div>
+            <form onSubmit={(e)=>e.preventDefault()} className="w-full md:w-80">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e)=>setSearchTerm(e.target.value)}
+                placeholder="Search providers, location, category, services"
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-gray-900"
+              />
+            </form>
+          </div>
           <div className="flex flex-wrap gap-3">
             {categories.map((cat) => {
               const checked = selectedCategories.includes(cat)
@@ -237,7 +273,7 @@ const ListofServices = () => {
                 </div>
 
                 <div className="mt-4 flex justify-end">
-                  <button className={`inline-flex items-center justify-center rounded-full text-white px-3 py-1.5 text-xs sm:text-sm font-semibold transition-colors ${theme.button}`}>
+                  <button onClick={() => handleServiceNavigate(sp)} className={`inline-flex items-center justify-center rounded-full text-white px-3 py-1.5 text-xs sm:text-sm font-semibold transition-colors ${theme.button}`}>
                     View Details
                   </button>
                 </div>
