@@ -11,7 +11,6 @@ import Login from './components/Login'
 import ChatBot from './components/ChatBot'
 import Resources from './pages/Resources'
 import './App.css'
-import GalaxyBack from './components/GalaxyBack'
 import ListYourBusiness from './components/ListYourBusiness'
 import Services from './pages/Services'
 import ListofServices from './pages/ListofServices'
@@ -19,7 +18,6 @@ import IndividualServices from './pages/IndividualServices'
 import PaymentGateway from './pages/PaymentGateway'
 import IndividualResources from './pages/IndividualResources'
 import AddToCart from './pages/AddToCart'
-import Galaxy from './components/GalaxyBack'
 
 
 function App() {
