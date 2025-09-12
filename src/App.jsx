@@ -18,6 +18,7 @@ import IndividualServices from './pages/IndividualServices'
 import PaymentGateway from './pages/PaymentGateway'
 import IndividualResources from './pages/IndividualResources'
 import AddToCart from './pages/AddToCart'
+import Menu from './pages/Menu'
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
             <Route path="/resources" element={<Resources/>}/>
             <Route path="/resources/:resourceId" element={<IndividualResources/>}/>
             <Route path="/cart" element={<AddToCart/>}/>
+            <Route path="/menu" element={<Menu/>}/>
           </Routes>
         </main>
         <Footer />

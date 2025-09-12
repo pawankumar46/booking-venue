@@ -170,31 +170,35 @@ const IndividualServices = () => {
       return newMonth
     })
   }
+  const handleMenu = () => {
+     navigate("/menu")
+  }
 
 const handleBookNow = () => {
   if (!selectedDate) {
     // Scroll down smoothly
     window.scrollBy({
-      top: 500,
+      top: 600,
       behavior: "smooth",
     });
     return; 
   }
-
-  // Navigate only if a date is selected
-  navigate("/pay", {
-    state: {
-      amount: 499,
-      merchantName: "Booking Website",
-      description: `Booking advance for ${serviceData.name}`,
-      customerName: "John Doe",
-      customerEmail: "john.doe@example.com",
-      customerPhone: "9999999999",
-      logo: serviceData.portfolio?.[0],
-    },
-  });
+  if (serviceType === 'caterers') {
+    navigate("/menu")
+  } else {
+    navigate("/pay", {
+      state: {
+        amount: 1000,
+        merchantName: "Booking Website",
+        description: `Booking advance for ${serviceData.name}`,
+        customerName: "John Doe",
+        customerEmail: "john.doe@example.com",
+        customerPhone: "9999999999",
+        logo: serviceData.portfolio?.[0],
+      },
+    });
+  }
 };
-
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -445,12 +449,19 @@ const handleBookNow = () => {
                           </div>
                         </div>
                         <div className=" flex mt-3 gap-4">
+                          {serviceType === 'caterers' ? <button
+                            onClick={handleBookNow}
+                            className={`${currentColor.button} text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity`}
+                          >
+                            Select Menu & Proceed to Book
+                          </button> : 
                           <button
                             onClick={handleBookNow}
                             className={`${currentColor.button} text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity`}
                           >
-                            Proceed to Book
-                          </button>
+                           Proceed to Book
+                          </button>}
+                          
                           <button
                             onClick={() => setSelectedDate(null)} // clears the date
                             className="bg-red-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
@@ -538,7 +549,7 @@ const handleBookNow = () => {
                   className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
                     selectedDate 
                       ? `${currentColor.button} text-white hover:opacity-90` 
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-gray-300 text-gray-500'
                   }`}
                 >
                   {selectedDate ? 'Book Through Online' : 'Select Available Dates'}
@@ -551,6 +562,29 @@ const handleBookNow = () => {
                   <FiMail className="w-4 h-4" />
                   Send Message
                 </button>
+                {serviceType === 'caterers' && (
+                  <div className="relative group">
+                    <button 
+                      onClick={handleMenu} 
+                      disabled={!selectedDate}
+                      className={`w-full py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+                        selectedDate 
+                          ? 'border border-gray-300 text-gray-700 hover:bg-gray-50' 
+                          : 'border border-gray-200 text-gray-400 cursor-not-allowed bg-gray-100'
+                      }`}
+                    >
+                      <FiCoffee className="w-4 h-4" />
+                      Menu
+                    </button>
+                    {!selectedDate && (
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                        Select date first
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
+                      </div>
+                    )}
+                  </div>
+                )}
+                
               </div>
               
               {/* Selected Date Display */}
@@ -575,10 +609,12 @@ const handleBookNow = () => {
             <div className="bg-white rounded-xl p-6 shadow-sm">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Info</h3>
               <div className="space-y-3">
+                {serviceType === 'caterers' ? null : 
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Starting Price:</span>
-                  <span className="font-semibold text-gray-900">{serviceData.startingPrice}</span>
-                </div>
+                <span className="text-gray-600">Starting Price:</span>
+                <span className="font-semibold text-gray-900">{serviceData.startingPrice}</span>
+              </div> }
+                
                 <div className="flex justify-between">
                   <span className="text-gray-600">Response Time:</span>
                   <span className="font-semibold text-gray-900">{serviceData.responseTime}</span>

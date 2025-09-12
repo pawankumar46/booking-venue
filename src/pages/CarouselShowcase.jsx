@@ -82,32 +82,39 @@ const CarouselShowcase = () => {
           const isHovered = hoveredIndex === index
           const dimOthers = hoveredIndex !== null && !isHovered
           return (
-            <div
-              key={`${item.title}-${index}`}
-              data-carousel-card
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className={
-                `relative w-64 md:w-80 h-40 md:h-56 rounded-xl overflow-hidden ring-1 ring-black/5 shadow transition-all duration-300 shrink-0 ` +
-                (isHovered
-                  ? 'scale-[1.05] z-10 shadow-2xl'
-                  : dimOthers
-                  ? 'blur-[2px] opacity-60'
-                  : '')
-              }
+            <a
+              href='/services/:city'
+              rel="noopener noreferrer"
+              className="block"
             >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                draggable="false"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0" />
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                <span className="text-white font-semibold tracking-wide drop-shadow">{item.title}</span>
-                <span className="text-white/90 text-xs px-2 py-0.5 rounded-full bg-white/20 ring-1 ring-white/30">Explore</span>
+              <div
+                key={`${item.title}-${index}`}
+                data-carousel-card
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                className={
+                  `relative w-64 md:w-80 h-40 md:h-56 rounded-xl overflow-hidden ring-1 ring-black/5 shadow transition-all duration-300 shrink-0 ` +
+                  (isHovered
+                    ? 'scale-[1.05] z-10 shadow-2xl'
+                    : dimOthers
+                      ? 'blur-[2px] opacity-60'
+                      : '')
+                }
+              >
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  draggable="false"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0" />
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                  <span className="text-white font-semibold tracking-wide drop-shadow">{item.title}</span>
+                  <span className="text-white/90 text-xs px-2 py-0.5 rounded-full bg-white/20 ring-1 ring-white/30">Explore</span>
+                </div>
               </div>
-            </div>
+            </a>
+
           )
         })}
       </div>
