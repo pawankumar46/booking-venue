@@ -330,7 +330,7 @@ const Landing = () => {
                           </a>
                         </div>
 
-                        <div className="w-full h-16 md:h-28 rounded-lg overflow-hidden relative">
+                        <div className="w-full h-[72px] md:h-[120px] rounded-lg overflow-hidden relative">
                           <CarouselVenueLanding />
                         </div>
                       </div>
@@ -369,7 +369,7 @@ const Landing = () => {
                           </a>
                         </div>
 
-                        <div className="w-full h-16 md:h-28 rounded-lg overflow-hidden relative">
+                        <div className="w-full h-[72px] md:h-[120px] rounded-lg overflow-hidden relative">
                           <CarouselServicesLanding />
                         </div>
                       </div>

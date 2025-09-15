@@ -75,41 +75,46 @@ const CarouselVenueLanding = () => {
       onMouseLeave={() => setIsPaused(false)}
     >
       <div
-        ref={containerRef}
-        className="flex gap-2 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth py-2"
+  ref={containerRef}
+  className="flex gap-2 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth py-2 snap-x snap-mandatory"
+>
+  {duplicated.map((item, index) => {
+    const isHovered = hoveredIndex === index
+    const dimOthers = hoveredIndex !== null && !isHovered
+    return (
+      <div
+        key={`${item.title}-${index}`}
+        data-carousel-card
+        onMouseEnter={() => setHoveredIndex(index)}
+        onMouseLeave={() => setHoveredIndex(null)}
+        className={
+          `relative w-48 sm:w-64 md:w-30 h-12 sm:h-20 md:h-26
+           rounded-lg sm:rounded-xl overflow-hidden shrink-0 snap-center
+           ring-1 ring-black/5 shadow transition-all duration-200 ` +
+          (isHovered
+            ? 'scale-[1.02] z-10 shadow-xl'
+            : dimOthers
+            ? 'blur-[2px] opacity-60'
+            : '')
+        }
       >
-        {duplicated.map((item, index) => {
-          const isHovered = hoveredIndex === index
-          const dimOthers = hoveredIndex !== null && !isHovered
-          return (
-            <div
-              key={`${item.title}-${index}`}
-              data-carousel-card
-              onMouseEnter={() => setHoveredIndex(index)}
-              onMouseLeave={() => setHoveredIndex(null)}
-              className={
-                `relative w-48 sm:w-64 md:w-30 h-12 sm:h-20 md:h-26 rounded-lg sm:rounded-xl overflow-hidden ring-1 ring-black/5 shadow transition-all duration-300 shrink-0 ` +
-                (isHovered
-                  ? 'scale-[1.05] z-10 shadow-2xl'
-                  : dimOthers
-                  ? 'blur-[2px] opacity-60'
-                  : '')
-              }
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                draggable="false"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0" />
-              <div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3 flex items-center justify-between">
-                <span className="text-white font-semibold text-xs sm:text-sm tracking-wide drop-shadow">{item.title}</span>
-              </div>
-            </div>
-          )
-        })}
+        <img
+          src={item.image}
+          alt={item.title}
+          className="absolute inset-0 w-full h-full object-cover"
+          draggable="false"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0" />
+        <div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3">
+          <span className="text-white font-semibold text-sm sm:text-base tracking-wide drop-shadow">
+            {item.title}
+          </span>
+        </div>
       </div>
+    )
+  })}
+</div>
+
     </div>
   )
 }
