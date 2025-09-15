@@ -228,48 +228,48 @@ const handleBookNow = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6 sm:space-y-8">
             {/* Service Header */}
-            <div className="bg-white rounded-xl p-6 shadow-sm">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
               <div className="flex items-start justify-between mb-4">
-                <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <h1 className="text-3xl font-bold text-gray-900">{serviceData.name}</h1>
+                <div className="flex-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{serviceData.name}</h1>
                     {serviceData.isFeatured && (
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${currentColor.badge}`}>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${currentColor.badge} self-start`}>
                         Featured
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-4 text-gray-600 mb-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-gray-600 mb-2">
                     <div className="flex items-center gap-1">
                       <FiMapPin className="w-4 h-4" />
-                      <span>{serviceData.location}</span>
+                      <span className="text-sm sm:text-base">{serviceData.location}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <FiClock className="w-4 h-4" />
-                      <span>{serviceData.experience}</span>
+                      <span className="text-sm sm:text-base">{serviceData.experience}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
                     <FiStar className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="text-gray-900 font-medium">{serviceData.rating}</span>
-                    <span className="text-gray-500">({serviceData.reviewCount} reviews)</span>
+                    <span className="text-gray-900 font-medium text-sm sm:text-base">{serviceData.rating}</span>
+                    <span className="text-gray-500 text-sm sm:text-base">({serviceData.reviewCount} reviews)</span>
                   </div>
                 </div>
-                <div className={`p-3 rounded-lg ${currentColor.bg}`}>
-                  <IconComponent className={`w-8 h-8 ${currentColor.text}`} />
+                <div className={`p-2 sm:p-3 rounded-lg ${currentColor.bg} flex-shrink-0`}>
+                  <IconComponent className={`w-6 h-6 sm:w-8 sm:h-8 ${currentColor.text}`} />
                 </div>
               </div>
             </div>
 
             {/* Portfolio */}
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Portfolio</h2>
-              <div className="grid grid-cols-3 gap-4">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Portfolio</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-4">
                 {serviceData.portfolio.map((image, index) => (
                   <div key={index} className="aspect-square rounded-lg overflow-hidden">
                     <img 
@@ -285,12 +285,12 @@ const handleBookNow = () => {
             {/* Tabs */}
             <div className="bg-white rounded-xl shadow-sm">
               <div className="border-b border-gray-200">
-                <nav className="flex space-x-8 px-6">
+                <nav className="flex space-x-4 sm:space-x-8 px-4 sm:px-6 overflow-x-auto">
                   {['about', 'availability', 'packages', 'reviews'].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`py-4 px-1 border-b-2 font-medium text-sm capitalize ${
+                      className={`py-3 sm:py-4 px-1 border-b-2 font-medium text-sm capitalize whitespace-nowrap ${
                         activeTab === tab
                           ? 'border-blue-500 text-blue-600'
                           : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -302,20 +302,20 @@ const handleBookNow = () => {
                 </nav>
               </div>
 
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 {/* About Tab */}
                 {activeTab === 'about' && (
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3">About {serviceData.name}</h3>
-                      <p className="text-gray-600 leading-relaxed">{serviceData.description}</p>
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">About {serviceData.name}</h3>
+                      <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{serviceData.description}</p>
                     </div>
                     
                     <div>
-                      <h4 className="text-md font-semibold text-gray-900 mb-3">Services Offered</h4>
+                      <h4 className="text-sm sm:text-md font-semibold text-gray-900 mb-2 sm:mb-3">Services Offered</h4>
                       <div className="flex flex-wrap gap-2">
                         {serviceData.services.map((serviceItem, index) => (
-                          <span key={index} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                          <span key={index} className="px-2 sm:px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm">
                             {serviceItem}
                           </span>
                         ))}
@@ -323,12 +323,12 @@ const handleBookNow = () => {
                     </div>
 
                     <div>
-                      <h4 className="text-md font-semibold text-gray-900 mb-3">Equipment & Techniques</h4>
+                      <h4 className="text-sm sm:text-md font-semibold text-gray-900 mb-2 sm:mb-3">Equipment & Techniques</h4>
                       <div className="space-y-2">
                         {serviceConfig.equipment.map((item, index) => (
                           <div key={index} className="flex items-center gap-2 text-gray-600">
                             <div className={`w-2 h-2 rounded-full ${currentColor.bg}`}></div>
-                            <span>{item}</span>
+                            <span className="text-sm sm:text-base">{item}</span>
                           </div>
                         ))}
                       </div>
@@ -338,28 +338,28 @@ const handleBookNow = () => {
 
                 {/* Availability Tab */}
                 {activeTab === 'availability' && (
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Check Availability</h3>
-                      <p className="text-gray-600 mb-6">Select your preferred date to check availability and proceed with booking.</p>
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Check Availability</h3>
+                      <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Select your preferred date to check availability and proceed with booking.</p>
                     </div>
 
                     {/* Calendar */}
-                    <div className="bg-gray-50 rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-lg font-semibold text-gray-900">
+                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
+                      <div className="flex items-center justify-between mb-3 sm:mb-4">
+                        <h4 className="text-base sm:text-lg font-semibold text-gray-900">
                           {currentMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                         </h4>
-                        <div className="flex gap-2">
+                        <div className="flex gap-1 sm:gap-2">
                           <button
                             onClick={() => navigateMonth(-1)}
-                            className="p-2 rounded-lg text-black bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
+                            className="p-1.5 sm:p-2 rounded-lg text-black bg-white border border-gray-200 hover:bg-gray-50 transition-colors text-sm sm:text-base"
                           >
                             ←
                           </button>
                           <button
                             onClick={() => navigateMonth(1)}
-                            className="p-2 rounded-lg text-black bg-white border border-gray-200 hover:bg-gray-50 transition-colors"
+                            className="p-1.5 sm:p-2 rounded-lg text-black bg-white border border-gray-200 hover:bg-gray-50 transition-colors text-sm sm:text-base"
                           >
                             →
                           </button>
@@ -369,7 +369,7 @@ const handleBookNow = () => {
                       {/* Calendar Grid */}
                       <div className="grid grid-cols-7 gap-1 mb-2">
                         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                          <div key={day} className="p-2 text-center text-sm font-medium text-gray-500">
+                          <div key={day} className="p-1 sm:p-2 text-center text-xs sm:text-sm font-medium text-gray-500">
                             {day}
                           </div>
                         ))}
@@ -382,7 +382,7 @@ const handleBookNow = () => {
                           
                           // Empty cells for days before the first day of the month
                           for (let i = 0; i < startingDayOfWeek; i++) {
-                            days.push(<div key={`empty-${i}`} className="p-2"></div>)
+                            days.push(<div key={`empty-${i}`} className="p-1 sm:p-2"></div>)
                           }
                           
                           // Days of the month
@@ -397,7 +397,7 @@ const handleBookNow = () => {
                                 key={day}
                                 onClick={() => handleDateSelect(date)}
                                 disabled={!isAvailable}
-                                className={`p-2 text-sm rounded-lg transition-all ${
+                                className={`p-1 sm:p-2 text-xs sm:text-sm rounded-lg transition-all ${
                                   isSelected
                                     ? `${currentColor.button} text-white`
                                     : isAvailable
@@ -415,17 +415,17 @@ const handleBookNow = () => {
                       </div>
 
                       {/* Legend */}
-                      <div className="flex items-center gap-4 mt-4 text-sm">
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-white border border-gray-200 rounded"></div>
+                      <div className="flex flex-wrap items-center gap-2 sm:gap-4 mt-3 sm:mt-4 text-xs sm:text-sm">
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white border border-gray-200 rounded"></div>
                           <span className="text-gray-600">Available</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-gray-100 rounded"></div>
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <div className="w-2 h-2 sm:w-3 sm:h-3 bg-gray-100 rounded"></div>
                           <span className="text-gray-600">Unavailable</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-blue-600 rounded"></div>
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <div className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-600 rounded"></div>
                           <span className="text-gray-600">Selected</span>
                         </div>
                       </div>
@@ -433,12 +433,12 @@ const handleBookNow = () => {
 
                     {/* Selected Date Info */}
                     {selectedDate && (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                        <div className="flex items-center gap-3">
-                          <FiCheckCircle className="w-5 h-5 text-green-600" />
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3 sm:p-4">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <FiCheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
                           <div>
-                            <h4 className="font-semibold text-green-900">Date Selected</h4>
-                            <p className="text-green-700">
+                            <h4 className="font-semibold text-green-900 text-sm sm:text-base">Date Selected</h4>
+                            <p className="text-green-700 text-xs sm:text-sm">
                               {selectedDate.toLocaleDateString('en-US', { 
                                 weekday: 'long', 
                                 year: 'numeric', 
@@ -448,23 +448,23 @@ const handleBookNow = () => {
                             </p>
                           </div>
                         </div>
-                        <div className=" flex mt-3 gap-4">
+                        <div className="flex flex-col sm:flex-row mt-3 gap-2 sm:gap-4">
                           {serviceType === 'caterers' ? <button
                             onClick={handleBookNow}
-                            className={`${currentColor.button} text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity`}
+                            className={`${currentColor.button} text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity text-sm sm:text-base`}
                           >
                             Select Menu & Proceed to Book
                           </button> : 
                           <button
                             onClick={handleBookNow}
-                            className={`${currentColor.button} text-white px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity`}
+                            className={`${currentColor.button} text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity text-sm sm:text-base`}
                           >
                            Proceed to Book
                           </button>}
                           
                           <button
                             onClick={() => setSelectedDate(null)} // clears the date
-                            className="bg-red-500 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors"
+                            className="bg-red-500 text-white px-4 sm:px-6 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors text-sm sm:text-base"
                           >
                             Remove Selected Date
                           </button>
@@ -475,12 +475,12 @@ const handleBookNow = () => {
 
                     {/* No Date Selected */}
                     {!selectedDate && (
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <div className="flex items-center gap-3">
-                          <FiCalendar className="w-5 h-5 text-blue-600" />
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <FiCalendar className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" />
                           <div>
-                            <h4 className="font-semibold text-blue-900">Select a Date</h4>
-                            <p className="text-blue-700">Choose an available date from the calendar above to proceed with booking.</p>
+                            <h4 className="font-semibold text-blue-900 text-sm sm:text-base">Select a Date</h4>
+                            <p className="text-blue-700 text-xs sm:text-sm">Choose an available date from the calendar above to proceed with booking.</p>
                           </div>
                         </div>
                       </div>
@@ -490,18 +490,18 @@ const handleBookNow = () => {
 
                 {/* Packages Tab */}
                 {activeTab === 'packages' && (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {serviceData.packages.map((pkg, index) => (
-                      <div key={index} className="border border-gray-200 rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="text-lg font-semibold text-gray-900">{pkg.name}</h4>
-                          <span className="text-xl font-bold text-gray-900">{pkg.price}</span>
+                      <div key={index} className="border border-gray-200 rounded-lg p-3 sm:p-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2">
+                          <h4 className="text-base sm:text-lg font-semibold text-gray-900">{pkg.name}</h4>
+                          <span className="text-lg sm:text-xl font-bold text-gray-900">{pkg.price}</span>
                         </div>
                         <ul className="space-y-1">
                           {pkg.features.map((feature, featureIndex) => (
                             <li key={featureIndex} className="flex items-center gap-2 text-gray-600">
                               <div className={`w-1.5 h-1.5 rounded-full ${currentColor.bg}`}></div>
-                              <span>{feature}</span>
+                              <span className="text-sm sm:text-base">{feature}</span>
                             </li>
                           ))}
                         </ul>
@@ -512,23 +512,23 @@ const handleBookNow = () => {
 
                 {/* Reviews Tab */}
                 {activeTab === 'reviews' && (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {serviceData.reviews.map((review, index) => (
-                      <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-gray-900">{review.name}</h4>
+                      <div key={index} className="border-b border-gray-200 pb-3 sm:pb-4 last:border-b-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2">
+                          <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{review.name}</h4>
                           <div className="flex items-center gap-1">
                             {[...Array(5)].map((_, i) => (
                               <FiStar 
                                 key={i} 
-                                className={`w-4 h-4 ${
+                                className={`w-3 h-3 sm:w-4 sm:h-4 ${
                                   i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
                                 }`} 
                               />
                             ))}
                           </div>
                         </div>
-                        <p className="text-gray-600">{review.comment}</p>
+                        <p className="text-gray-600 text-sm sm:text-base">{review.comment}</p>
                       </div>
                     ))}
                   </div>
@@ -538,15 +538,15 @@ const handleBookNow = () => {
           </div>
 
           {/* Right Column - Contact & Info */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Get in Touch */}
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Get in Touch</h3>
-              <div className="space-y-3">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Get in Touch</h3>
+              <div className="space-y-2 sm:space-y-3">
                 <button 
                   onClick={handleBookNow} 
                   // disabled={!selectedDate}
-                  className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
+                  className={`w-full py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-colors text-sm sm:text-base ${
                     selectedDate 
                       ? `${currentColor.button} text-white hover:opacity-90` 
                       : 'bg-gray-300 text-gray-500'
@@ -554,11 +554,11 @@ const handleBookNow = () => {
                 >
                   {selectedDate ? 'Book Through Online' : 'Select Available Dates'}
                 </button>
-                <button className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+                <button className="w-full border border-gray-300 text-gray-700 py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base">
                   <FiPhone className="w-4 h-4" />
                   Call Now for Booking
                 </button>
-                <button className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+                <button className="w-full border border-gray-300 text-gray-700 py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base">
                   <FiMail className="w-4 h-4" />
                   Send Message
                 </button>
@@ -567,7 +567,7 @@ const handleBookNow = () => {
                     <button 
                       onClick={handleMenu} 
                       disabled={!selectedDate}
-                      className={`w-full py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 ${
+                      className={`w-full py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 text-sm sm:text-base ${
                         selectedDate 
                           ? 'border border-gray-300 text-gray-700 hover:bg-gray-50' 
                           : 'border border-gray-200 text-gray-400 cursor-not-allowed bg-gray-100'
@@ -577,7 +577,7 @@ const handleBookNow = () => {
                       Menu
                     </button>
                     {!selectedDate && (
-                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 sm:px-3 py-1 sm:py-2 bg-gray-900 text-white text-xs sm:text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
                         Select date first
                         <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
                       </div>
@@ -589,12 +589,12 @@ const handleBookNow = () => {
               
               {/* Selected Date Display */}
               {selectedDate && (
-                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <div className="mt-3 sm:mt-4 p-2 sm:p-3 bg-green-50 border border-green-200 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <FiCheckCircle className="w-4 h-4 text-green-600" />
-                    <span className="text-sm font-medium text-green-900">Selected Date:</span>
+                    <FiCheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
+                    <span className="text-xs sm:text-sm font-medium text-green-900">Selected Date:</span>
                   </div>
-                  <p className="text-sm text-green-700 mt-1">
+                  <p className="text-xs sm:text-sm text-green-700 mt-1">
                     {selectedDate.toLocaleDateString('en-US', { 
                       weekday: 'short', 
                       month: 'short', 
@@ -606,26 +606,26 @@ const handleBookNow = () => {
             </div>
 
             {/* Quick Info */}
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Info</h3>
-              <div className="space-y-3">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Quick Info</h3>
+              <div className="space-y-2 sm:space-y-3">
                 {serviceType === 'caterers' ? null : 
                 <div className="flex justify-between">
-                <span className="text-gray-600">Starting Price:</span>
-                <span className="font-semibold text-gray-900">{serviceData.startingPrice}</span>
+                <span className="text-gray-600 text-sm sm:text-base">Starting Price:</span>
+                <span className="font-semibold text-gray-900 text-sm sm:text-base">{serviceData.startingPrice}</span>
               </div> }
                 
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Response Time:</span>
-                  <span className="font-semibold text-gray-900">{serviceData.responseTime}</span>
+                  <span className="text-gray-600 text-sm sm:text-base">Response Time:</span>
+                  <span className="font-semibold text-gray-900 text-sm sm:text-base">{serviceData.responseTime}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Advance Booking:</span>
-                  <span className="font-semibold text-gray-900">{serviceData.advanceBooking}</span>
+                  <span className="text-gray-600 text-sm sm:text-base">Advance Booking:</span>
+                  <span className="font-semibold text-gray-900 text-sm sm:text-base">{serviceData.advanceBooking}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Cancellation:</span>
-                  <span className="font-semibold text-gray-900">{serviceData.cancellation}</span>
+                  <span className="text-gray-600 text-sm sm:text-base">Cancellation:</span>
+                  <span className="font-semibold text-gray-900 text-sm sm:text-base">{serviceData.cancellation}</span>
                 </div>
               </div>
             </div>

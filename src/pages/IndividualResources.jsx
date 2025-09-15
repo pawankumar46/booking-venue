@@ -424,48 +424,48 @@ const IndividualResources = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-6 sm:space-y-8">
             {/* Resource Header */}
-            <div className="bg-white rounded-xl p-6 shadow-sm">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
               <div className="flex items-start justify-between mb-4">
-                <div>
-                  <div className="flex items-center gap-3 mb-2">
-                    <h1 className="text-3xl font-bold text-gray-900">{resourceData.name}</h1>
+                <div className="flex-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{resourceData.name}</h1>
                     {resourceData.isFeatured && (
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${currentColor.badge}`}>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${currentColor.badge} self-start`}>
                         Featured
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-4 text-gray-600 mb-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-gray-600 mb-2">
                     <div className="flex items-center gap-1">
                       <FiMapPin className="w-4 h-4" />
-                      <span>{resourceData.location}</span>
+                      <span className="text-sm sm:text-base">{resourceData.location}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <FiClock className="w-4 h-4" />
-                      <span>{resourceData.experience}</span>
+                      <span className="text-sm sm:text-base">{resourceData.experience}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
                     <FiStar className="w-4 h-4 text-yellow-400 fill-current" />
-                    <span className="text-gray-900 font-medium">{resourceData.rating}</span>
-                    <span className="text-gray-500">({resourceData.reviewCount} reviews)</span>
+                    <span className="text-gray-900 font-medium text-sm sm:text-base">{resourceData.rating}</span>
+                    <span className="text-gray-500 text-sm sm:text-base">({resourceData.reviewCount} reviews)</span>
                   </div>
                 </div>
-                <div className={`p-3 rounded-lg ${currentColor.bg}`}>
-                  <IconComponent className={`w-8 h-8 ${currentColor.text}`} />
+                <div className={`p-2 sm:p-3 rounded-lg ${currentColor.bg} flex-shrink-0`}>
+                  <IconComponent className={`w-6 h-6 sm:w-8 sm:h-8 ${currentColor.text}`} />
                 </div>
               </div>
             </div>
 
             {/* Portfolio */}
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Gallery</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
+              <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Gallery</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 md:gap-4">
                 {resourceData.portfolio.map((image, index) => (
                   <div key={index} className="aspect-square rounded-lg overflow-hidden">
                     <img 
@@ -481,12 +481,12 @@ const IndividualResources = () => {
             {/* Tabs */}
             <div className="bg-white rounded-xl shadow-sm">
               <div className="border-b border-gray-200">
-                <nav className="flex space-x-8 px-6">
+                <nav className="flex space-x-4 sm:space-x-8 px-4 sm:px-6 overflow-x-auto">
                   {['about', 'packages', 'reviews'].map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`py-4 px-1 border-b-2 font-medium text-sm capitalize ${
+                      className={`py-3 sm:py-4 px-1 border-b-2 font-medium text-sm capitalize whitespace-nowrap ${
                         activeTab === tab
                           ? 'border-blue-500 text-blue-600'
                           : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
@@ -498,20 +498,20 @@ const IndividualResources = () => {
                 </nav>
               </div>
 
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 {/* About Tab */}
                 {activeTab === 'about' && (
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3">About {resourceData.name}</h3>
-                      <p className="text-gray-600 leading-relaxed">{resourceData.description}</p>
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">About {resourceData.name}</h3>
+                      <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{resourceData.description}</p>
                     </div>
                     
                     <div>
-                      <h4 className="text-md font-semibold text-gray-900 mb-3">Services Offered</h4>
+                      <h4 className="text-sm sm:text-md font-semibold text-gray-900 mb-2 sm:mb-3">Services Offered</h4>
                       <div className="flex flex-wrap gap-2">
                         {resourceData.services.map((serviceItem, index) => (
-                          <span key={index} className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                          <span key={index} className="px-2 sm:px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs sm:text-sm">
                             {serviceItem}
                           </span>
                         ))}
@@ -519,12 +519,12 @@ const IndividualResources = () => {
                     </div>
 
                     <div>
-                      <h4 className="text-md font-semibold text-gray-900 mb-3">Equipment & Features</h4>
+                      <h4 className="text-sm sm:text-md font-semibold text-gray-900 mb-2 sm:mb-3">Equipment & Features</h4>
                       <div className="space-y-2">
                         {resourceConfig.equipment.map((item, index) => (
                           <div key={index} className="flex items-center gap-2 text-gray-600">
                             <div className={`w-2 h-2 rounded-full ${currentColor.bg}`}></div>
-                            <span>{item}</span>
+                            <span className="text-sm sm:text-base">{item}</span>
                           </div>
                         ))}
                       </div>
@@ -534,18 +534,18 @@ const IndividualResources = () => {
 
                 {/* Packages Tab */}
                 {activeTab === 'packages' && (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {resourceData.packages.map((pkg, index) => (
-                      <div key={index} className="border border-gray-200 rounded-lg p-4">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="text-lg font-semibold text-gray-900">{pkg.name}</h4>
-                          <span className="text-xl font-bold text-gray-900">{pkg.price}</span>
+                      <div key={index} className="border border-gray-200 rounded-lg p-3 sm:p-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2">
+                          <h4 className="text-base sm:text-lg font-semibold text-gray-900">{pkg.name}</h4>
+                          <span className="text-lg sm:text-xl font-bold text-gray-900">{pkg.price}</span>
                         </div>
                         <ul className="space-y-1">
                           {pkg.features.map((feature, featureIndex) => (
                             <li key={featureIndex} className="flex items-center gap-2 text-gray-600">
                               <div className={`w-1.5 h-1.5 rounded-full ${currentColor.bg}`}></div>
-                              <span>{feature}</span>
+                              <span className="text-sm sm:text-base">{feature}</span>
                             </li>
                           ))}
                         </ul>
@@ -556,23 +556,23 @@ const IndividualResources = () => {
 
                 {/* Reviews Tab */}
                 {activeTab === 'reviews' && (
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {resourceData.reviews.map((review, index) => (
-                      <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-semibold text-gray-900">{review.name}</h4>
+                      <div key={index} className="border-b border-gray-200 pb-3 sm:pb-4 last:border-b-0">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2 gap-2">
+                          <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{review.name}</h4>
                           <div className="flex items-center gap-1">
                             {[...Array(5)].map((_, i) => (
                               <FiStar 
                                 key={i} 
-                                className={`w-4 h-4 ${
+                                className={`w-3 h-3 sm:w-4 sm:h-4 ${
                                   i < review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
                                 }`} 
                               />
                             ))}
                           </div>
                         </div>
-                        <p className="text-gray-600">{review.comment}</p>
+                        <p className="text-gray-600 text-sm sm:text-base">{review.comment}</p>
                       </div>
                     ))}
                   </div>
@@ -582,19 +582,19 @@ const IndividualResources = () => {
           </div>
 
           {/* Right Column - Contact & Info */}
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* Conditional Right Panel */}
             {mode === 'sell' ? (
-              <div className="bg-white rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Buy Options</h3>
+              <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Buy Options</h3>
 
                 {/* Quantity */}
-                <div className="mb-4">
+                <div className="mb-3 sm:mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
                   <div className="inline-flex items-center rounded-lg border border-gray-300 overflow-hidden">
-                    <button onClick={decrementQty} className="px-3 py-2 text-gray-700 hover:bg-gray-50">-</button>
-                    <span className="px-4 py-2 min-w-[3rem] text-center text-gray-900">{quantity}</span>
-                    <button onClick={incrementQty} className="px-3 py-2 text-gray-700 hover:bg-gray-50">+</button>
+                    <button onClick={decrementQty} className="px-2 sm:px-3 py-2 text-gray-700 hover:bg-gray-50">-</button>
+                    <span className="px-3 sm:px-4 py-2 min-w-[3rem] text-center text-gray-900 text-sm sm:text-base">{quantity}</span>
+                    <button onClick={incrementQty} className="px-2 sm:px-3 py-2 text-gray-700 hover:bg-gray-50">+</button>
                   </div>
                 </div>
 
@@ -664,33 +664,33 @@ const IndividualResources = () => {
                   </div>
                 )}
 
-                <div className="flex gap-3">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                   <button
                     onClick={() => { addToCart(); navigate('/cart') }}
-                    className={`${currentColor.button} flex-1 text-white py-3 px-4 rounded-lg font-medium transition-colors`}
+                    className={`${currentColor.button} flex-1 text-white py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-colors text-sm sm:text-base`}
                   >
                     Add to Cart
                   </button>
                   <button
                     onClick={() => navigate('/resources?mode=sell')}
-                    className="flex-1 border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors"
+                    className="flex-1 border border-gray-300 text-gray-700 py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors text-sm sm:text-base"
                   >
                     Add more items
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-xl p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Get in Touch</h3>
-                <div className="space-y-3">
-                  <button className={`w-full ${currentColor.button} text-white py-3 px-4 rounded-lg font-medium transition-colors`}>
+              <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Get in Touch</h3>
+                <div className="space-y-2 sm:space-y-3">
+                  <button className={`w-full ${currentColor.button} text-white py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-colors text-sm sm:text-base`}>
                     Book Now
                   </button>
-                  <button className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+                  <button className="w-full border border-gray-300 text-gray-700 py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base">
                     <FiPhone className="w-4 h-4" />
                     Call Now
                   </button>
-                  <button className="w-full border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+                  <button className="w-full border border-gray-300 text-gray-700 py-2 sm:py-3 px-3 sm:px-4 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base">
                     <FiMail className="w-4 h-4" />
                     Send Message
                   </button>
@@ -699,24 +699,24 @@ const IndividualResources = () => {
             )}
 
             {/* Quick Info / Pricing */}
-            <div className="bg-white rounded-xl p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">{mode === 'sell' ? 'Pricing' : 'Quick Info'}</h3>
-              <div className="space-y-3">
+            <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">{mode === 'sell' ? 'Pricing' : 'Quick Info'}</h3>
+              <div className="space-y-2 sm:space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Price:</span>
-                  <span className="font-semibold text-gray-900">{resourceData.price}</span>
+                  <span className="text-gray-600 text-sm sm:text-base">Price:</span>
+                  <span className="font-semibold text-gray-900 text-sm sm:text-base">{resourceData.price}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Response Time:</span>
-                  <span className="font-semibold text-gray-900">{resourceData.responseTime}</span>
+                  <span className="text-gray-600 text-sm sm:text-base">Response Time:</span>
+                  <span className="font-semibold text-gray-900 text-sm sm:text-base">{resourceData.responseTime}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Advance Booking:</span>
-                  <span className="font-semibold text-gray-900">{resourceData.advanceBooking}</span>
+                  <span className="text-gray-600 text-sm sm:text-base">Advance Booking:</span>
+                  <span className="font-semibold text-gray-900 text-sm sm:text-base">{resourceData.advanceBooking}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Cancellation:</span>
-                  <span className="font-semibold text-gray-900">{resourceData.cancellation}</span>
+                  <span className="text-gray-600 text-sm sm:text-base">Cancellation:</span>
+                  <span className="font-semibold text-gray-900 text-sm sm:text-base">{resourceData.cancellation}</span>
                 </div>
               </div>
             </div>

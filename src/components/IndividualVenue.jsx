@@ -296,14 +296,14 @@ const IndividualVenue = () => {
       
       {/* Content */}
       <section className="pb-16">
-        <div className="max-w-6xl mx-auto px-6 py-10">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
             {/* Gallery */}
             <div className="lg:col-span-2">
-              <div className="grid grid-cols-4 grid-rows-2 gap-3">
+              <div className="grid grid-cols-4 grid-rows-2 gap-2 sm:gap-3">
                 <div className="col-span-4 row-span-2 lg:col-span-3 lg:row-span-2 rounded-xl overflow-hidden">
                   <button type="button" onClick={() => openGallery(0)} className="block w-full">
-                    <div className="h-72 md:h-[420px] bg-center bg-cover" style={{ backgroundImage: `url(${venue.photos[0]})` }} />
+                    <div className="h-48 sm:h-72 md:h-[420px] bg-center bg-cover" style={{ backgroundImage: `url(${venue.photos[0]})` }} />
                   </button>
                 </div>
                 <div className="hidden lg:block rounded-xl overflow-hidden">
@@ -331,12 +331,12 @@ const IndividualVenue = () => {
             </div>
 
             {/* Details */}
-            <aside>
-              <div className="rounded-2xl bg-white shadow-xl ring-1 ring-black/5 p-6">
+            <aside className="order-first lg:order-last">
+              <div className="rounded-2xl bg-white shadow-xl ring-1 ring-black/5 p-4 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="text-sm text-gray-600">Starting at</div>
-                    <div className="text-2xl font-bold text-gray-900">₹{`450/Pax`.toLocaleString('en-IN')}</div>
+                    <div className="text-xl sm:text-2xl font-bold text-gray-900">₹{`450/Pax`.toLocaleString('en-IN')}</div>
                   </div>
                   <div className="text-sm font-medium text-yellow-600">⭐ {Number(venue.rating).toFixed(1)}</div>
                 </div>
@@ -347,20 +347,20 @@ const IndividualVenue = () => {
                   <li>Parking: Available</li>
                 </ul>
                 <div className="mt-6 grid grid-cols-2 gap-3">
-                  <button className="rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">Enquire</button>
-                  <button className="rounded-md bg-gray-100 px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-200">Call</button>
+                  <button className="rounded-md bg-blue-600 px-3 sm:px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700">Enquire</button>
+                  <button className="rounded-md bg-gray-100 px-3 sm:px-4 py-2 text-sm font-semibold text-gray-800 hover:bg-gray-200">Call</button>
                 </div>
               </div>
 
               {/* Availability Form */}
-              <div className="mt-6 rounded-2xl bg-white shadow-xl ring-1 ring-black/5 p-6">
-                <h2 className="text-lg font-semibold text-gray-900">Check Availability</h2>
-                <form className="mt-4 space-y-4" onSubmit={handleFormSubmit}>
+              <div className="mt-4 sm:mt-6 rounded-2xl bg-white shadow-xl ring-1 ring-black/5 p-4 sm:p-6">
+                <h2 className="text-base sm:text-lg font-semibold text-gray-900">Check Availability</h2>
+                <form className="mt-4 space-y-3 sm:space-y-4" onSubmit={handleFormSubmit}>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Event Date</label>
                     <DatePicker />
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Start Time</label>
                       <TimePicker 
@@ -382,7 +382,7 @@ const IndividualVenue = () => {
                     <label htmlFor="session" className="block text-sm font-medium text-gray-700">Session</label>
                     <select
                       id="session"
-                      className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                       defaultValue=""
                       required
                     >
@@ -399,7 +399,7 @@ const IndividualVenue = () => {
                       type="number"
                       min="1"
                       placeholder="e.g. 150"
-                      className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                      className="mt-1 w-full rounded-lg border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                       required
                     />
                   </div>
@@ -407,33 +407,33 @@ const IndividualVenue = () => {
                     <input
                       type="text"
                       placeholder="Your name"
-                      className="rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                      className="rounded-lg border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                       required
                     />
                     <input
                       type="tel"
                       placeholder="Phone"
-                      className="rounded-lg border border-gray-300 px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                      className="rounded-lg border border-gray-300 px-3 sm:px-4 py-2 sm:py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                       required
                     />
                   </div>
-                  <button type="submit" className="w-full rounded-lg bg-red-600 px-6 py-4 text-sm font-semibold text-white hover:bg-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">Check Availability</button>
+                  <button type="submit" className="w-full rounded-lg bg-red-600 px-4 sm:px-6 py-3 sm:py-4 text-sm font-semibold text-white hover:bg-red-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">Check Availability</button>
                 </form>
               </div>
             </aside>
           </div>
 
           {/* About the Venue */}
-          <div className="mt-8">
-            <div className="rounded-xl bg-white p-6 ring-1 ring-black/5 shadow-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">About {venue.name}</h3>
-              <p className="text-gray-700 leading-relaxed">{venue.description}</p>
+          <div className="mt-6 sm:mt-8">
+            <div className="rounded-xl bg-white p-4 sm:p-6 ring-1 ring-black/5 shadow-lg">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">About {venue.name}</h3>
+              <p className="text-sm sm:text-base text-gray-700 leading-relaxed">{venue.description}</p>
             </div>
           </div>
 
           {/* Highlights */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="rounded-xl bg-white p-5  ring-1 ring-black/5 shadow-lg" >
+          <div className="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+            <div className="rounded-xl bg-white p-4 sm:p-5 ring-1 ring-black/5 shadow-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Highlights</h3>
               <ul className="text-sm text-gray-700 list-disc pl-5 space-y-1">
                 <li>Veg & Non-Veg available</li>
@@ -443,13 +443,13 @@ const IndividualVenue = () => {
                 <li>Premium location</li>
               </ul>
             </div>
-            <div className="rounded-xl bg-white p-5  ring-1 ring-black/5 shadow-lg">
+            <div className="rounded-xl bg-white p-4 sm:p-5 ring-1 ring-black/5 shadow-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Timings</h3>
               <p className="text-sm text-gray-700">Morning: 9:00 AM – 3:30 PM</p>
               <p className="text-sm text-gray-700">Evening: 5:00 PM – 11:00 PM</p>
               <p className="text-sm text-gray-700 mt-2">Full Day bookings available</p>
             </div>
-            <div className="rounded-xl bg-white p-5  ring-1 ring-black/5 shadow-lg">
+            <div className="rounded-xl bg-white p-4 sm:p-5 ring-1 ring-black/5 shadow-lg">
               <h3 className="font-semibold text-gray-900 mb-2">Menu</h3>
               <p className="text-sm text-gray-700">Veg: ₹800 per person</p>
               <p className="text-sm text-gray-700">Non-Veg: ₹999 per person</p>
@@ -458,14 +458,14 @@ const IndividualVenue = () => {
           </div>
 
           {/* Amenities & Features */}
-          <div className="mt-8">
-            <div className="rounded-xl bg-white p-6 ring-1 ring-black/5 shadow-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Amenities & Features</h3>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="mt-6 sm:mt-8">
+            <div className="rounded-xl bg-white p-4 sm:p-6 ring-1 ring-black/5 shadow-lg">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Amenities & Features</h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
                 {venue.amenities.map((amenity, index) => (
                   <div key={index} className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg">
                     <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-                    <span className="text-sm font-medium text-gray-800">{amenity}</span>
+                    <span className="text-xs sm:text-sm font-medium text-gray-800">{amenity}</span>
                   </div>
                 ))}
               </div>
@@ -473,21 +473,21 @@ const IndividualVenue = () => {
           </div>
 
           {/* Seating Arrangements */}
-          <div className="mt-8">
-            <div className="rounded-xl bg-white p-6 ring-1 ring-black/5 shadow-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Seating Arrangements</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="mt-6 sm:mt-8">
+            <div className="rounded-xl bg-white p-4 sm:p-6 ring-1 ring-black/5 shadow-lg">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Seating Arrangements</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                 {venue.seatingArrangements.map((seating, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+                  <div key={index} className="border border-gray-200 rounded-lg p-3 sm:p-4 hover:border-blue-300 transition-colors">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-semibold text-gray-900">{seating.type}</h4>
+                      <h4 className="font-semibold text-gray-900 text-sm sm:text-base">{seating.type}</h4>
                       <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
                         {(['Round Table', 'Rectangular Table', 'Dining Style', 'Dining Table'].includes(seating.type))
                           ? `Up to ${seating.capacity} guests / table`
                           : `Up to ${seating.capacity}`}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600">{seating.description || `Ideal ${seating.type}${seating.capacity ? ` • up to ${seating.capacity}${(['Round Table', 'Rectangular Table', 'Dining Style', 'Dining Table', 'Round Table Seating', 'Rectangular Table Seating'].includes(seating.type) ? ' per table' : ' guests')}` : ''}`}</p>
+                    <p className="text-xs sm:text-sm text-gray-600">{seating.description || `Ideal ${seating.type}${seating.capacity ? ` • up to ${seating.capacity}${(['Round Table', 'Rectangular Table', 'Dining Style', 'Dining Table', 'Round Table Seating', 'Rectangular Table Seating'].includes(seating.type) ? ' per table' : ' guests')}` : ''}`}</p>
                   </div>
                 ))}
               </div>
@@ -495,13 +495,13 @@ const IndividualVenue = () => {
           </div>
 
           {/* Additional Features */}
-          <div className="mt-8">
-            <div className="rounded-xl bg-white p-6 ring-1 ring-black/5 shadow-lg">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Additional Services</h3>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="mt-6 sm:mt-8">
+            <div className="rounded-xl bg-white p-4 sm:p-6 ring-1 ring-black/5 shadow-lg">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Additional Services</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
                 <div className={`p-3 rounded-lg text-center ${venue.features.decoration ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200'}`}>
-                  <div className={`w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center ${venue.features.decoration ? 'bg-green-100' : 'bg-gray-100'}`}>
-                    <span className={venue.features.decoration ? 'text-green-600' : 'text-gray-400'}>🎨</span>
+                  <div className={`w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 rounded-full flex items-center justify-center ${venue.features.decoration ? 'bg-green-100' : 'bg-gray-100'}`}>
+                    <span className={`text-sm sm:text-base ${venue.features.decoration ? 'text-green-600' : 'text-gray-400'}`}>🎨</span>
                   </div>
                   <p className="text-xs font-medium text-gray-700">Decoration</p>
                   <p className={`text-xs ${venue.features.decoration ? 'text-green-600' : 'text-red-500'}`}>
@@ -510,8 +510,8 @@ const IndividualVenue = () => {
                 </div>
 
                 <div className={`p-3 rounded-lg text-center ${venue.features.catering ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200'}`}>
-                  <div className={`w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center ${venue.features.catering ? 'bg-green-100' : 'bg-gray-100'}`}>
-                    <span className={venue.features.catering ? 'text-green-600' : 'text-gray-400'}>🍽️</span>
+                  <div className={`w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 rounded-full flex items-center justify-center ${venue.features.catering ? 'bg-green-100' : 'bg-gray-100'}`}>
+                    <span className={`text-sm sm:text-base ${venue.features.catering ? 'text-green-600' : 'text-gray-400'}`}>🍽️</span>
                   </div>
                   <p className="text-xs font-medium text-gray-700">Catering</p>
                   <p className={`text-xs ${venue.features.catering ? 'text-green-600' : 'text-red-500'}`}>
@@ -520,8 +520,8 @@ const IndividualVenue = () => {
                 </div>
 
                 <div className={`p-3 rounded-lg text-center ${venue.features.photography ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200'}`}>
-                  <div className={`w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center ${venue.features.photography ? 'bg-green-100' : 'bg-gray-100'}`}>
-                    <span className={venue.features.photography ? 'text-green-600' : 'text-gray-400'}>📸</span>
+                  <div className={`w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 rounded-full flex items-center justify-center ${venue.features.photography ? 'bg-green-100' : 'bg-gray-100'}`}>
+                    <span className={`text-sm sm:text-base ${venue.features.photography ? 'text-green-600' : 'text-gray-400'}`}>📸</span>
                   </div>
                   <p className="text-xs font-medium text-gray-700">Photography</p>
                   <p className={`text-xs ${venue.features.photography ? 'text-green-600' : 'text-red-500'}`}>
@@ -530,8 +530,8 @@ const IndividualVenue = () => {
                 </div>
 
                 <div className="p-3 rounded-lg text-center bg-green-50 border border-green-200">
-                  <div className="w-8 h-8 mx-auto mb-2 rounded-full flex items-center justify-center bg-green-100">
-                    <span className="text-green-600">🔒</span>
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2 rounded-full flex items-center justify-center bg-green-100">
+                    <span className="text-sm sm:text-base text-green-600">🔒</span>
                   </div>
                   <p className="text-xs font-medium text-gray-700">Security</p>
                   <p className="text-xs text-green-600">24/7 Available</p>

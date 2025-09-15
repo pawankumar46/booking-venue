@@ -70,13 +70,13 @@ const CarouselVenueLanding = () => {
 
   return (
     <div
-      className="relative"
+      className="relative px-4 sm:px-0"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       <div
         ref={containerRef}
-        className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth py-2"
+        className="flex gap-2 sm:gap-4 overflow-x-auto no-scrollbar scroll-smooth py-2"
       >
         {duplicated.map((item, index) => {
           const isHovered = hoveredIndex === index
@@ -88,7 +88,7 @@ const CarouselVenueLanding = () => {
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
               className={
-                `relative w-64 md:w-30 h-20 md:h-26 rounded-xl overflow-hidden ring-1 ring-black/5 shadow transition-all duration-300 shrink-0 ` +
+                `relative w-48 sm:w-64 md:w-30 h-12 sm:h-20 md:h-26 rounded-lg sm:rounded-xl overflow-hidden ring-1 ring-black/5 shadow transition-all duration-300 shrink-0 ` +
                 (isHovered
                   ? 'scale-[1.05] z-10 shadow-2xl'
                   : dimOthers
@@ -103,8 +103,8 @@ const CarouselVenueLanding = () => {
                 draggable="false"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0" />
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                <span className="text-white font-semibold text-sm tracking-wide drop-shadow">{item.title}</span>
+              <div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 right-2 sm:right-3 flex items-center justify-between">
+                <span className="text-white font-semibold text-xs sm:text-sm tracking-wide drop-shadow">{item.title}</span>
               </div>
             </div>
           )

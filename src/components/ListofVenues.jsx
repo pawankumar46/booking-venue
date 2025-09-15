@@ -547,11 +547,11 @@ const ListofVenues = () => {
           {!isBelowMinPax && (
           <div className="space-y-2">
             {filteredVenues.map((v) => (
-              <div key={v.id} className="bg-white  h-43 rounded-lg shadow-sm border overflow-hidden">
+              <div key={v.id} className="bg-white rounded-lg shadow-sm border overflow-hidden">
                 {/* Mobile Layout */}
-                <div className=" block lg:hidden">
-                {/* Image Carousel */}
-                  <div className="relative h-64 sm:h-72 w-full bg-center bg-cover overflow-hidden" style={{ backgroundImage: `url(${venueImages[getCarouselState(v.id).currentIndex]})` }}>
+                <div className="block lg:hidden">
+                  {/* Image Carousel */}
+                  <div className="relative h-48 sm:h-64 w-full bg-center bg-cover overflow-hidden" style={{ backgroundImage: `url(${venueImages[getCarouselState(v.id).currentIndex]})` }}>
                     {/* Navigation Arrows */}
                     <button
                       onClick={() => prevCarouselImage(v.id)}
@@ -608,63 +608,78 @@ const ListofVenues = () => {
                   </div>
                   
                   {/* Content */}
-                  <div >
+                  <div className="p-4">
+                    {/* Venue Name */}
+                    <div className="mb-3">
+                      <h3 className="text-lg font-bold text-gray-900">{v.name}</h3>
+                      <div className="flex items-center gap-2 mt-1">
+                        <div className="flex items-center gap-1">
+                          <span className="text-yellow-500">⭐</span>
+                          <span className="text-sm font-medium text-gray-700">{v.rating}</span>
+                        </div>
+                        <span className="text-gray-300">•</span>
+                        <span className="text-sm text-gray-600">{v.venueType}</span>
+                      </div>
+                    </div>
+
                     {/* Location (single row) */}
-                    <div className="flex items-center gap-2 min-w-0">
-                      <div className="text-lg font-semibold text-gray-800 flex items-center gap-2 whitespace-nowrap">
+                    <div className="flex items-center gap-2 min-w-0 mb-3">
+                      <div className="text-sm font-medium text-gray-800 flex items-center gap-2 whitespace-nowrap">
                         <FaMapMarkerAlt className="text-blue-600" /> 
                         {v.locality}, {v.location}
                       </div>
                       <span className="text-gray-300">•</span>
-                      <div className="text-sm text-gray-600 truncate flex-1">{v.address}</div>
+                      <div className="text-xs text-gray-600 truncate flex-1">{v.address}</div>
                     </div>
 
                     {/* Basic Info Grid */}
-                    <div className="grid grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 gap-3 mb-3">
                       <div className="flex items-center gap-2">
-                        <IoIosPerson className="h-5 w-5 text-gray-600" />
+                        <IoIosPerson className="h-4 w-4 text-gray-600" />
                         <div>
-                          
-                          <div className="font-semibold">
+                          <div className="text-xs text-gray-500">Min Guests</div>
+                          <div className="text-sm font-semibold text-gray-800">
                             {selectedGuestOption ? selectedGuestOption : Math.min(50, v.capacity)}
                           </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <IoIosPeople className="h-5 w-5 text-gray-600"/>
+                        <IoIosPeople className="h-4 w-4 text-gray-600"/>
                         <div>
-                          
-                          <div className="font-semibold">{v.capacity}</div>
+                          <div className="text-xs text-gray-500">Max Capacity</div>
+                          <div className="text-sm font-semibold text-gray-800">{v.capacity}</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <IoBed className="h-5 w-5 text-gray-600" />
+                        <IoBed className="h-4 w-4 text-gray-600" />
                         <div>
-                          
-                          <div className="font-semibold">{v.rooms}</div>
+                          <div className="text-xs text-gray-500">Rooms</div>
+                          <div className="text-sm font-semibold text-gray-800">{v.rooms}</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <SiLevelsdotfyi className="h-5 w-5 text-gray-600"/>
+                        <SiLevelsdotfyi className="h-4 w-4 text-gray-600"/>
                         <div>
-                        
-                          <div className="font-semibold">{v.floors}</div>
+                          <div className="text-xs text-gray-500">Floors</div>
+                          <div className="text-sm font-semibold text-gray-800">{v.floors}</div>
                         </div>
                       </div>
                     </div>
 
                     {/* Parking and Permissions */}
-                    <div className="space-y-3">
+                    <div className="space-y-3 mb-3">
                       <div className="flex items-center gap-2">
-                        <FaParking className="h-5 w-5 text-gray-600" />
+                        <FaParking className="h-4 w-4 text-gray-600" />
                         <div className="flex gap-4">
                           <div className="flex items-center gap-1">
-                            <FaMotorcycle className="h-4 w-4 text-gray-500" />
-                            <span className="text-sm font-medium">{v.bikeParking}</span>
+                            <FaMotorcycle className="h-3 w-3 text-gray-500" />
+                            <span className="text-xs text-gray-500">Bike:</span>
+                            <span className="text-sm font-medium text-gray-800">{v.bikeParking}</span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <FaCarAlt className="h-4 w-4 text-gray-500" />
-                            <span className="text-sm font-medium">{v.carParking}</span>
+                            <FaCarAlt className="h-3 w-3 text-gray-500" />
+                            <span className="text-xs text-gray-500">Car:</span>
+                            <span className="text-sm font-medium text-gray-800">{v.carParking}</span>
                           </div>
                         </div>
                       </div>
