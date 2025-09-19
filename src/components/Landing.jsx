@@ -6,8 +6,10 @@ import { MdPeopleAlt } from 'react-icons/md'
 import Blogs from './Blogs'
 import CarouselVenueLanding from './CarouselVenueLanding'
 import CarouselServicesLanding from './CarouselServicesLanding'
+import { useCity } from '../contexts/CityContext'
 
 const Landing = () => {
+  const { selectedCity } = useCity();
   // Carousel state for venue images
   const [currentVenueImage, setCurrentVenueImage] = useState(0)
   const [isCarouselPaused, setIsCarouselPaused] = useState(false)
@@ -122,28 +124,19 @@ const Landing = () => {
           <div className="mt-4 flex flex-col sm:flex-row gap-3">
             <Link to={`/venues/${encodeURIComponent(venue.city)}?name=${encodeURIComponent(venue.name)}`} className="flex-1 text-center rounded-lg bg-red-600 px-5 py-2.5 text-white font-semibold hover:bg-red-700">Check availability</Link>
             <Link to={`/venues/${encodeURIComponent(venue.city)}?name=${encodeURIComponent(venue.name)}`} className="flex-1 text-center rounded-lg border-2 border-gray-200 px-5 py-2.5 text-gray-900 font-semibold hover:border-gray-300">View contact</Link>
-          </div>
         </div>
       </div>
-    )
-  }
+
+    </div>
+  )
+}
   const [showTalkModal, setShowTalkModal] = useState(false)
   const [talkForm, setTalkForm] = useState({ name: '', phone: '', email: '', eventType: '', packs: '', company: '', date: '', requirements: '' })
   const updateTalkForm = (key, val) => setTalkForm(prev => ({ ...prev, [key]: val }))
   const navigate = useNavigate()
-  const cities = useMemo(
-    () => [
-      'Mumbai', 'Delhi', 'Bengaluru', 'Hyderabad', 'Ahmedabad', 'Chennai', 'Kolkata', 'Surat', 'Pune', 'Jaipur',
-      'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Visakhapatnam', 'Pimpri-Chinchwad', 'Patna', 'Vadodara',
-      'Ghaziabad', 'Ludhiana', 'Agra', 'Nashik', 'Faridabad', 'Meerut', 'Rajkot', 'Varanasi', 'Srinagar', 'Aurangabad',
-      'Dhanbad', 'Amritsar', 'Navi Mumbai', 'Allahabad', 'Ranchi', 'Howrah', 'Coimbatore', 'Jabalpur', 'Gwalior', 'Vijayawada',
-      'Jodhpur', 'Madurai', 'Raipur', 'Kota', 'Guwahati', 'Chandigarh', 'Solapur', 'Hubli–Dharwad', 'Bareilly', 'Mysore',
-    ],
-    []
-  )
   const venueTypes = useMemo(
     () => [
-      'Banquet Hall', 'Resort', 'Wedding Hall','Hotel', 'Community Hall', 'Conference Hall', 'Farmhouse', 'Restaurant',
+      'Auditorium', 'Resort', 'Wedding Hall','Hotel', 'Community Hall', 'Conference Hall', 'Farmhouse', 'Restaurant',
     ],
     []
   )
@@ -165,55 +158,223 @@ const Landing = () => {
     ],
     []
   )
+
+  const serviceSubCategories = useMemo(
+    () => ({
+      'Photography': [
+        'PhotoGraphy',
+        'Album',
+        'Industry Photography',
+        'Drone Photography',
+        'Event Photography'
+      ],
+      'Videography': [
+        'Wedding Videography',
+        'Corporate Videography',
+        'Document/Film',
+        'Commercial/Advertising'
+      ],
+      'Catering': [
+        'Centralized Catering',
+        'Onsite Catering',
+        'Daily Requirement',
+        'Corporate Catering',
+        'Buffet/Full-Service'
+      ],
+      'Decoration': [
+        'Event Decoration',
+        'Festival Decoration',
+        'Wedding Decoration',
+        'Corporate Decoration',
+        'Themed Decoration'
+      ],
+      'DJ & Music': [
+        'Wedding DJ and Music',
+        'Club/Party',
+        'Corporate',
+        'Festival/Concert',
+        'Event-Specific'
+      ],
+      'Lighting': [
+        'Stage Lighting',
+        'Uplighting',
+        'Laser-Lighting',
+        'Wedding'
+      ],
+      'Transportation': [
+        'Wedding Transportation',
+        'Guest Pickup and Drop',
+        'VIP/Luxury',
+        'Event Logistics',
+        'Shuttle Services'
+      ],
+      'Makeup & Styling': [
+        'Bridal Makeup',
+        'Groom Styling',
+        'Party Makeup',
+        'Fashion',
+        'Corporate'
+      ],
+      'Event Planning': [
+        'Wedding Planning',
+        'Social-Event',
+        'Festival and Cultural',
+        'Destination/Event Travel'
+      ],
+      'Security': [
+        'Event Security',
+        'VIP/Celebrity',
+        'Venue Security',
+        'Surveillance and Monitoring',
+        'Emergency and Safety Management'
+      ]
+    }),
+    []
+  )
   // Resources dropdown data
   const resourceTypes = useMemo(
     () => [
-      "Ganesha idol / God idol setup",
-      "Decorative background / stage backdrop",
-      "Flower decorations (real/artificial)",
-      "Balloon decorations / arches / pillars",
-      "Mandap / canopy / shamiana",
-      "Wedding arch / entry gate decoration",
-      "Fairy lights / LED lights / chandeliers",
-      "Carpet / red carpet walkway",
+      "Idol",
+      "BackGround",
+      "Arches / Pillars",
+      "Lighting and Chandeliers",
+      "Carpet",
       "Photo booth props & frames",
       "Chairs (plastic, cushioned, banquet)",
-      "Chair covers & ribbons",
-      "Sofas for stage",
       "Dining tables / round tables",
-      "Cocktail tables / high tables",
-      "Tablecloths, runners, skirting",
       "DJ & sound system",
-      "Speakers & microphones",
-      "LED screens / projectors",
-      "Dance floor setup",
-      "Stage platforms / risers",
-      "Cutlery (plates, spoons, glasses)",
-      "Serving counters / buffet tables",
-      "Chafing dishes (for hot food)",
-      "Juice / mocktail counters",
-      "Coffee machine / tea stall setup",
-      "Shamiana / pandal",
-      "Fans / coolers / heaters",
-      "Portable AC",
-      "Generators / backup power",
-      "Carpet flooring / matting",
-      "Bouncy castle / inflatable games (for birthdays)",
-      "Magician / clown props",
-      "Cake table setup",
-      "Party props (hats, masks, etc.)",
-      "Themed cutouts / cartoon characters"
+      "Electrical Apparatus",
+      "Entertainment"
     ],
     []
   )
-  const [selectedCity, setSelectedCity] = useState('')
+
+  const resourceSubCategories = useMemo(
+    () => ({
+      "Idol": [
+        "Ganesha",
+        "Shiva", 
+        "Venkateshwara",
+        "Nandi"
+      ],
+      "BackGround": [
+        "Floral backdrop",
+        "Fabric draping",
+        "LED backdrop", 
+        "Themed backdrop",
+        "Balloon backdrop"
+      ],
+      "Arches / Pillars": [
+        "Balloon arch",
+        "Balloon pillars",
+        "Balloon ceiling décor",
+        "Helium balloons",
+        "Customized balloon art"
+      ],
+      "Lighting and Chandeliers": [
+        "String lights",
+        "LED spotlights",
+        "Chandeliers",
+        "Uplighting",
+        "Laser lights"
+      ],
+      "Carpet": [
+        "Red carpet walkway",
+        "Custom printed carpet",
+        "Flower-strewn walkway",
+        "LED-lit walkway"
+      ],
+      "Photo booth props & frames": [
+        "Customized frames",
+        "Funky props",
+        "Theme-based props",
+        "LED photo booth"
+      ],
+      "Chairs (plastic, cushioned, banquet)": [
+        "Plastic chairs",
+        "Cushioned chairs",
+        "Banquet chairs",
+        "Lounge chairs",
+        "Single sofa chair",
+        "Double seater",
+        "Royal-style sofa",
+        "Lounge sofa"
+      ],
+      "Dining tables / round tables": [
+        "Round dining table",
+        "Rectangular dining table",
+        "Buffet table",
+        "Folding dining table",
+        "Standing cocktail table",
+        "Bar table",
+        "LED cocktail table"
+      ],
+      "DJ & sound system": [
+        "DJ console",
+        "Turntable setup",
+        "Mixing equipment",
+        "DJ lights",
+        "Wireless microphones",
+        "Corded microphones",
+        "Surround sound speakers",
+        "Bass speakers"
+      ],
+      "Electrical Apparatus": [
+        "Pedestal fans",
+        "Desert coolers",
+        "Portable heaters",
+        "Ceiling fans",
+        "Split portable AC",
+        "Tower AC",
+        "Outdoor cooling units",
+        "Diesel generator",
+        "Silent generator",
+        "Portable backup unit"
+      ],
+      "Entertainment": [
+        "Magic props kit",
+        "Clown wigs",
+        "Funny costumes",
+        "Face paint setup",
+        "Round cake table",
+        "LED-lit cake table",
+        "Themed cake stand",
+        "Birthday hats",
+        "Eye masks",
+        "Party goggles",
+        "Handheld props",
+        "Mickey Mouse cutout",
+        "Superhero standees",
+        "Princess cutouts",
+        "Seasonal characters"
+      ]
+    }),
+    []
+  )
   const [selectedType, setSelectedType] = useState('')
   const [selectedOccasion, setSelectedOccasion] = useState('')
   const [selectedPax, setSelectedPax] = useState('')
   const [searchType, setSearchType] = useState('venue') // 'venue' or 'service' or 'resources'
   // Resources state
   const [selectedResourceType, setSelectedResourceType] = useState('')
+  const [selectedResourceSubCategory, setSelectedResourceSubCategory] = useState('')
   const [resourceMode, setResourceMode] = useState('rent') // 'rent' | 'sell'
+  // Service state
+  const [selectedServiceSubCategory, setSelectedServiceSubCategory] = useState('')
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('')
+  // Modal state
+  const [showCityModal, setShowCityModal] = useState(false)
+
+  // Reset subcategory when main category changes
+  useEffect(() => {
+    setSelectedServiceSubCategory('')
+  }, [selectedType])
+
+  useEffect(() => {
+    setSelectedResourceSubCategory('')
+  }, [selectedResourceType])
+
   const featuredVenues = useMemo(
     () => [
       {
@@ -265,27 +426,34 @@ const Landing = () => {
 
   const onSubmit = (e) => {
     e.preventDefault()
-    if (!selectedCity) return
+    if (selectedCity === 'Select City'){
+      setShowCityModal(true)
+    } else {
     const params = new URLSearchParams()
     if (selectedType) params.set('type', selectedType)
     if (selectedOccasion) params.set('occasion', selectedOccasion)
     if (selectedPax) params.set('pax', selectedPax)
+    if (selectedServiceSubCategory) params.set('subCategory', selectedServiceSubCategory)
     const query = params.toString()
     
     if (searchType === 'venue') {
-      const url = `/venues/${encodeURIComponent(selectedCity)}${query ? `?${query}` : ''}`
+      const cityPath = selectedCity !== 'Select City' ? `/${encodeURIComponent(selectedCity)}` : ''
+      const url = `/venues${cityPath}${query ? `?${query}` : ''}`
       navigate(url)
     } else if (searchType === 'service') {
-      const url = `/services/${encodeURIComponent(selectedCity)}${query ? `?${query}` : ''}`
+      const cityPath = selectedCity !== 'Select City' ? `/${encodeURIComponent(selectedCity)}` : ''
+      const url = `/services${cityPath}${query ? `?${query}` : ''}`
       navigate(url)
     } else {
       const paramsResources = new URLSearchParams()
       if (selectedResourceType) paramsResources.set('resourceType', selectedResourceType)
+      if (selectedResourceSubCategory) paramsResources.set('subCategory', selectedResourceSubCategory)
       paramsResources.set('mode', resourceMode)
       const queryResources = paramsResources.toString()
       const url = `/resources${queryResources ? `?${queryResources}` : ''}`
       navigate(url)
-    }
+}
+  }
   }
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-gradient-to-r from-gray-300 via-purple-200 to-pink-200">
@@ -322,12 +490,12 @@ const Landing = () => {
                       <div className="w-full">
                         <div className="flex justify-between items-center mb-2">
                           <h2 className="text-sm font-semibold text-gray-800">Venues</h2>
-                          <a
-                            href="/venues/:city" // need to change once be implemented
+                          <Link
+                            to={selectedCity !== 'Select City' ? `/venues/${encodeURIComponent(selectedCity)}` : '/venues/:city'}
                             className="text-xs font-medium text-purple-600 hover:text-purple-800 transition"
                           >
                             View All →
-                          </a>
+                          </Link>
                         </div>
 
                         <div className="w-full h-[72px] md:h-[120px] rounded-lg overflow-hidden relative">
@@ -361,12 +529,12 @@ const Landing = () => {
                       <div className="w-full">
                         <div className="flex justify-between items-center mb-2">
                           <h2 className="text-sm font-semibold text-gray-800">Services</h2>
-                          <a
-                            href="/services"
+                          <Link
+                            to={selectedCity !== 'Select City' ? `/services/${encodeURIComponent(selectedCity)}` : '/services'}
                             className="text-xs font-medium text-purple-600 hover:text-purple-800 transition"
                           >
                             View All →
-                          </a>
+                          </Link>
                         </div>
 
                         <div className="w-full h-[72px] md:h-[120px] rounded-lg overflow-hidden relative">
@@ -381,12 +549,10 @@ const Landing = () => {
 
               {/* Right column - Search section */}
               <div className="col-span-1">
-                <div className="rounded-xl p-[1px] bg-gradient-to-r from-pink-400/5 via-fuchsia-400/5 to-purple-400/5 h-full">
+                <div className="rounded-xl p-[1px] bg-gradient-to-r from-pink-400/5 via-fuchsia-400/5 to-purple-400/5 h-133">
                   <div className="rounded-xl bg-white/40 backdrop-blur shadow-xl ring-1 ring-gray-200 h-full px-5 py-6 transition-all hover:shadow-2xl hover:-translate-y-1">
                   <div className="h-full">
-                    <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 text-center">
-                      Search {searchType === 'venue' ? 'Venues' : searchType === 'service' ? 'Services' : 'Resources'}
-                    </h2>
+                    
                     
                     {/* Toggle buttons */}
                     <div className="flex mb-6 bg-gray-100 rounded-lg p-1">
@@ -424,34 +590,45 @@ const Landing = () => {
                         Resources
                       </button>
                     </div>
+                    <h2 className="text-lg font-bold text-gray-900 mb-3 text-center">
+                      Search {searchType === 'venue' ? 'Venues' : searchType === 'service' ? 'Services' : 'Resources'}
+                    </h2>
 
-                    <form onSubmit={onSubmit} className="space-y-4">
-                      <div>
-                        <label htmlFor="landing-city" className="block text-sm font-medium text-gray-700 mb-2">Location</label>
-                        <select
-                          id="landing-city"
-                          value={selectedCity}
-                          onChange={(e) => setSelectedCity(e.target.value)}
-                          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer text-sm"
-                          style={{ 
-                            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
-                            backgroundPosition: 'right 0.5rem center',
-                            backgroundRepeat: 'no-repeat',
-                            backgroundSize: '1.2em 1.2em',
-                            paddingRight: '2rem'
+                    {/* Search Section */}
+                    <div className="mb-4">
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Enter your search..."
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 text-sm"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => {
+                            // Handle search functionality here
+                            console.log('Searching for:', searchQuery);
                           }}
+                          className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium"
                         >
-                          <option value="" className="text-gray-500">Select city</option>
-                          {cities.map((city) => (
-                            <option key={city} value={city} className="text-gray-900 py-2">{city}</option>
-                          ))}
-                        </select>
+                          Search
+                        </button>
                       </div>
+                    </div>
+
+                    {/* Choose Section */}
+                    <h2 className="text-lg font-bold text-gray-900 mb-4 text-center">
+                      Choose {searchType === 'venue' ? 'Venues' : searchType === 'service' ? 'Services' : 'Resources'}
+                    </h2>
+                    <div className="mb-4">
+                      <div className="rounded-lg border border-gray-300 bg-gray-50 p-3 min-h-[160px]">
+                        <form onSubmit={onSubmit} className="space-y-2">
 
                       {searchType !== 'resources' && (
                         <div>
-                          <label htmlFor="landing-type" className="block text-sm font-medium text-gray-700 mb-2">
-                            {searchType === 'venue' ? 'Venue Type' : 'Service Type'}
+                          <label htmlFor="landing-type" className="block text-sm font-medium text-gray-700 mb-1">
+                            {searchType === 'venue' ? 'Venue Type' : 'Service Category'}
                           </label>
                           <select
                             id="landing-type"
@@ -474,10 +651,38 @@ const Landing = () => {
                         </div>
                       )}
 
+                      {searchType === 'service' && selectedType && (
+                        <div>
+                          <label htmlFor="landing-service-subcategory" className="block text-sm font-medium text-gray-700 mb-1">
+                            Service Sub Category
+                          </label>
+                          <select
+                            id="landing-service-subcategory"
+                            value={selectedServiceSubCategory}
+                            onChange={(e) => setSelectedServiceSubCategory(e.target.value)}
+                            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer text-sm"
+                            style={{ 
+                              backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                              backgroundPosition: 'right 0.5rem center',
+                              backgroundRepeat: 'no-repeat',
+                              backgroundSize: '1.2em 1.2em',
+                              paddingRight: '2rem'
+                            }}
+                          >
+                            <option value="" className="text-gray-900">Select sub category</option>
+                            {serviceSubCategories[selectedType]?.map((subCategory) => (
+                              <option key={subCategory} value={subCategory} className="text-gray-900 py-2">
+                                {subCategory}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      )}
+
                       {searchType === 'resources' && (
                         <>
                           <div>
-                            <label htmlFor="landing-resource-type" className="block text-sm font-medium text-gray-700 mb-2">Resource Type</label>
+                            <label htmlFor="landing-resource-type" className="block text-sm font-medium text-gray-700 mb-1">Resource Category</label>
                             <select
                               id="landing-resource-type"
                               value={selectedResourceType}
@@ -498,8 +703,34 @@ const Landing = () => {
                             </select>
                           </div>
 
+                          {selectedResourceType && (
+                            <div>
+                              <label htmlFor="landing-resource-subcategory" className="block text-sm font-medium text-gray-700 mb-1">Resource Sub Category</label>
+                              <select
+                                id="landing-resource-subcategory"
+                                value={selectedResourceSubCategory}
+                                onChange={(e) => setSelectedResourceSubCategory(e.target.value)}
+                                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 appearance-none cursor-pointer text-sm"
+                                style={{ 
+                                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                                  backgroundPosition: 'right 0.5rem center',
+                                  backgroundRepeat: 'no-repeat',
+                                  backgroundSize: '1.2em 1.2em',
+                                  paddingRight: '2rem'
+                                }}
+                              >
+                                <option value="" className="text-gray-900">Select sub category</option>
+                                {resourceSubCategories[selectedResourceType]?.map((subCategory) => (
+                                  <option key={subCategory} value={subCategory} className="text-gray-900 py-2">
+                                    {subCategory}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          )}
+
                           {/* Rent/Sell toggle */}
-                          <div className="flex mb-2 mt-2 bg-gray-100 rounded-lg p-1">
+                          <div className="flex mb-1 mt-1 bg-gray-100 rounded-lg p-1">
                             <button
                               type="button"
                               onClick={() => { setResourceMode('rent') }}
@@ -528,7 +759,7 @@ const Landing = () => {
 
                       {searchType === 'venue' && (
                         <div>
-                          <label htmlFor="landing-occasion" className="block text-sm font-medium text-gray-700 mb-2">Occasion</label>
+                          <label htmlFor="landing-occasion" className="block text-sm font-medium text-gray-700 mb-1">Occasion</label>
                           <select
                             id="landing-occasion"
                             value={selectedOccasion}
@@ -552,7 +783,7 @@ const Landing = () => {
 
                       {searchType === 'venue' && (
                         <div>
-                          <label htmlFor="landing-pax" className="block text-sm font-medium text-gray-700 mb-2">Pax</label>
+                          <label htmlFor="landing-pax" className="block text-sm font-medium text-gray-700 mb-1">Pax</label>
                           <select
                             id="landing-pax"
                             value={selectedPax}
@@ -574,13 +805,15 @@ const Landing = () => {
                         </div>
                       )}
 
-                      <button
-                        type="submit"
-                        className="w-full inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-3 font-semibold text-white hover:bg-red-700 transition-all duration-200 shadow-sm hover:shadow ring-1 ring-red-500/20 text-sm"
-                      >
-                        Find {searchType === 'venue' ? 'venues' : searchType === 'service' ? 'services' : 'resources'} →
-                      </button>
-                    </form>
+                          <button
+                            type="submit"
+                            className="w-full inline-flex items-center justify-center rounded-lg bg-red-600 px-4 py-2.5 font-semibold text-white hover:bg-red-700 transition-all duration-200 shadow-sm hover:shadow ring-1 ring-red-500/20 text-sm"
+                          >
+                            Find {searchType === 'venue' ? 'venues' : searchType === 'service' ? 'services' : 'resources'} →
+                          </button>
+                        </form>
+                      </div>
+                    </div>
                   </div>
                   </div>
                 </div>
@@ -620,7 +853,7 @@ const Landing = () => {
             Chat With Us
           </button>
           <Link
-            to="/venues/all"
+            to={selectedCity !== 'Select City' ? `/venues/${encodeURIComponent(selectedCity)}` : '/venues'}
             className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-pink-600 to-purple-600 text-white px-8 py-4 text-lg font-semibold shadow-md hover:opacity-95"
           >
             Browse All Venues
@@ -664,6 +897,36 @@ const Landing = () => {
                   </div>
                 </form>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* City Selection Modal */}
+      {showCityModal && (
+        <div className="fixed inset-0  flex items-center justify-center z-50 backdrop-blur-sm bg-black/30">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4 shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Select Your City</h3>
+              <button
+                onClick={() => setShowCityModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <TiTimes className="h-6 w-6" />
+              </button>
+            </div>
+            <div className="mb-4">
+              <p className="text-gray-600 text-sm">
+                Please select your city from the navigation bar before searching for venues, services, or resources.
+              </p>
+            </div>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowCityModal(false)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium"
+              >
+                Got it
+              </button>
             </div>
           </div>
         </div>

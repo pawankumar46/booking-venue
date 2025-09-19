@@ -19,6 +19,7 @@ import PaymentGateway from './pages/PaymentGateway'
 import IndividualResources from './pages/IndividualResources'
 import AddToCart from './pages/AddToCart'
 import Menu from './pages/Menu'
+import { CityProvider } from './contexts/CityContext'
 
 
 function App() {
@@ -26,33 +27,35 @@ function App() {
     ? HashRouter
     : BrowserRouter
   return (
-    <RouterComponent gestureEnabled={false}>
-      <div className="App min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/blogs" element={<Blogs />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/business" element={<ListYourBusiness/>}/>
-            <Route path="/venues" element={<Venues />} />
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/services" element={<Services/>}/>
-            <Route path="/venues/:city" element={<ListofVenues />} />
-            <Route path="/venue/:city/:venueId" element={<IndividualVenue />} />
-            <Route path="/services/:city" element={<ListofServices/>}/>
-            <Route path="/services/:serviceType/:serviceId" element={<IndividualServices/>}/>
-            <Route path="/pay" element={<PaymentGateway/>}/>
-            <Route path="/resources" element={<Resources/>}/>
-            <Route path="/resources/:resourceId" element={<IndividualResources/>}/>
-            <Route path="/cart" element={<AddToCart/>}/>
-            <Route path="/menu" element={<Menu/>}/>
-          </Routes>
-        </main>
-        <Footer />
-        <ChatBot />
-      </div>
-    </RouterComponent>
+    <CityProvider>
+      <RouterComponent gestureEnabled={false}>
+        <div className="App min-h-screen flex flex-col">
+          <NavBar />
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/business" element={<ListYourBusiness/>}/>
+              <Route path="/venues" element={<Venues />} />
+              <Route path="/login" element={<Login/>}/>
+              <Route path="/services" element={<Services/>}/>
+              <Route path="/venues/:city" element={<ListofVenues />} />
+              <Route path="/venue/:city/:venueId" element={<IndividualVenue />} />
+              <Route path="/services/:city" element={<ListofServices/>}/>
+              <Route path="/services/:serviceType/:serviceId" element={<IndividualServices/>}/>
+              <Route path="/pay" element={<PaymentGateway/>}/>
+              <Route path="/resources" element={<Resources/>}/>
+              <Route path="/resources/:resourceId" element={<IndividualResources/>}/>
+              <Route path="/cart" element={<AddToCart/>}/>
+              <Route path="/menu" element={<Menu/>}/>
+            </Routes>
+          </main>
+          <Footer />
+          <ChatBot />
+        </div>
+      </RouterComponent>
+    </CityProvider>
   )
 }
 

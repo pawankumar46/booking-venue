@@ -20,77 +20,64 @@ const Resources = () => {
 
 	const items = useMemo(() => {
 		const photoByName = (name) => {
-			const n = name.toLowerCase()
-			if (n.includes('ganesha') || n.includes('god idol')) return 'https://images.unsplash.com/photo-1567591391293-f9a99c77e128?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('background') || n.includes('backdrop')) return 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('flower')) return 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('balloon')) return 'https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('mandap') || n.includes('shamiana')) return 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('wedding arch')) return 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('fairy lights') || n.includes('chandeliers') || n.includes('led lights')) return 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('carpet')) return 'https://images.unsplash.com/photo-1614080035039-af24354a6478?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('photo booth')) return 'https://images.unsplash.com/photo-1452587925148-ce544e77e70d?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('chair')) return 'https://images.unsplash.com/photo-1571428229830-4f2e5b3f0c74?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('sofa')) return 'https://images.unsplash.com/photo-1505691723518-36a5ac3b2a02?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('dining tables') || n.includes('round tables')) return 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('cocktail tables')) return 'https://images.unsplash.com/photo-1541542684-4a88a05b76d3?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('tablecloths') || n.includes('runners')) return 'https://images.unsplash.com/photo-1513617336893-3f3df36d3b06?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('dj') || n.includes('sound system')) return 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('speakers') || n.includes('microphones')) return 'https://images.unsplash.com/photo-1483412033650-1015ddeb83d1?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('led screens') || n.includes('projectors')) return 'https://images.unsplash.com/photo-1514302240736-b1fee5985889?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('dance floor')) return 'https://images.unsplash.com/photo-1511110011919-7fea1f0e2c69?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('stage platforms') || n.includes('risers')) return 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('cutlery')) return 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('serving counters') || n.includes('buffet')) return 'https://images.unsplash.com/photo-1604908176997-fbf48fd15698?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('chafing dishes')) return 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('juice') || n.includes('mocktail')) return 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('coffee machine') || n.includes('tea stall')) return 'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('fans') || n.includes('coolers') || n.includes('heaters')) return 'https://images.unsplash.com/photo-1516298773066-c48f8e9bd92b?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('portable ac')) return 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('generators') || n.includes('backup power')) return 'https://images.unsplash.com/photo-1593079831268-3381b0db4a77?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('bouncy castle') || n.includes('inflatable')) return 'https://images.unsplash.com/photo-1528763380143-65b3acfd0df6?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('magician') || n.includes('clown')) return 'https://images.unsplash.com/photo-1505744762024-59cf4f3b6b3b?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('cake table')) return 'https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('party props')) return 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=1200&auto=format&fit=crop'
-			if (n.includes('themed cutouts') || n.includes('cartoon')) return 'https://images.unsplash.com/photo-1542452255191-c85a98f2c5b9?q=80&w=1200&auto=format&fit=crop'
-			return 'https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1200&auto=format&fit=crop'
-		}
+  const n = name.toLowerCase();
+
+  const mapping = [
+    { keywords: ['ganesha', 'god idol'], url: 'https://images.unsplash.com/photo-1567591391293-f9a99c77e128?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['background', 'backdrop'], url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['flower'], url: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['balloon'], url: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['mandap', 'shamiana'], url: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['wedding arch'], url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['fairy lights', 'chandeliers', 'led lights'], url: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['carpet'], url: 'https://images.unsplash.com/photo-1614080035039-af24354a6478?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['photo booth'], url: 'https://images.unsplash.com/photo-1452587925148-ce544e77e70d?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['chair'], url: 'https://images.unsplash.com/photo-1571428229830-4f2e5b3f0c74?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['sofa'], url: 'https://images.unsplash.com/photo-1505691723518-36a5ac3b2a02?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['dining tables', 'round tables'], url: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['cocktail tables'], url: 'https://images.unsplash.com/photo-1541542684-4a88a05b76d3?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['tablecloths', 'runners'], url: 'https://images.unsplash.com/photo-1513617336893-3f3df36d3b06?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['dj', 'sound system'], url: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['speakers', 'microphones'], url: 'https://images.unsplash.com/photo-1483412033650-1015ddeb83d1?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['led screens', 'projectors'], url: 'https://images.unsplash.com/photo-1514302240736-b1fee5985889?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['dance floor'], url: 'https://images.unsplash.com/photo-1511110011919-7fea1f0e2c69?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['stage platforms', 'risers'], url: 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['cutlery'], url: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['serving counters', 'buffet'], url: 'https://images.unsplash.com/photo-1604908176997-fbf48fd15698?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['chafing dishes'], url: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['juice', 'mocktail'], url: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['coffee machine', 'tea stall'], url: 'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['fans', 'coolers', 'heaters'], url: 'https://images.unsplash.com/photo-1516298773066-c48f8e9bd92b?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['portable ac'], url: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['generators', 'backup power'], url: 'https://images.unsplash.com/photo-1593079831268-3381b0db4a77?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['bouncy castle', 'inflatable'], url: 'https://images.unsplash.com/photo-1528763380143-65b3acfd0df6?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['magician', 'clown'], url: 'https://images.unsplash.com/photo-1505744762024-59cf4f3b6b3b?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['cake table'], url: 'https://images.unsplash.com/photo-1519869325930-281384150729?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['party props'], url: 'https://images.unsplash.com/photo-1542051841857-5f90071e7989?q=80&w=1200&auto=format&fit=crop' },
+    { keywords: ['themed cutouts', 'cartoon'], url: 'https://images.unsplash.com/photo-1542452255191-c85a98f2c5b9?q=80&w=1200&auto=format&fit=crop' },
+  ];
+
+  const found = mapping.find(item =>
+    item.keywords.some(k => n.includes(k))
+  );
+
+  return found
+    ? found.url
+    : 'https://images.unsplash.com/photo-1512295767273-ac109ac3acfa?q=80&w=1200&auto=format&fit=crop'; // fallback
+};
+
 		const names = [
-			"Ganesha idol / God idol setup",
-			"Decorative background / stage backdrop",
-			"Flower decorations (real/artificial)",
-			"Balloon decorations / arches / pillars",
-			"Mandap / canopy / shamiana",
-			"Wedding arch / entry gate decoration",
-			"Fairy lights / LED lights / chandeliers",
-			"Carpet / red carpet walkway",
-			"Photo booth props & frames",
-			"Chairs (plastic, cushioned, banquet)",
-			"Chair covers & ribbons",
-			"Sofas for stage",
-			"Dining tables / round tables",
-			"Cocktail tables / high tables",
-			"Tablecloths, runners, skirting",
-			"DJ & sound system",
-			"Speakers & microphones",
-			"LED screens / projectors",
-			"Dance floor setup",
-			"Stage platforms / risers",
-			"Cutlery (plates, spoons, glasses)",
-			"Serving counters / buffet tables",
-			"Chafing dishes (for hot food)",
-			"Juice / mocktail counters",
-			"Coffee machine / tea stall setup",
-			"Shamiana / pandal",
-			"Fans / coolers / heaters",
-			"Portable AC",
-			"Generators / backup power",
-			"Carpet flooring / matting",
-			"Bouncy castle / inflatable games (for birthdays)",
-			"Magician / clown props",
-			"Cake table setup",
-			"Party props (hats, masks, etc.)",
-			"Themed cutouts / cartoon characters"
+			 "Idol",
+      "BackGround",
+      "Arches / Pillars",
+      "Lighting and Chandeliers",
+      "Carpet",
+      "Photo booth props & frames",
+      "Chairs (plastic, cushioned, banquet)",
+      "Dining tables / round tables",
+      "DJ & sound system",
+      "Electrical Apparatus",
+      "Entertainment"
 		]
 		return names.map((name, idx) => {
 			const priceBrackets = ["₹500", "₹1,000", "₹1,500", "₹2,000", "₹2,500", "₹3,000"]
