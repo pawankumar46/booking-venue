@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Bars3Icon, XMarkIcon, MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { useCity } from '../contexts/CityContext';
@@ -9,31 +9,55 @@ const NavBar = () => {
   const [isVenueOpen, setIsVenueOpen] = useState(false); // Add this state for venue dropdown
   const [showCityModal, setShowCityModal] = useState(false);
   const [citySearch, setCitySearch] = useState('');
+  const [showAllCities, setShowAllCities] = useState(false);
   const { selectedCity, updateCity } = useCity();
   const navigations = [
     { name: 'Home', to: '/' },
     { name: 'Contact', to: '/contact' },
     { name: 'Login', to: '/login' }
   ];
-  const allCities = [
-    'Mumbai', 'Delhi', 'Bengaluru','Mangalore', 'Hyderabad', 'Ahmedabad', 'Chennai', 'Kolkata', 'Surat', 'Pune', 'Jaipur',
-    'Lucknow', 'Kanpur', 'Nagpur', 'Indore', 'Thane', 'Bhopal', 'Visakhapatnam', 'Pimpri-Chinchwad', 'Patna', 'Vadodara',
-    'Ghaziabad', 'Ludhiana', 'Agra', 'Nashik', 'Faridabad', 'Meerut', 'Rajkot', 'Varanasi', 'Srinagar', 'Aurangabad',
-    'Dhanbad', 'Amritsar', 'Navi Mumbai', 'Allahabad', 'Ranchi', 'Howrah', 'Coimbatore', 'Jabalpur', 'Gwalior', 'Vijayawada',
-    'Jodhpur', 'Madurai', 'Raipur', 'Kota', 'Guwahati', 'Chandigarh', 'Solapur', 'Hubli–Dharwad', 'Bareilly', 'Mysore',
-  ];
+  const allCities = ["Mumbai","Delhi","Bengaluru","Chennai","Kolkata","Hyderabad","Pune",
+    "Ahmedabad","Jaipur","Lucknow","Kanpur","Nagpur","Indore","Bhopal","Patna","Vadodara",
+    "Surat","Varanasi","Visakhapatnam","Coimbatore","Kochi","Thiruvananthapuram","Madurai",
+    "Mysuru","Mangaluru","Belagavi","Hubballi","Kalaburagi","Davangere","Shivamogga","Ballari",
+    "Tumakuru","Raichur","Bidar","Hassan","Mandya","Chitradurga","Kolar","Karwar","Hospet",
+    "Bagalkot","Bijapur","Chikkamagaluru","Gadag","Udupi","Sirsi","Bhadravati","Yadgir",
+    "Koppal","Dharwad","Amritsar","Ludhiana","Chandigarh","Guwahati","Ranchi","Raipur",
+    "Bhubaneswar","Noida","Gurugram","Faridabad","Ghaziabad","Jodhpur","Udaipur","Agra",
+    "Meerut","Prayagraj","Jabalpur","Aurangabad","Nashik","Rajkot","Gwalior","Jamshedpur",
+    "Dehradun","Shimla","Srinagar","Jammu","Panaji","Margao","Dhanbad","Asansol","Durgapur",
+    "Siliguri","Howrah","Navi Mumbai","Thane","Solapur","Kolhapur","Satara","Sangli",
+    "Tiruchirappalli","Erode","Salem","Tirunelveli","Tiruppur","Vellore","Kanchipuram",
+    "Nagercoil","Tuticorin","Rajahmundry","Kakinada","Guntur","Nellore","Anantapur","Tirupati",
+    "Kurnool","Ongole","Eluru","Nizamabad","Karimnagar","Warangal","Khammam","Adilabad",
+    "Mahbubnagar","Suryapet","Nalgonda","Imphal","Aizawl","Agartala","Shillong","Itanagar",
+    "Kohima","Gangtok","Dibrugarh","Tinsukia","Silchar","Tezpur","Jorhat","Bongaigaon",
+    "Aligarh","Moradabad","Saharanpur","Bareilly","Gorakhpur","Firozabad","Mathura","Ayodhya",
+    "Muzaffarnagar","Sitapur","Etawah","Jhansi","Shahjahanpur","Bulandshahr","Mirzapur",
+    "Barabanki","Deoria","Ghazipur","Morena","Sagar","Satna","Rewa","Katni","Chhindwara",
+    "Seoni","Betul","Ratlam","Khandwa","Khargone","Burhanpur","Dewas","Ujjain"]
 
   const popularCities = [
-    { name: 'Mumbai', icon: '🏛️' },
-    { name: 'Delhi-NCR', icon: '🏛️' },
-    { name: 'Bengaluru', icon: '🏛️' },
-    { name: 'Hyderabad', icon: '🕌' },
-    { name: 'Ahmedabad', icon: '🕌' },
-    { name: 'Chandigarh', icon: '✋' },
-    { name: 'Chennai', icon: '🛕' },
-    { name: 'Pune', icon: '🏰' },
-    { name: 'Kolkata', icon: '🏛️' },
-    { name: 'Kochi', icon: '🚤' }
+    { name: 'Mumbai', icon: '🌉' },        // Gateway of India / Marine Drive
+  { name: 'Delhi-NCR', icon: '🕌' },     // India Gate / Red Fort
+  { name: 'Bengaluru', icon: '🏢' },    // Modern IT skyline
+  { name: 'Hyderabad', icon: '🏰' },    // Charminar
+  { name: 'Ahmedabad', icon: '🕌' },    // Jama Masjid
+  { name: 'Chandigarh', icon: '🏛️' },  // Capitol Complex
+  { name: 'Chennai', icon: '🛕' },      // Kapaleeshwarar Temple
+  { name: 'Pune', icon: '🏰' },         // Shaniwar Wada
+  { name: 'Kolkata', icon: '🌉' },      // Howrah Bridge
+  { name: 'Kochi', icon: '⛵' },        // Backwaters / Chinese Fishing Nets
+  { name: 'Jaipur', icon: '🏰' },       // Hawa Mahal / Amber Fort
+  { name: 'Lucknow', icon: '🏛️' },     // Bara Imambara
+  { name: 'Nagpur', icon: '🛕' },       // Deekshabhoomi
+  { name: 'Indore', icon: '🏢' },       // Rajwada Palace
+  { name: 'Bhopal', icon: '🏰' },       // Taj-ul-Masajid
+  { name: 'Patna', icon: '🕌' },        // Golghar
+  { name: 'Vadodara', icon: '🏰' },     // Laxmi Vilas Palace
+  { name: 'Surat', icon: '🏙️' },       // Textile city skyline
+  { name: 'Visakhapatnam', icon: '🏖️' }, // Beaches
+  { name: 'Coimbatore', icon: '🏭' }    // Industrial city / textile mills
   ];
 
   const filteredCities = allCities.filter(city => 
@@ -44,15 +68,34 @@ const NavBar = () => {
     updateCity(city);
     setShowCityModal(false);
     setCitySearch('');
+    setShowAllCities(false);
   };
+  
 
   const handleLocationDetect = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          // In a real app, you'd reverse geocode the coordinates to get city name
-          updateCity('Location Detected');
-          setShowCityModal(false);
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          try {
+            // Using BigDataCloud API (CORS-friendly)
+            const res = await fetch(
+              `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`
+            );
+            const data = await res.json();
+            
+            // Update the selected city with the detected city
+            if (data.city) {
+              updateCity(data.city);
+              setShowCityModal(false);
+              setCitySearch('');
+            } else {
+              alert('Unable to detect your city. Please select manually.');
+            }
+          } catch (err) {
+            console.error('Error fetching location data:', err);
+            alert('Error detecting your location. Please select manually.');
+          }
         },
         (error) => {
           console.error('Error getting location:', error);
@@ -155,23 +198,23 @@ const NavBar = () => {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowCityModal(false)} />
           <div className="relative w-full max-w-2xl mx-4">
             <div className="rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 bg-white">
-              <div className="p-6">
+              <div className="p-4">
                 {/* Search Bar */}
-                <div className="relative mb-6">
+                <div className="relative mb-4">
                   <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                   <input
                     type="text"
                     placeholder="Search for your city"
                     value={citySearch}
                     onChange={(e) => setCitySearch(e.target.value)}
-                    className="w-full pl-10 pr-4 text-black py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="w-full pl-10 pr-4 text-black py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
 
                 {/* Detect Location Button */}
                 <button
                   onClick={handleLocationDetect}
-                  className="w-full mb-6 flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                  className="w-full mb-4 flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200"
                 >
                   <div className="w-4 h-4 rounded-full border-2 border-red-500 flex items-center justify-center">
                     <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
@@ -180,34 +223,34 @@ const NavBar = () => {
                 </button>
 
                 {/* Popular Cities */}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Popular Cities</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <div className="mb-4">
+                  <h3 className="text-base font-semibold text-gray-900 mb-3">Popular Cities</h3>
+                  <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
                     {popularCities.map((city) => (
                       <button
                         key={city.name}
                         onClick={() => handleCitySelect(city.name)}
-                        className="flex flex-col items-center p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors duration-200"
+                        className="flex flex-col items-center p-2 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-colors duration-200"
                       >
-                        <span className="text-2xl mb-1">{city.icon}</span>
-                        <span className="text-sm font-medium text-gray-700">{city.name}</span>
+                        <span className="text-lg mb-1">{city.icon}</span>
+                        <span className="text-xs font-medium text-gray-700 text-center">{city.name}</span>
                       </button>
                     ))}
                   </div>
                 </div>
 
                 {/* All Cities List */}
-                {citySearch && (
-                  <div className="max-h-64 overflow-y-auto">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">All Cities</h3>
-                    <div className="space-y-1">
+                {(citySearch || showAllCities) && (
+                  <div>
+                    <h3 className="text-base font-semibold text-gray-900 mb-3">All Cities</h3>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                       {filteredCities.map((city) => (
                         <button
                           key={city}
                           onClick={() => handleCitySelect(city)}
-                          className="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                          className="text-left px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
                         >
-                          <span className="text-gray-700">{city}</span>
+                          <span className="text-sm text-gray-700">{city}</span>
                         </button>
                       ))}
                     </div>
@@ -215,9 +258,12 @@ const NavBar = () => {
                 )}
 
                 {/* View All Cities Link */}
-                <div className="mt-6 text-center">
+                <div className="mt-4 text-center">
                   <button
-                    onClick={() => setCitySearch('')}
+                    onClick={() => {
+                      setShowAllCities(true);
+                      setCitySearch('');
+                    }}
                     className="text-red-600 hover:text-red-700 font-medium text-sm"
                   >
                     View All Cities
